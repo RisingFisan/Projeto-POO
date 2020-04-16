@@ -5,7 +5,7 @@ import java.awt.geom.Point2D.Double;
 public class Voluntario {
     private String codVoluntario;
     private String nomeVoluntario;
-    private Point2D.Double gps;
+    private Point2D gps;
     private double raio;
     private String email;
     private String password;
@@ -37,7 +37,7 @@ public class Voluntario {
         return this.nomeVoluntario;
     }
     
-    public Point2D.Double getGps(){
+    public Point2D getGps(){
         return this.gps;
     }
     
@@ -61,7 +61,7 @@ public class Voluntario {
         this.nomeVoluntario = nome;
     }
     
-    public void setGps(Point2D.Double point){
+    public void setGps(Point2D point){
         this.gps = point;
     }
     
