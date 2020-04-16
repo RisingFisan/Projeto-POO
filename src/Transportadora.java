@@ -7,12 +7,12 @@ public class Transportadora {
     String nomeEmpresa;
     String email;
     String password;
-    Point2D gps;
+    Point2D.Double gps;
     int NIF;
     double raio;
     double precoKm;
 
-    public Transportadora (String cod, String nome,String novoEmail,String novaPass, Point2D gps, int NIF, double raio, double preco) {
+    public Transportadora (String cod, String nome,String novoEmail,String novaPass, Point2D.Double gps, int NIF, double raio, double preco) {
         this.codEmpresa = cod;
         this.nomeEmpresa = nome;
         this.email = novoEmail;
@@ -49,7 +49,7 @@ public class Transportadora {
     }
 
 
-    public Point2D getGps() {
+    public Point2D.Double getGps() {
         return this.gps;
     }
 
@@ -82,7 +82,7 @@ public class Transportadora {
         this.password = pass;
     }
 
-    public void setGps(Point2D gps) {
+    public void setGps(Point2D.Double gps) {
         this.gps = gps;
     }
 
