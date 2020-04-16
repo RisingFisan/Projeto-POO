@@ -10,10 +10,10 @@ public class Voluntario {
     private String email;
     private String password;
     
-    public Voluntario (String cod,String nome,double x,double y,double novoRaio,String novoEmail,String novaPassword) {
+    public Voluntario (String cod,String nome,Point2D point,double novoRaio,String novoEmail,String novaPassword) {
         this.codVoluntario =  cod;
         this.nomeVoluntario = nome;
-        this.gps = new Point2D.Double(x,y);
+        this.gps = point;
         this.email = novoEmail;
         this.password = novaPassword;
     }

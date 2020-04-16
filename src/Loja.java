@@ -9,10 +9,10 @@ public class Loja {
     private String email;
     private String password;
     
-    public Loja (String cod,String nome,double x,double y,String novoEmail,String novaPassword) {
+    public Loja (String cod,String nome,Point2D point,String novoEmail,String novaPassword) {
         this.codLoja =  cod;
         this.nomeLoja = nome;
-        this.gps = new Point2D.Double(x,y);
+        this.gps = point;
         this.email = novoEmail;
         this.password = novaPassword;
     }

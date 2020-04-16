@@ -12,13 +12,14 @@ public class Transportadora {
     double raio;
     double precoKm;
 
-    public Transportadora (String cod, String nome,String novoEmail,String novaPass, double gpsX,double gpsY, int NIF, double raio, double preco) {
+    public Transportadora (String cod, String nome ,Point2D point, int outroNIF, double raio, double preco,String novoEmail,String novaPass) {
         this.codEmpresa = cod;
         this.nomeEmpresa = nome;
         this.email = novoEmail;
         this.password= novaPass;
-        this.gps = new Point2D.Double(gpsX,gpsY);
+        this.gps = point;
         this.raio = raio;
+        this.NIF= outroNIF;
         this.precoKm = preco;
     }
 
