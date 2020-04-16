@@ -22,7 +22,7 @@ public class Loja {
         this.nomeLoja = outro.getNomeLoja();
         this.gps = outro.getGps();
         this.email = outro.getEmail();
-        this.password = outro.getPassword();
+        this.password = outro.password;
         
     }
     
@@ -43,9 +43,10 @@ public class Loja {
         return this.email;
     }
     
-    public String getPassword(){
-        return this.password;
-    }
+    
+    //public String getPassword(){
+    //    return this.password;
+   // }
     
     //SETTERS
     
@@ -80,7 +81,7 @@ public class Loja {
             && this.nomeLoja.equals(l.getNomeLoja()) 
             && this.gps.equals(l.getGps())
             && this.email.equals(l.getEmail())
-            && this.password.equals(l.getPassword())) return true;
+            && this.password.equals(l.password)) return true;
         else return false;
             
     }
@@ -94,6 +95,10 @@ public class Loja {
         sb.append("Email: ").append(this.email).append("\n");
         sb.append("Password: ").append(this.password).append("\n");
         return sb.toString();
+    }
+    
+    public boolean checkCredenciais (String outroEmail,String pass){
+        return (this.email.equals(outroEmail) && this.password.equals(pass));
     }
     
     

@@ -22,7 +22,7 @@ public class Utilizador {
         this.nomeUtilizador = outro.getNomeUtilizador();
         this.gps = outro.getGps();
         this.email = outro.getEmail();
-        this.password = outro.getPassword();
+        this.password = outro.password;
         
     }
     
@@ -43,9 +43,7 @@ public class Utilizador {
         return this.email;
     }
     
-    public String getPassword(){
-        return this.password;
-    }
+    
     
     //SETTERS
     
@@ -80,7 +78,7 @@ public class Utilizador {
             && this.nomeUtilizador.equals(u.getNomeUtilizador()) 
             && this.gps.equals(u.getGps())
             && this.email.equals(u.getEmail())
-            && this.password.equals(u.getPassword())) return true;
+            && this.password.equals(u.password)) return true;
         else return false;
             
     }
@@ -94,6 +92,10 @@ public class Utilizador {
         sb.append("Email: ").append(this.email).append("\n");
         sb.append("Password: ").append(this.password).append("\n");
         return sb.toString();
+    }
+    
+    public boolean checkCredenciais (String outroEmail,String pass){
+        return (this.email.equals(outroEmail) && this.password.equals(pass));
     }
     
     
