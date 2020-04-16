@@ -19,7 +19,8 @@ public class Parse
                         Loja l = parseLoja(linhaPartida[1]);
                         System.out.println(l.toString());
                         break;                                   
-                //...
+                case "Voluntario":
+                break;
                 default: 
                         System.out.println("Linha invalida.");
                         break;
