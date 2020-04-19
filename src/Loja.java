@@ -1,6 +1,6 @@
 import java.awt.geom.Point2D;
 
-public class Loja extends Utilizador {
+public class Loja extends Conta {
     public Loja(String cod, String nome, double x, double y) {
         this.codigo = cod;
         this.nome = nome;
@@ -30,23 +30,10 @@ public class Loja extends Utilizador {
         return new Loja(this);
     }
 
-    //EQUALS
-    public boolean equals(Loja l) {
-        return this.codigo.equals(l.codigo)
-                && this.nome.equals(l.nome)
-                && this.gps.equals(l.gps)
-                && this.email.equals(l.email)
-                && this.password.equals(l.password);
-    }
-
     //ToString
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Código de Loja: '").append(this.codigo).append("'\n");
-        sb.append("Nome da Loja: '").append(this.nome).append("'\n");
-        sb.append("Coordenadas: ").append(this.gps.toString()).append("\n");
-        sb.append("Email: '").append(this.email).append("'\n");
-        sb.append("Password: '").append(this.password.replaceAll(".","*")).append("'\n");
+        StringBuilder sb = new StringBuilder("Loja\n");
+        sb.append(super.toString());
         return sb.toString();
     }
 }

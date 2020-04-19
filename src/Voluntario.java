@@ -1,6 +1,6 @@
 import java.awt.geom.Point2D;
 
-public class Voluntario extends Utilizador{
+public class Voluntario extends Conta {
     private double raio;
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
@@ -56,13 +56,9 @@ public class Voluntario extends Utilizador{
 
     //ToString
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Código de Voluntario: '").append(this.codigo).append("'\n");
-        sb.append("Nome do Voluntario: '").append(this.nome).append("'\n");
-        sb.append("Coordenadas: ").append(this.gps.toString()).append("\n");
+        StringBuilder sb = new StringBuilder("Voluntário\n");
+        sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Email: '").append(this.email).append("'\n");
-        sb.append("Password: '").append(this.password.replaceAll(".","*")).append("'\n");
         return sb.toString();
     }
 }

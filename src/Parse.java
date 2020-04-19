@@ -13,8 +13,8 @@ public class Parse {
             String[] linhaPartida = linha.split(":", 2);
             switch (linhaPartida[0]) {
                 case "Utilizador":
-                    Utilizador u = parseUtilizador(linhaPartida[1]); // criar um Utilizador
-                    System.out.println(u.toString()); //enviar para o ecrã apenas para teste
+                    Conta u = parseUtilizador(linhaPartida[1]); // criar um Utilizador
+                    System.out.println(u.toString()); //enviar para o ecrï¿½ apenas para teste
                     break;
                 case "Loja":
                     Loja l = parseLoja(linhaPartida[1]);
@@ -40,14 +40,14 @@ public class Parse {
     }
 
 
-    public Utilizador parseUtilizador(String input) {
+    public Conta parseUtilizador(String input) {
         String[] campos = input.split(",");
         String nome = campos[0];
         String codUtilizador = campos[1];
         double x = Double.parseDouble(campos[2]);
         double y = Double.parseDouble(campos[3]);
         //dodos por omissao
-        return new Utilizador(codUtilizador, nome, x, y);
+        return new Conta(codUtilizador, nome, x, y);
     }
 
     public Loja parseLoja(String input) {

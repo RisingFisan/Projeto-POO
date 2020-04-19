@@ -73,10 +73,10 @@ public class LinhaEncomenda {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Código de Produto: ").append(this.codProduto).append("\n");
-        sb.append("Descrição: ").append(this.descricao).append("\n");
+        sb.append("Cï¿½digo de Produto: ").append(this.codProduto).append("\n");
+        sb.append("Descriï¿½ï¿½o: ").append(this.descricao).append("\n");
         sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
-        sb.append("Valor Unitário: ").append(this.valorUnitario).append("\n");
+        sb.append("Valor Unitï¿½rio: ").append(this.valorUnitario).append("\n");
         return sb.toString();
     }
 }

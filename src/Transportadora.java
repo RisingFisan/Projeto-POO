@@ -1,6 +1,6 @@
 import java.awt.geom.Point2D;
 
-public class Transportadora extends Utilizador {
+public class Transportadora extends Conta {
     String nif;
     double raio;
     double precoKm;
@@ -71,29 +71,13 @@ public class Transportadora extends Utilizador {
         return new Transportadora(this);
     }
     
-    //EQUALS
-    public boolean equals(Transportadora p) {
-        return this.codigo.equals(p.codigo) &&
-                this.nome.equals(p.nome) &&
-                this.email.equals(p.email) &&
-                this.password.equals(p.password) &&
-                this.gps.equals(p.gps) &&
-                this.nif.equals(p.nif) &&
-                Double.compare(this.raio, p.raio) == 0 &&
-                Double.compare(this.precoKm, p.precoKm) == 0;
-    }
-    
     //toSTRING
-    public String toString () {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Código da empresa: '").append(this.codigo).append("'\n");
-        sb.append("Nome da empresa: '").append(this.nome).append("'\n");
-        sb.append("Email: '").append(this.email).append("'\n");
-        sb.append("Password: '").append(this.password.replaceAll(".","*")).append("'\n");
-        sb.append("Localização: ").append(this.gps.toString()).append("\n");
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Transportadora\n");
+        sb.append(super.toString());
         sb.append("NIF: '").append(this.nif).append("'\n");
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Preco por Km: ").append(this.precoKm).append("\n");
+        sb.append("Preço por km: ").append(this.precoKm).append("\n");
         return sb.toString();
     }
 }
