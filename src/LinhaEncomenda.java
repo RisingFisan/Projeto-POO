@@ -1,86 +1,82 @@
+public class LinhaEncomenda {
 
-public class LinhaEncomenda
-{
     private String codProduto;
     private String descricao;
     private int quantidade;
     private double valorUnitario;
-    
-    public LinhaEncomenda(String cod,String desc,int quant,double valor){
+
+    public LinhaEncomenda(String cod, String desc, int quant, double valor) {
         this.codProduto = cod;
         this.descricao = desc;
         this.quantidade = quant;
-        this. valorUnitario = valor;
+        this.valorUnitario = valor;
     }
-    
-    public LinhaEncomenda (LinhaEncomenda le) {
+
+    public LinhaEncomenda(LinhaEncomenda le) {
         this.codProduto = getCodProduto();
         this.descricao = getDescricao();
         this.quantidade = getQuantidade();
-        this. valorUnitario = getValor();
+        this.valorUnitario = getValor();
     }
-    
-    
+
     //GETTERS
-    
+
     public String getCodProduto() {
         return this.codProduto;
     }
-    
+
     public String getDescricao() {
         return this.descricao;
     }
-    
+
     public int getQuantidade() {
         return this.quantidade;
     }
-    
+
     public double getValor() {
         return this.valorUnitario;
     }
-    
+
     //SETTERS
-    
+
     public void setCodProduto(String cod) {
         this.codProduto = cod;
     }
-    
-     public void setDescricao(String desc) {
+
+    public void setDescricao(String desc) {
         this.descricao = desc;
     }
-    
-     public void setQuantidade(int quant) {
+
+    public void setQuantidade(int quant) {
         this.quantidade = quant;
     }
-    
-     public void setValor(double valor) {
+
+    public void setValor(double valor) {
         this.valorUnitario = valor;
     }
-    
-    
+
+
     //CLONE
-    public LinhaEncomenda clone(){
+    public LinhaEncomenda clone() {
         return new LinhaEncomenda(this);
     }
-    
+
     //EQUALS
     public boolean equals(LinhaEncomenda le) {
-         if (this.codProduto.equals(le.getCodProduto()) 
-            && this.descricao.equals(le.getDescricao()) 
-            && this.quantidade == le.getQuantidade()
-            && this.valorUnitario == le.getValor()) return true;
-        else return false;
+        return this.codProduto.equals(le.getCodProduto())
+                && this.descricao.equals(le.getDescricao())
+                && this.quantidade == le.getQuantidade()
+                && Double.compare(this.valorUnitario, le.valorUnitario) == 0;
     }
-    
+
     //toString
-    
-    public String toString(){
+
+    public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Código de Produto: ").append(this.codProduto).append("\n");
-        sb.append("Descricao: ").append(this.descricao).append("\n");
-        sb.append("Quantidade encomenda: ").append(this.quantidade).append("\n");
-        sb.append("Valor Unitario: ").append(this.valorUnitario).append("\n");
+        sb.append("Cï¿½digo de Produto: ").append(this.codProduto).append("\n");
+        sb.append("Descriï¿½ï¿½o: ").append(this.descricao).append("\n");
+        sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
+        sb.append("Valor Unitï¿½rio: ").append(this.valorUnitario).append("\n");
         return sb.toString();
     }
-    
-    }
+}

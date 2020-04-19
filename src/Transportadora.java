@@ -1,101 +1,67 @@
-import java.lang.Object;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 
-public class Transportadora {
-    String codEmpresa;
-    String nomeEmpresa;
-    String email;
-    String password;
-    Point2D gps;
-    int NIF;
+public class Transportadora extends Conta {
+    String nif;
     double raio;
     double precoKm;
 
-    public Transportadora (String cod, String nome ,Point2D point, int outroNIF, double raio, double preco,String novoEmail,String novaPass) {
-        this.codEmpresa = cod;
-        this.nomeEmpresa = nome;
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
+        this.codigo = cod;
+        this.nome = nome;
+        this.email = cod;
+        this.password= cod;
+        this.gps = new Point2D.Double(x, y);
+        this.raio = raio;
+        this.nif = nif;
+        this.precoKm = preco;
+    }
+
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass) {
+        this.codigo = cod;
+        this.nome = nome;
         this.email = novoEmail;
         this.password= novaPass;
-        this.gps = point;
+        this.gps = new Point2D.Double(x, y);
         this.raio = raio;
-        this.NIF= outroNIF;
+        this.nif = nif;
         this.precoKm = preco;
     }
 
 
     public Transportadora (Transportadora util) {
-        this.codEmpresa = util.getCodEmpresa();
-        this.nomeEmpresa = util.getNome();
-        this.email = util.getEmail();
+        this.codigo = util.codigo;
+        this.nome = util.nome;
+        this.email = util.email;
         this.password = util.password;
-        this.gps = util.getGps();
-        this.NIF = util.getNIF();
-        this.raio = util.getRaio();
-        this.precoKm = util.getPreco();
+        this.gps = new Point2D.Double(this.getGPSx(), this.getGPSy());
+        this.nif = util.nif;
+        this.raio = util.raio;
+        this.precoKm = util.precoKm;
     }
 
     //GETTERS
-    public String getCodEmpresa() {
-        return this.codEmpresa;
+    public String getNIF() {
+        return this.nif;
     }
-
-
-    public String getNome() {
-        return this.nomeEmpresa;
-    }
-    
-    public String getEmail() {
-        return this.email;
-    }
-
-
-    public Point2D getGps() {
-        return this.gps;
-    }
-
-
-    public int getNIF() {
-        return this.NIF;
-    }
-
 
     public double getRaio() {
         return this.raio;
     }
 
-    public double getPreco() {
+    public double getPrecoPorKm() {
         return this.precoKm;
     }
-  
+
     //SETTERS
-    public void setCodEmpresa(String util) {
-        this.codEmpresa = util;
-    }
-
-    public void setNome(String nome) {
-        this.nomeEmpresa = nome;
-    }
-    public void setEmail(String novoEmail) {
-        this.email = novoEmail;
-    }
-    public void setPassword(String pass) {
-        this.password = pass;
-    }
-
-    public void setGps(Point2D gps) {
-        this.gps = gps;
-    }
-
-    public void setNIF(int nif) {
-        this.NIF = nif;
+    public void setNIF(String nif) {
+        this.nif = nif;
     }
 
     public void setRaio(double raio) {
         this.raio = raio;
     }
 
-    public void setPreco(double preco) {
+    public void setPrecoPorKm(double preco) {
         this.precoKm = preco;
     }
     
@@ -105,41 +71,14 @@ public class Transportadora {
         return new Transportadora(this);
     }
     
-    //EQUALS
-    public boolean equals(Transportadora p) {
-        if (this.codEmpresa.equals(p.getCodEmpresa()) &&
-            this.nomeEmpresa.equals(p.getNome()) &&
-            this.email.equals(p.getEmail()) && 
-            this.password.equals(p.password)&&
-            this.gps.equals(p.getGps()) &&
-            this.NIF == p.getNIF() &&
-            this.raio == p.getRaio() &&
-            this.precoKm == p.getPreco()) 
-            return true;
-
-        else return false;
-
-    }
-    
     //toSTRING
-    public String toString () {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Código da empresa: ").append(this.codEmpresa).append("\n");
-        sb.append("Nome da empresa: ").append(this.nomeEmpresa).append("\n");
-        sb.append("Email: ").append(this.email).append("\n");
-        sb.append("Localização: ").append(this.gps.toString()).append("\n");
-        sb.append("NIF: ").append(this.NIF).append("\n");
-        sb.append("Raio(km): ").append(this.raio).append("\n");
-        sb.append("Preco por Km: ").append(this.precoKm).append("\n");
-
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Transportadora\n");
+        sb.append(super.toString());
+        sb.append("NIF: '").append(this.nif).append("'\n");
+        sb.append("Raio: ").append(this.raio).append("km\n");
+        sb.append("PreÃ§o por km: ").append(this.precoKm).append("\n");
         return sb.toString();
     }
-    
-    public boolean checkCredenciais (String outroEmail,String pass){
-        return (this.email.equals(outroEmail) && this.password.equals(pass));
-    }
-
-
-
 }
 
