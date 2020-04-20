@@ -1,4 +1,4 @@
-public class LinhaEncomenda {
+public class LinhaEncomenda implements Comparable {
 
     private String codProduto;
     private String descricao;
@@ -78,5 +78,11 @@ public class LinhaEncomenda {
         sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
         sb.append("Valor Unit�rio: ").append(this.valorUnitario).append("\n");
         return sb.toString();
+    }
+    
+    @Override
+    public int compareTo(Object o) {
+        LinhaEncomenda u = (LinhaEncomenda) o;
+        return this.codProduto.compareTo(u.codProduto);
     }
 }
