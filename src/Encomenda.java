@@ -31,7 +31,6 @@ public class Encomenda{
         this.codEnc = e.codEnc;
         this.codUtil = e.codUtil;
         this.codLoja = e.codLoja;
-        this.encomenda = new TreeSet<>();
         this.encomenda = e.getEncomenda();
         
         
