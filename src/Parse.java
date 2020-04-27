@@ -11,15 +11,20 @@ import java.util.stream.Collectors;
 public class Parse {
     Set<Conta> c;
     Set<Encomenda> e;
+    
+    public Parse() {
+        this.c = new TreeSet<>();
+        this.e = new TreeSet<>();
+    }
 
     public void parse() {
-        List<String> linhas = lerFicheiro("LogsGerados.csv"); //alterar nome do ficheiro
+        List<String> linhas = lerFicheiro("/testeFile.csv"); 
         for (String linha : linhas) {
             String[] linhaPartida = linha.split(":", 2);
             switch (linhaPartida[0]) {
                 case "Utilizador":
-                    Conta u = parseUtilizador(linhaPartida[1]); // criar um Utilizador
-                    System.out.println(u.toString()); //enviar para o ecra apenas para teste
+                    Conta u = parseUtilizador(linhaPartida[1]); 
+                    System.out.println(u.toString()); 
                     c.add(u);
                     break;
                 case "Loja":
@@ -48,7 +53,8 @@ public class Parse {
             }
 
         }
-        System.out.println("done!");
+        System.out.println("----Ficheiros carregados!---");
+        
     }
 
 
@@ -58,11 +64,10 @@ public class Parse {
         String codUtilizador = campos[1];
         double x = Double.parseDouble(campos[2]);
         double y = Double.parseDouble(campos[3]);
-        //dados por omissao
-        return new Conta(codUtilizador, nome, x, y);
+        return new Utilizador(codUtilizador, nome, x, y);
     }
 
-    public Loja parseLoja(String input) {
+    public Conta parseLoja(String input) {
         String[] campos = input.split(",");
         String codLoja = campos[0];
         String nomeLoja = campos[1];
@@ -72,7 +77,7 @@ public class Parse {
         return new Loja(codLoja, nomeLoja, x, y);
     }
 
-    public Voluntario parseVoluntario(String input) {
+    public Conta parseVoluntario(String input) {
         String[] campos = input.split(",");
         String codVol = campos[0];
         String nomeVol = campos[1];
@@ -83,7 +88,7 @@ public class Parse {
         return new Voluntario(codVol, nomeVol, x, y, raio);
     }
 
-    public Transportadora parseTransportadora(String input) {
+    public Conta parseTransportadora(String input) {
         String[] campos = input.split(",");
         String codTransp = campos[0];
         String nomeTransp = campos[1];

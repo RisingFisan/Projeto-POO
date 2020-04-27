@@ -22,4 +22,8 @@ public class Utilizador extends Conta {
     public Utilizador clone() {
         return new Utilizador(this);
     }
+    
+    public boolean equals(Utilizador u){
+        return super.equals(u);
+    }
 }

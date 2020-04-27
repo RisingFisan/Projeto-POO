@@ -16,6 +16,7 @@ public class TrazAqui implements Serializable {
     }
    
     public TrazAqui(TrazAqui t){
+        //por copia
 } 
 
 
@@ -32,9 +33,22 @@ public class TrazAqui implements Serializable {
    
    
     
-    public void fazerRegisto(){
+    public void fazerRegistoUser(){
         
     }
+    
+    public void fazerRegistoVoluntario(){
+        
+    }
+    
+    public void fazerRegistoTransportadora(){
+        
+    }
+    
+    public void fazerRegistoEmpresa(){
+    }
+    
+    
     
    
    
