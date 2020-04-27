@@ -31,7 +31,11 @@ public class Contas {
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append("Utilizadores: ").append(setContas.toString()).append('\n');
+        sb.append("Contas na app: ").append(setContas.toString()).append('\n');
         return sb.toString();
+    }
+    
+    public void addConta (Conta c){
+        this.setContas.add(c);
     }
 }

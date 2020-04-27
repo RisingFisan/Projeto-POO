@@ -8,6 +8,7 @@ public class Conta implements Comparable {
     protected String email;
     protected String password;
 
+    
     public Conta() {
         this.codigo = null;
         this.nome = null;

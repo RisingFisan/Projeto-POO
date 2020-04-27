@@ -9,29 +9,17 @@ public class Loja extends Conta {
     private Queue <Encomenda> filaEspera;
     
     public Loja(String cod, String nome, double x, double y) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
-        this.email = cod;
-        this.password = cod;
+        super(cod,nome,x,y);
         this.filaEspera = new LinkedList<>();
     }
 
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, LinkedList<Encomenda> l) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
-        this.email = novoEmail;
-        this.password = novaPassword;
+        super(cod,nome,x,y,novoEmail,novaPassword);
         this.setFilaEspera(l);
     }
 
     public Loja(Loja outro) {
-        this.codigo = outro.codigo;
-        this.nome = outro.nome;
-        this.gps = new Point2D.Double(outro.getGPSx(), outro.getGPSy());
-        this.email = outro.getEmail();
-        this.password = outro.password;
+        super(outro);
         this.filaEspera = outro.getFilaEspera();
     }
     

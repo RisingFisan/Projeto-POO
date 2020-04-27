@@ -6,37 +6,25 @@ public class Transportadora extends Conta {
     double precoKm;
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.email = cod;
-        this.password= cod;
-        this.gps = new Point2D.Double(x, y);
+        super(cod,nome,x,y);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
     }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.email = novoEmail;
-        this.password= novaPass;
-        this.gps = new Point2D.Double(x, y);
+       super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
     }
 
 
-    public Transportadora (Transportadora util) {
-        this.codigo = util.codigo;
-        this.nome = util.nome;
-        this.email = util.email;
-        this.password = util.password;
-        this.gps = new Point2D.Double(this.getGPSx(), this.getGPSy());
-        this.nif = util.nif;
-        this.raio = util.raio;
-        this.precoKm = util.precoKm;
+    public Transportadora (Transportadora t) {
+        super(t);
+        this.nif = t.nif;
+        this.raio = t.raio;
+        this.precoKm = t.precoKm;
     }
 
     //GETTERS

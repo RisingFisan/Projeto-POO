@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class Parse {
+    Set<Conta> c;
+    Set<Encomenda> e;
 
     public void parse() {
         List<String> linhas = lerFicheiro("LogsGerados.csv"); //alterar nome do ficheiro
@@ -15,20 +20,27 @@ public class Parse {
                 case "Utilizador":
                     Conta u = parseUtilizador(linhaPartida[1]); // criar um Utilizador
                     System.out.println(u.toString()); //enviar para o ecra apenas para teste
+                    c.add(u);
                     break;
                 case "Loja":
-                    Loja l = parseLoja(linhaPartida[1]);
+                    Conta l = parseLoja(linhaPartida[1]);
                     System.out.println(l.toString());
+                    c.add(l);
                     break;
                 case "Voluntario":
-                    Voluntario v = parseVoluntario(linhaPartida[1]);
+                    Conta v = parseVoluntario(linhaPartida[1]);
                     System.out.println(v.toString());
+                    c.add(v);
                     break;
                 case "Transportadora":
-                    Transportadora t = parseTransportadora(linhaPartida[1]);
+                    Conta t = parseTransportadora(linhaPartida[1]);
                     System.out.println(t.toString());
+                    c.add(t);
                     break;
                 case "Encomenda":
+                    Encomenda enc = parseEnc(linhaPartida[1]);
+                    System.out.println(e.toString());
+                    e.add(enc);
                     break;
                 default:
                     System.out.println("Linha invalida.");
@@ -73,15 +85,35 @@ public class Parse {
 
     public Transportadora parseTransportadora(String input) {
         String[] campos = input.split(",");
-        String codTrans = campos[0];
-        String nomeTrans = campos[1];
+        String codTransp = campos[0];
+        String nomeTransp = campos[1];
         double x = Double.parseDouble(campos[2]);
         double y = Double.parseDouble(campos[3]);
         String nif = campos[4];
         double raio = Double.parseDouble(campos[5]);
         double preco = Double.parseDouble(campos[6]);
         //dados por omissao
-        return new Transportadora(codTrans, nomeTrans, x, y, nif, raio, preco);
+        return new Transportadora(codTransp, nomeTransp, x, y, nif, raio, preco);
+    }
+    
+    public Encomenda parseEnc(String input){
+        String[] campos = input.split(",");
+        String cod = campos[0];
+        String nome = campos[1];
+        String loja = campos[2];
+        double peso = Double.parseDouble(campos[3]);
+        Set<LinhaEncomenda> l = new TreeSet<>();
+        int i = 4;
+        while(i<campos.length-1){
+            String codProd = campos[i++];
+            String codDesc = campos[i++];
+            int quant = Integer.parseInt(campos[i++]);
+            double val = Double.parseDouble(campos[i++]); 
+            LinhaEncomenda le = new LinhaEncomenda(codProd,codDesc,quant,val);
+            l.add(le);
+        }
+        return new Encomenda(cod,nome,loja,peso,l);
+        
     }
 
     public List<String> lerFicheiro(String nomeFich) {
@@ -92,6 +124,14 @@ public class Parse {
             System.out.println(exc.getMessage());
         }
         return lines;
+    }
+    
+    public Set getContas(){
+        return this.c.stream().map(Conta::clone).collect(Collectors.toSet());
+    }
+    
+    public Set getEncomendas(){
+        return this.e.stream().map(Encomenda::clone).collect(Collectors.toSet());
     }
 
 
