@@ -8,6 +8,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
+
+
+import java.io.*;
+
+
 public class Parse {
     Set<Conta> c;
     Set<Encomenda> e;
@@ -18,7 +23,7 @@ public class Parse {
     }
 
     public void parse() {
-        List<String> linhas = lerFicheiro("/testeFile.csv"); 
+        List<String> linhas = lerFicheiro("logs.csv"); 
         for (String linha : linhas) {
             String[] linhaPartida = linha.split(":", 2);
             switch (linhaPartida[0]) {
@@ -44,7 +49,7 @@ public class Parse {
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
-                    System.out.println(e.toString());
+                    System.out.println(enc.toString());
                     e.add(enc);
                     break;
                 default:
@@ -56,6 +61,30 @@ public class Parse {
         System.out.println("----Ficheiros carregados!---");
         
     }
+    
+    /*Prototipo de outra parse - nao acabada*/
+    public void parse2(){
+        
+        
+        try{
+            File file = new File("logs.csv");
+            System.out.println(file.getCanonicalPath());
+            FileInputStream ft = new FileInputStream(file);
+
+            DataInputStream in = new DataInputStream(ft);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strline;
+
+            while((strline = br.readLine()) != null){
+                System.out.println(strline.toString());
+            }
+            in.close();
+            
+        }catch(Exception e){
+            System.err.println("Error: " + e.getMessage());
+        }
+} 
+    
 
 
     public Conta parseUtilizador(String input) {
@@ -112,11 +141,12 @@ public class Parse {
         while(i<campos.length-1){
             String codProd = campos[i++];
             String codDesc = campos[i++];
-            int quant = Integer.parseInt(campos[i++]);
+            double quant = Double.parseDouble(campos[i++]); 
             double val = Double.parseDouble(campos[i++]); 
             LinhaEncomenda le = new LinhaEncomenda(codProd,codDesc,quant,val);
             l.add(le);
         }
+         
         return new Encomenda(cod,nome,loja,peso,l);
         
     }

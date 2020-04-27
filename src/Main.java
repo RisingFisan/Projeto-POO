@@ -9,8 +9,10 @@ public class Main
     }
     
     public static void Main(){
-        Parse p = new Parse();
-        p.parse();
+        TrazAqui app = new TrazAqui();
+        
+        
+        app.loadFiles();
     }
     
 }

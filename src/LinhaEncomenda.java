@@ -2,10 +2,10 @@ public class LinhaEncomenda implements Comparable {
 
     private String codProduto;
     private String descricao;
-    private int quantidade;
+    private double quantidade;
     private double valorUnitario;
 
-    public LinhaEncomenda(String cod, String desc, int quant, double valor) {
+    public LinhaEncomenda(String cod, String desc, double quant, double valor) {
         this.codProduto = cod;
         this.descricao = desc;
         this.quantidade = quant;
@@ -29,7 +29,7 @@ public class LinhaEncomenda implements Comparable {
         return this.descricao;
     }
 
-    public int getQuantidade() {
+    public double getQuantidade() {
         return this.quantidade;
     }
 
@@ -47,7 +47,7 @@ public class LinhaEncomenda implements Comparable {
         this.descricao = desc;
     }
 
-    public void setQuantidade(int quant) {
+    public void setQuantidade(double quant) {
         this.quantidade = quant;
     }
 

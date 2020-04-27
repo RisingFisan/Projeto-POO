@@ -2,7 +2,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-public class Encomenda{
+public class Encomenda implements Comparable{
     private String codEnc;
     private String codUtil;
     private String codLoja;
@@ -57,14 +57,14 @@ public class Encomenda{
     public void setPeso(double newPeso) {this.peso = newPeso;}
     
     public void setEncomenda(Set<LinhaEncomenda> le) {
-        this.encomenda.stream().map(LinhaEncomenda::clone).collect(Collectors.toSet());
+        this.encomenda = le.stream().map(LinhaEncomenda::clone).collect(Collectors.toSet());
     }
     
     public Encomenda clone(){
         return new Encomenda(this);
     }
     
-    public String toSTring() {
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Código da Encomenda: ").append(this.codEnc).append("\n");
         sb.append("Código do Utilizador: ").append(this.codUtil).append("\n");
@@ -85,6 +85,12 @@ public class Encomenda{
                 (this.peso)==(e.peso) &&
                 this.encomenda.equals(e.encomenda);
     }
+    
+   @Override
+    public int compareTo(Object o) {
+        Encomenda u = (Encomenda) o;
+        return this.codEnc.compareTo(u.codEnc);
+    } 
     
     
 }
