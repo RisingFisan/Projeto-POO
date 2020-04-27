@@ -126,11 +126,11 @@ public class Parse {
         return lines;
     }
     
-    public Set getContas(){
+    public Set<Conta> getContas(){
         return this.c.stream().map(Conta::clone).collect(Collectors.toSet());
     }
     
-    public Set getEncomendas(){
+    public Set<Encomenda> getEncomendas(){
         return this.e.stream().map(Encomenda::clone).collect(Collectors.toSet());
     }
 
