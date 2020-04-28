@@ -4,6 +4,13 @@ public class LinhaEncomenda implements Comparable {
     private String descricao;
     private double quantidade;
     private double valorUnitario;
+    
+    public LinhaEncomenda() {
+        this.codProduto = "";
+        this.descricao = "";
+        this.quantidade = 0;
+        this.valorUnitario = 0;
+    }
 
     public LinhaEncomenda(String cod, String desc, double quant, double valor) {
         this.codProduto = cod;
@@ -13,10 +20,10 @@ public class LinhaEncomenda implements Comparable {
     }
 
     public LinhaEncomenda(LinhaEncomenda le) {
-        this.codProduto = getCodProduto();
-        this.descricao = getDescricao();
-        this.quantidade = getQuantidade();
-        this.valorUnitario = getValor();
+        this.codProduto = le.getCodProduto();
+        this.descricao = le.getDescricao();
+        this.quantidade = le.getQuantidade();
+        this.valorUnitario = le.getValor();
     }
 
     //GETTERS
@@ -84,5 +91,6 @@ public class LinhaEncomenda implements Comparable {
     public int compareTo(Object o) {
         LinhaEncomenda u = (LinhaEncomenda) o;
         return this.codProduto.compareTo(u.codProduto);
+    
     }
 }

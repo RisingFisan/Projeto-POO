@@ -144,7 +144,7 @@ public class Parse {
             double quant = Double.parseDouble(campos[i++]); 
             double val = Double.parseDouble(campos[i++]); 
             LinhaEncomenda le = new LinhaEncomenda(codProd,codDesc,quant,val);
-            l.add(le);
+            l.add(le.clone());
         }
          
         return new Encomenda(cod,nome,loja,peso,l);
