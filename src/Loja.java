@@ -1,6 +1,7 @@
 import java.awt.geom.Point2D;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Iterator; 
 
@@ -43,7 +44,7 @@ public class Loja extends Conta {
     public String toString() {
         StringBuilder sb = new StringBuilder("Loja\n");
         sb.append(super.toString());
-        sb.append(this.filaEspera);
+        sb.append("Fila de espera: ").append(this.filaEspera.toString());
         return sb.toString();
     }
     
@@ -57,5 +58,8 @@ public class Loja extends Conta {
             return true;  
              
         }
+        
+        
     }
+    
 }

@@ -35,7 +35,17 @@ public class Contas {
         return sb.toString();
     }
     
+    public Contas clone(){
+        return new Contas(this);
+    }
+    
     public void addConta (Conta c){
         this.setContas.add(c);
+    }
+    
+    public Conta getContaByCod(String cod){
+        for (Conta c : this.setContas)
+           if (c.getCodigo().equals(cod)) return c.clone();
+        return null;   
     }
 }

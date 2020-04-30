@@ -5,11 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
 import java.util.Set;
+import java.util.LinkedList;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-
-
-
 import java.io.*;
 
 
@@ -29,34 +27,38 @@ public class Parse {
             switch (linhaPartida[0]) {
                 case "Utilizador":
                     Conta u = parseUtilizador(linhaPartida[1]); 
-                    System.out.println(u.toString()); 
+                    //System.out.println(u.toString()); 
                     c.add(u);
                     break;
                 case "Loja":
                     Conta l = parseLoja(linhaPartida[1]);
-                    System.out.println(l.toString());
+                    //System.out.println(l.toString());
                     c.add(l);
                     break;
                 case "Voluntario":
                     Conta v = parseVoluntario(linhaPartida[1]);
-                    System.out.println(v.toString());
+                    //System.out.println(v.toString());
                     c.add(v);
                     break;
                 case "Transportadora":
                     Conta t = parseTransportadora(linhaPartida[1]);
-                    System.out.println(t.toString());
+                    //System.out.println(t.toString());
                     c.add(t);
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
-                    System.out.println(enc.toString());
                     e.add(enc);
                     break;
+                    
+                case "Aceite":
+                break;
+                
                 default:
                     System.out.println("Linha invalida.");
                     break;
             }
-
+            
+           putEncInQueues();
         }
         System.out.println("----Ficheiros carregados!---");
         
@@ -84,6 +86,21 @@ public class Parse {
             System.err.println("Error: " + e.getMessage());
         }
 } 
+
+   public void putEncInQueues(){
+ 
+       for (Conta conta : this.c){
+           if(conta instanceof Loja){
+                Loja l = (Loja) conta;
+                LinkedList<Encomenda> encDaLoja = this.e.stream()
+                                                     .filter(a->a.getCodLoja().equals(l.getCodigo()))
+                                                     .collect(Collectors.toCollection(LinkedList::new));
+               l.setFilaEspera(encDaLoja);
+            }
+          
+        }
+        
+   } 
     
 
 
@@ -161,12 +178,12 @@ public class Parse {
         return lines;
     }
     
-    public Set<Conta> getContas(){
-        return this.c.stream().map(Conta::clone).collect(Collectors.toSet());
+    public Contas getContas(){
+        return new Contas(c);
     }
     
-    public Set<Encomenda> getEncomendas(){
-        return this.e.stream().map(Encomenda::clone).collect(Collectors.toSet());
+    public Encomendas getEncomendas(){
+        return new Encomendas(e);
     }
 
 

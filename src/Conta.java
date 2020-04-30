@@ -120,6 +120,7 @@ public class Conta implements Comparable {
     public boolean checkCredenciais (String outroEmail, String pass){
         return (this.email.equals(outroEmail) && this.password.equals(pass));
     }
-
+    
+    
 
 }
