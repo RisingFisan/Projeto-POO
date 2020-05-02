@@ -66,9 +66,9 @@ public class Encomenda{
     
     public String toSTring() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Código da Encomenda: ").append(this.codEnc).append("\n");
-        sb.append("Código do Utilizador: ").append(this.codUtil).append("\n");
-        sb.append("Código da Loja: ").append(this.codLoja).append("\n");
+        sb.append("CÃ³digo da Encomenda: ").append(this.codEnc).append("\n");
+        sb.append("CÃ³digo do Utilizador: ").append(this.codUtil).append("\n");
+        sb.append("CÃ³digo da Loja: ").append(this.codLoja).append("\n");
         sb.append("Peso: ").append(this.peso).append("\n");
         sb.append("Linhas da Encomenda: ").append(this.encomenda.toString()).append("\n");
 
