@@ -22,7 +22,11 @@ public class Contas {
                 .map(Conta::clone)
                 .collect(Collectors.toSet());
     }
-
+    
+    public void addConta (Conta conta) {
+        this.setContas.add(conta.clone());
+    }
+    
     public void setContas(Set<Conta> set) {
         this.setContas = set.stream()
                 .map(Conta::clone)
@@ -33,5 +37,12 @@ public class Contas {
         final StringBuffer sb = new StringBuffer();
         sb.append("Utilizadores: ").append(setContas.toString()).append('\n');
         return sb.toString();
+    }
+    
+    public boolean checkCredenciais (String email, String pass) {
+        for (Conta c: this.setContas) {
+            if (c.checkCredenciais(email, pass)) return true;
+        }
+        return false;
     }
 }
