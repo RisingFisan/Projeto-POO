@@ -102,7 +102,7 @@ public class Conta implements Comparable {
     //ToString
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Código da conta: '").append(this.codigo).append("'\n");
+        sb.append("CÃ³digo da conta: '").append(this.codigo).append("'\n");
         sb.append("Nome da conta: '").append(this.nome).append("'\n");
         sb.append("Coordenadas: ").append(this.gps.toString()).append("\n");
         sb.append("Email: '").append(this.email).append("'\n");
