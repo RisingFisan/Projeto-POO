@@ -2,27 +2,15 @@ import java.awt.geom.Point2D;
 
 public class Utilizador extends Conta {
     public Utilizador(String codigo, String nome, double x, double y) {
-        this.codigo = codigo;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
-        this.email = codigo;
-        this.password = codigo;
+       super(codigo,nome,x,y);
     }
 
-    public Utilizador(String codigo, String nome, double x, double y, String email, String passowrd) {
-        this.codigo = codigo;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
-        this.email = email;
-        this.password = passowrd;
+    public Utilizador(String codigo, String nome, double x, double y, String email, String password) {
+       super(codigo,nome,x,y,email,password);
     }
 
     public Utilizador(Utilizador outro) {
-        this.codigo = outro.codigo;
-        this.nome = outro.nome;
-        this.gps = new Point2D.Double(outro.getGPSx(), outro.getGPSy());
-        this.email = outro.email;
-        this.password = outro.password;
+        super(outro);
     }
 
     public String toString() {
@@ -33,5 +21,9 @@ public class Utilizador extends Conta {
 
     public Utilizador clone() {
         return new Utilizador(this);
+    }
+    
+    public boolean equals(Utilizador u){
+        return super.equals(u);
     }
 }

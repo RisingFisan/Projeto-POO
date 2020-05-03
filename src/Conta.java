@@ -8,6 +8,7 @@ public class Conta implements Comparable {
     protected String email;
     protected String password;
 
+    
     public Conta() {
         this.codigo = null;
         this.nome = null;
@@ -102,7 +103,7 @@ public class Conta implements Comparable {
     //ToString
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("Código da conta: '").append(this.codigo).append("'\n");
+        sb.append("Codigo da conta: '").append(this.codigo).append("'\n");
         sb.append("Nome da conta: '").append(this.nome).append("'\n");
         sb.append("Coordenadas: ").append(this.gps.toString()).append("\n");
         sb.append("Email: '").append(this.email).append("'\n");
@@ -119,6 +120,7 @@ public class Conta implements Comparable {
     public boolean checkCredenciais (String outroEmail, String pass){
         return (this.email.equals(outroEmail) && this.password.equals(pass));
     }
-
+    
+    
 
 }

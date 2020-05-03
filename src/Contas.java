@@ -31,7 +31,21 @@ public class Contas {
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append("Utilizadores: ").append(setContas.toString()).append('\n');
+        sb.append("Contas na app: ").append(setContas.toString()).append('\n');
         return sb.toString();
+    }
+    
+    public Contas clone(){
+        return new Contas(this);
+    }
+    
+    public void addConta (Conta c){
+        this.setContas.add(c);
+    }
+    
+    public Conta getContaByCod(String cod){
+        for (Conta c : this.setContas)
+           if (c.getCodigo().equals(cod)) return c.clone();
+        return null;   
     }
 }

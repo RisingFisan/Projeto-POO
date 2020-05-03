@@ -4,30 +4,21 @@ public class Voluntario extends Conta {
     private double raio;
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
+        super(cod,nome,x,y);
         this.email = cod;
         this.password = cod;
         this.raio = raio;
     }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
-        this.codigo = cod;
-        this.nome = nome;
-        this.gps = new Point2D.Double(x, y);
-        this.email = novoEmail;
-        this.password = novaPassword;
+        super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
     }
 
     public Voluntario(Voluntario outro) {
-        this.codigo = outro.codigo;
-        this.nome = outro.nome;
-        this.gps = new Point2D.Double(outro.getGPSx(), outro.getGPSy());
+        super(outro);
         this.raio = outro.raio;
-        this.email = outro.email;
-        this.password = outro.password;
+        
     }
 
     // GETTERS
@@ -47,11 +38,7 @@ public class Voluntario extends Conta {
 
     //EQUALS
     public boolean equals(Voluntario v) {
-        return this.codigo.equals(v.codigo)
-                && this.nome.equals(v.nome)
-                && this.gps.equals(v.gps)
-                && this.email.equals(v.email)
-                && this.password.equals(v.password);
+        return super.equals(v) && this.raio ==v.raio;
     }
 
     //ToString
