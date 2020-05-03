@@ -2,10 +2,17 @@ public class LinhaEncomenda implements Comparable {
 
     private String codProduto;
     private String descricao;
-    private int quantidade;
+    private double quantidade;
     private double valorUnitario;
+    
+    public LinhaEncomenda() {
+        this.codProduto = "";
+        this.descricao = "";
+        this.quantidade = 0;
+        this.valorUnitario = 0;
+    }
 
-    public LinhaEncomenda(String cod, String desc, int quant, double valor) {
+    public LinhaEncomenda(String cod, String desc, double quant, double valor) {
         this.codProduto = cod;
         this.descricao = desc;
         this.quantidade = quant;
@@ -13,10 +20,10 @@ public class LinhaEncomenda implements Comparable {
     }
 
     public LinhaEncomenda(LinhaEncomenda le) {
-        this.codProduto = getCodProduto();
-        this.descricao = getDescricao();
-        this.quantidade = getQuantidade();
-        this.valorUnitario = getValor();
+        this.codProduto = le.getCodProduto();
+        this.descricao = le.getDescricao();
+        this.quantidade = le.getQuantidade();
+        this.valorUnitario = le.getValor();
     }
 
     //GETTERS
@@ -29,7 +36,7 @@ public class LinhaEncomenda implements Comparable {
         return this.descricao;
     }
 
-    public int getQuantidade() {
+    public double getQuantidade() {
         return this.quantidade;
     }
 
@@ -47,7 +54,7 @@ public class LinhaEncomenda implements Comparable {
         this.descricao = desc;
     }
 
-    public void setQuantidade(int quant) {
+    public void setQuantidade(double quant) {
         this.quantidade = quant;
     }
 
@@ -73,10 +80,10 @@ public class LinhaEncomenda implements Comparable {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("C�digo de Produto: ").append(this.codProduto).append("\n");
-        sb.append("Descri��o: ").append(this.descricao).append("\n");
+        sb.append("Codigo de Produto: ").append(this.codProduto).append("\n");
+        sb.append("Descricao: ").append(this.descricao).append("\n");
         sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
-        sb.append("Valor Unit�rio: ").append(this.valorUnitario).append("\n");
+        sb.append("Valor Unitario: ").append(this.valorUnitario).append("\n");
         return sb.toString();
     }
     
@@ -84,5 +91,6 @@ public class LinhaEncomenda implements Comparable {
     public int compareTo(Object o) {
         LinhaEncomenda u = (LinhaEncomenda) o;
         return this.codProduto.compareTo(u.codProduto);
+    
     }
 }
