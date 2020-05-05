@@ -1,4 +1,4 @@
-/** Controlador Temporario */
+/* Controlador Temporario */
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,7 +19,7 @@ public class TrazAqui implements Serializable {
         //por copia
 } 
 
-
+    /*
     public TrazAqui loadFiles(){
       Parse p = new Parse();
       TrazAqui t = new TrazAqui();
@@ -27,10 +27,10 @@ public class TrazAqui implements Serializable {
        t.contas = new Contas(p.getContas());
        t.encomendas = new Encomendas(p.getEncomendas());
        return t;
-     
-     
+
+
     }
-   
+   */
    
     
     public void fazerRegistoUser(){

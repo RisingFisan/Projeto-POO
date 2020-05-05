@@ -10,7 +10,7 @@ public class Main
     
     public static void Main(){
         TrazAqui app = new TrazAqui();
-         app.loadFiles();
+         //app.loadFiles();
     }
     
 }
