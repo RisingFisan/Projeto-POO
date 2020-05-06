@@ -1,10 +1,9 @@
-import java.awt.geom.Point2D;
 import java.util.Objects;
 
 public class Transportadora extends Conta {
-    String nif;
-    double raio;
-    double precoKm;
+    private String nif;
+    private double raio;
+    private double precoKm;
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);

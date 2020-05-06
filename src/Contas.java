@@ -37,16 +37,13 @@ public class Contas {
         return sb.toString();
     }
     
-    public boolean checkCredenciais (String email, String pass) {
-        return this.mapContas.values().stream()
-                .anyMatch(c->c.checkCredenciais(email,pass));
-    }
-    
     public Contas clone(){
         return new Contas(this);
     }
 
-    public Conta getContaByCod(String cod){
-        return this.mapContas.getOrDefault(cod,null);
+    public Conta getContaByEmail(String email){
+        return this.mapContas.values().stream()
+                .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc)
+                .clone();
     }
 }

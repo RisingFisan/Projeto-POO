@@ -116,7 +116,7 @@ public class Conta implements Comparable {
         return this.codigo.compareTo(u.codigo);
     }
 
-    public boolean checkCredenciais (String outroEmail, String pass){
-        return (this.email.equals(outroEmail) && this.password.equals(pass));
+    public boolean checkPassword (String password){
+        return this.password.equals(password);
     }
 }

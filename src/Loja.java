@@ -21,11 +21,15 @@ public class Loja extends Conta {
     }
 
     public void setFilaEspera(List<Encomenda> l) {
-        this.filaEspera = new ArrayDeque<>(l);
+        this.filaEspera = l.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     public Queue<Encomenda> getFilaEspera() {
-        return new ArrayDeque<>(this.filaEspera);
+        return this.filaEspera.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     //CLONE

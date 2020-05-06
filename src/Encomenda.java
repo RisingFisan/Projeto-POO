@@ -3,7 +3,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Encomenda implements Comparable {
+public class Encomenda implements Comparable<Encomenda> {
     private String codEnc;
     private String codUtil;
     private String codLoja;
@@ -94,10 +94,8 @@ public class Encomenda implements Comparable {
         return Objects.hash(codEnc, codUtil, codLoja, peso, produtos);
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Encomenda u = (Encomenda) o;
-        return this.codEnc.compareTo(u.codEnc);
+    public int compareTo(Encomenda e) {
+        return this.codEnc.compareTo(e.codEnc);
     } 
     
     

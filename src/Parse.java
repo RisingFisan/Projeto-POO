@@ -10,9 +10,11 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.io.*;
 
+/* TODO: Passar as funcionalidades desta classe para a classe Estado */
+
 public class Parse {
-    Set<Conta> c;
-    Set<Encomenda> e;
+    private Set<Conta> c;
+    private Set<Encomenda> e;
 
     public Parse() {
         this.c = new TreeSet<>();
