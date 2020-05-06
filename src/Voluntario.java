@@ -1,12 +1,10 @@
-import java.awt.geom.Point2D;
+import java.util.Objects;
 
 public class Voluntario extends Conta {
     private double raio;
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
-        this.email = cod;
-        this.password = cod;
         this.raio = raio;
     }
 
@@ -18,7 +16,6 @@ public class Voluntario extends Conta {
     public Voluntario(Voluntario outro) {
         super(outro);
         this.raio = outro.raio;
-        
     }
 
     // GETTERS
@@ -37,8 +34,16 @@ public class Voluntario extends Conta {
     }
 
     //EQUALS
-    public boolean equals(Voluntario v) {
-        return super.equals(v) && this.raio ==v.raio;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Voluntario that = (Voluntario) o;
+        return Double.compare(that.raio, raio) == 0;
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), raio);
     }
 
     //ToString

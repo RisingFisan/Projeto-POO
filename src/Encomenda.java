@@ -1,39 +1,37 @@
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Encomenda implements Comparable{
+public class Encomenda implements Comparable<Encomenda> {
     private String codEnc;
     private String codUtil;
     private String codLoja;
     private double peso;
-    private Set<LinhaEncomenda> encomenda;
-    
-    public Encomenda (String newCodEnc,String newCodUtil,String newCodLoja,double newPeso){
+    private Map<String, LinhaEncomenda> produtos;
+
+    public Encomenda(String codEnc, String codUtil, String codLoja, double peso) {
+        this.codEnc = codEnc;
+        this.codUtil = codUtil;
+        this.codLoja = codLoja;
+        this.peso = peso;
+        this.produtos = new HashMap<>();
+    }
+
+    public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le){
         this.codEnc = newCodEnc;
         this.codUtil = newCodUtil;
         this.codLoja = newCodLoja;
         this.peso = newPeso;
-        this.encomenda = new TreeSet<>();
-        
-    } 
-    
-     public Encomenda (String newCodEnc,String newCodUtil,String newCodLoja,double newPeso,Set<LinhaEncomenda> le){
-        this.codEnc = newCodEnc;
-        this.codUtil = newCodUtil;
-        this.codLoja = newCodLoja;
-        this.peso = newPeso;
-        this.setEncomenda(le);
-        
+        this.setProdutos(le);
     }
     
      public Encomenda (Encomenda e){
         this.codEnc = e.codEnc;
         this.codUtil = e.codUtil;
         this.codLoja = e.codLoja;
-        this.encomenda = e.getEncomenda();
-        
-        
+        this.peso = e.peso;
+        this.produtos = e.getProdutos();
     }
     
     public String getCodEnc() {return this.codEnc;}
@@ -44,8 +42,9 @@ public class Encomenda implements Comparable{
     
     public double getPeso() {return this.peso;}
     
-    public Set<LinhaEncomenda> getEncomenda() {
-        return this.encomenda.stream().map(LinhaEncomenda::clone).collect(Collectors.toSet());
+    public Map<String, LinhaEncomenda> getProdutos() {
+        return this.produtos.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue().clone()));
     }
     
     public void setCodEnc(String newCod) {this.codEnc = newCod;}
@@ -56,8 +55,13 @@ public class Encomenda implements Comparable{
     
     public void setPeso(double newPeso) {this.peso = newPeso;}
     
-    public void setEncomenda(Set<LinhaEncomenda> le) {
-        this.encomenda = le.stream().map(LinhaEncomenda::clone).collect(Collectors.toSet());
+    public void setProdutos(Map<String, LinhaEncomenda> produtos) {
+        this.produtos = produtos.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue().clone()));
+    }
+
+    public void addProduto(LinhaEncomenda le) {
+        this.produtos.put(le.getCodProduto(), le.clone());
     }
     
     public Encomenda clone(){
@@ -65,31 +69,33 @@ public class Encomenda implements Comparable{
     }
     
     public String toString() {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("Encomenda\n");
         sb.append("Código da Encomenda: ").append(this.codEnc).append("\n");
         sb.append("Código do Utilizador: ").append(this.codUtil).append("\n");
         sb.append("Código da Loja: ").append(this.codLoja).append("\n");
         sb.append("Peso: ").append(this.peso).append("\n");
-        sb.append("Linhas da Encomenda: ").append(this.encomenda.toString()).append("\n");
+        sb.append("Produtos: ").append(this.produtos.toString()).append("\n");
 
         return sb.toString();
-    } 
-    
-   public boolean equals(Object o) {
+    }
+
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Encomenda e = (Encomenda) o;
-        return this.codEnc.equals(e.codEnc) &&
-                this.codUtil.equals(e.codUtil) &&
-                this.codLoja.equals(e.codLoja) &&
-                (this.peso)==(e.peso) &&
-                this.encomenda.equals(e.encomenda);
+        Encomenda encomenda = (Encomenda) o;
+        return Double.compare(encomenda.peso, peso) == 0 &&
+                Objects.equals(codEnc, encomenda.codEnc) &&
+                Objects.equals(codUtil, encomenda.codUtil) &&
+                Objects.equals(codLoja, encomenda.codLoja) &&
+                Objects.equals(produtos, encomenda.produtos);
     }
-    
-   @Override
-    public int compareTo(Object o) {
-        Encomenda u = (Encomenda) o;
-        return this.codEnc.compareTo(u.codEnc);
+
+    public int hashCode() {
+        return Objects.hash(codEnc, codUtil, codLoja, peso, produtos);
+    }
+
+    public int compareTo(Encomenda e) {
+        return this.codEnc.compareTo(e.codEnc);
     } 
     
     

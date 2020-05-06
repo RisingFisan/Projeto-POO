@@ -1,9 +1,9 @@
-import java.awt.geom.Point2D;
+import java.util.Objects;
 
 public class Transportadora extends Conta {
-    String nif;
-    double raio;
-    double precoKm;
+    private String nif;
+    private double raio;
+    private double precoKm;
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
@@ -67,6 +67,20 @@ public class Transportadora extends Conta {
         sb.append("Raio: ").append(this.raio).append("km\n");
         sb.append("Preço por km: ").append(this.precoKm).append("\n");
         return sb.toString();
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Transportadora that = (Transportadora) o;
+        return Double.compare(that.raio, raio) == 0 &&
+                Double.compare(that.precoKm, precoKm) == 0 &&
+                nif.equals(that.nif);
+    }
+
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), nif, raio, precoKm);
     }
 }
 

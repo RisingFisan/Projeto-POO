@@ -1,4 +1,6 @@
-public class LinhaEncomenda implements Comparable {
+import java.util.Objects;
+
+public class LinhaEncomenda {
 
     private String codProduto;
     private String descricao;
@@ -68,12 +70,19 @@ public class LinhaEncomenda implements Comparable {
         return new LinhaEncomenda(this);
     }
 
-    //EQUALS
-    public boolean equals(LinhaEncomenda le) {
-        return this.codProduto.equals(le.getCodProduto())
-                && this.descricao.equals(le.getDescricao())
-                && this.quantidade == le.getQuantidade()
-                && Double.compare(this.valorUnitario, le.valorUnitario) == 0;
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LinhaEncomenda that = (LinhaEncomenda) o;
+        return Double.compare(that.quantidade, quantidade) == 0 &&
+                Double.compare(that.valorUnitario, valorUnitario) == 0 &&
+                this.codProduto.equals(that.codProduto) &&
+                this.descricao.equals(that.descricao);
+    }
+
+    public int hashCode() {
+        return Objects.hash(codProduto, descricao, quantidade, valorUnitario);
     }
 
     //toString
@@ -85,12 +94,5 @@ public class LinhaEncomenda implements Comparable {
         sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
         sb.append("Valor Unitario: ").append(this.valorUnitario).append("\n");
         return sb.toString();
-    }
-    
-    @Override
-    public int compareTo(Object o) {
-        LinhaEncomenda u = (LinhaEncomenda) o;
-        return this.codProduto.compareTo(u.codProduto);
-    
     }
 }

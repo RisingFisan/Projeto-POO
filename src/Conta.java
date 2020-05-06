@@ -2,12 +2,11 @@ import java.awt.geom.Point2D;
 import java.util.Objects;
 
 public class Conta implements Comparable {
-    protected String codigo;
-    protected String nome;
-    protected Point2D gps;
-    protected String email;
-    protected String password;
-
+    private String codigo;
+    private String nome;
+    private Point2D gps;
+    private String email;
+    private String password;
     
     public Conta() {
         this.codigo = null;
@@ -107,7 +106,7 @@ public class Conta implements Comparable {
         sb.append("Nome da conta: '").append(this.nome).append("'\n");
         sb.append("Coordenadas: ").append(this.gps.toString()).append("\n");
         sb.append("Email: '").append(this.email).append("'\n");
-        sb.append("Password: '").append(this.password.replaceAll(".","*")).append("'\n");
+        sb.append("Password: '").append(this.password.replaceAll("\\S","*")).append("'\n");
         return sb.toString();
     }
 
@@ -117,10 +116,7 @@ public class Conta implements Comparable {
         return this.codigo.compareTo(u.codigo);
     }
 
-    public boolean checkCredenciais (String outroEmail, String pass){
-        return (this.email.equals(outroEmail) && this.password.equals(pass));
+    public boolean checkPassword (String password){
+        return this.password.equals(password);
     }
-    
-    
-
 }

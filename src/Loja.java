@@ -1,21 +1,17 @@
-import java.awt.geom.Point2D;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Iterator; 
 
 public class Loja extends Conta {
-    
-    private Queue <Encomenda> filaEspera;
-    
+
+    private Queue<Encomenda> filaEspera;
+
     public Loja(String cod, String nome, double x, double y) {
-        super(cod,nome,x,y);
-        this.filaEspera = new LinkedList<>();
+        super(cod, nome, x, y);
+        this.filaEspera = new ArrayDeque<>();
     }
 
-    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, LinkedList<Encomenda> l) {
-        super(cod,nome,x,y,novoEmail,novaPassword);
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l) {
+        super(cod, nome, x, y, novoEmail, novaPassword);
         this.setFilaEspera(l);
     }
 
@@ -23,17 +19,18 @@ public class Loja extends Conta {
         super(outro);
         this.filaEspera = outro.getFilaEspera();
     }
-    
-    
-    public void setFilaEspera(LinkedList<Encomenda> l){
-        this.filaEspera = l.stream().map(Encomenda::clone).collect(Collectors.toCollection(LinkedList::new));
+
+    public void setFilaEspera(List<Encomenda> l) {
+        this.filaEspera = l.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
-    
-    
-    public Queue getFilaEspera() {
-        return this.filaEspera.stream().map(Encomenda::clone).collect(Collectors.toCollection(LinkedList::new));
-       }
-       
+
+    public Queue<Encomenda> getFilaEspera() {
+        return this.filaEspera.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
 
     //CLONE
     public Loja clone() {
@@ -47,19 +44,14 @@ public class Loja extends Conta {
         sb.append("Fila de espera: ").append(this.filaEspera.toString());
         return sb.toString();
     }
-    
-    public boolean equals(Loja l){
-        if (!super.equals(l) || this.filaEspera.size()!=l.getFilaEspera().size()) return false;
-        else {
-            Iterator it = this.filaEspera.iterator();
-            Iterator it1 = l.getFilaEspera().iterator();
-            while (it.hasNext() && it1.hasNext())
-              if (!it.next().equals(it1.next())) return false;
-            return true;  
-             
-        }
-        
-        
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Loja loja = (Loja) o;
+        return this.filaEspera.size() == loja.filaEspera.size() &&
+                this.filaEspera.containsAll(loja.filaEspera) &&
+                loja.filaEspera.containsAll(this.filaEspera);
     }
-    
 }
