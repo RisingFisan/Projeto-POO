@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.io.*;
+import java.util.*;
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -98,11 +99,12 @@ public class Estado implements Serializable {
 
     }
    
+    
     public void putEncInQueues() {
         for (Map.Entry<String,Conta> conta : this.lojas.getContas().entrySet()) {
-                LinkedList<Encomenda> encDaLoja = this.encomendas.getEnc().stream()
+                List <Encomenda> encDaLoja = this.encomendas.getEnc().stream()
                         .filter(a -> a.getCodLoja().equals(conta.getValue().getCodigo()))
-                        .collect(Collectors.toCollection(LinkedList::new));
+                        .collect(Collectors.toList());
                 Loja l = (Loja) conta.getValue();
                 l.setFilaEspera(encDaLoja);
             
