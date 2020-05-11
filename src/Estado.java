@@ -89,7 +89,7 @@ public class Estado implements Serializable {
                 case "Aceite":
                     break;
                 default:
-                    System.out.println("Linha inv√°lida.");
+                    System.out.println("Linha inv·lida.");
                     break;
             }
             putEncInQueues();
@@ -97,7 +97,7 @@ public class Estado implements Serializable {
         System.out.println("----Ficheiros carregados!---");
 
     }
-    /*Inacabada*/
+   
     public void putEncInQueues() {
         for (Map.Entry<String,Conta> conta : this.lojas.getContas().entrySet()) {
                 LinkedList<Encomenda> encDaLoja = this.encomendas.getEnc().stream()
