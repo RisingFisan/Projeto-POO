@@ -101,7 +101,9 @@ public class Estado implements Serializable {
    
     
     public void putEncInQueues() {
-        for (Map.Entry<String,Conta> conta : this.lojas.getContas().entrySet()) {
+        Contas lj = new Contas();
+        Map<String,Conta> cont = this.lojas.getContas();
+        for (Map.Entry<String,Conta> conta : cont.entrySet()) {
                 List <Encomenda> encDaLoja = this.encomendas.getEnc().stream()
                         .filter(a -> a.getCodLoja().equals(conta.getValue().getCodigo()))
                         .collect(Collectors.toList());
@@ -110,6 +112,7 @@ public class Estado implements Serializable {
             
 
         }
+       this.lojas = lj; 
 
     }
 
