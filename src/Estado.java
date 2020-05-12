@@ -26,6 +26,15 @@ public class Estado implements Serializable {
         this.transportadoras = new Contas();
         this.lojas = new Contas();
     }
+    
+    public Estado (Estado outro){
+       this.utilizadores = outro.utilizadores;
+       this.voluntarios = outro.voluntarios;
+       this.transportadoras =outro.transportadoras;
+       this.lojas = outro.lojas;
+       this.encomendas = outro.encomendas;
+    }
+    
 
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
@@ -46,17 +55,51 @@ public class Estado implements Serializable {
         
        return conta.clone();
     }
+    
+    public Estado clone(){
+        return new Estado(this);
+    }
 
     public void loadEstado() {
         parse();
 
     }
 
-    public void saveEstado() {
+    public void saveEstado() throws FileNotFoundException, IOException  {
+        try {
+             ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.txt"));
+             oos.writeObject(this);
+             oos.flush();
+             oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       
 
+    }
+    public Contas getUtilizadores(){
+        return this.utilizadores.clone();
+    }
+    
+    //Outras opcao de leitura --Nao tenho a certeza se está certo.
+     public void loadEstado1(String fileName) {
+         Estado e = parse1();
+         this.utilizadores = e.getUtilizadores();
+         //...
+        
+
+    }
+    public Estado parse1() throws FileNotFoundException, IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.txt"));
+        Estado e = (Estado) ois.readObject();
+        ois.close();
+        return e;
+    
     }
     
     /*--------------------FUNCOES QUE ESTAVAM NA PARSE-----------------------*/
+    
+   
     
     public void parse() {
         List<String> linhas = lerFicheiro("logs.csv");
