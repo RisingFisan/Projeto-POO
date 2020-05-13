@@ -103,7 +103,6 @@ public class Estado implements Serializable {
     public void parse() {
         
         List<String> linhas = lerFicheiro("logs.csv");
-        List<Encomenda> encs = new ArrayList<>();
         List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
@@ -134,7 +133,7 @@ public class Estado implements Serializable {
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
-                    encs.add(enc);
+                    this.encomendas.addEnc(enc);
                     break;
                 case "Aceite":
                     listaAceite.add(linhaPartida[1]); 
@@ -144,9 +143,9 @@ public class Estado implements Serializable {
                     break;
             }
             
-            putEncInQueues(listaLoja,encs);
-            //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras
-            //distributeEncs();
+            putEncInQueues(listaLoja);
+            //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
+            distributeEncAceites(listaAceite,listaVol,listaTransportadora);
             
         }
         System.out.println("----Ficheiros carregados!---");
@@ -154,16 +153,18 @@ public class Estado implements Serializable {
     }
     
     
-    public void distributeEncAceites(List<String> lista){
+    public void distributeEncAceites(List<String> lista,List<Conta> vol,List<Conta> transp){
+        
+        
         
         
     }
    
     
-    public void putEncInQueues(List<Conta> lj,List<Encomenda> encs) {
+    public void putEncInQueues(List<Conta> lj) {
        for (Conta c : lj){
             Loja loj = (Loja) c; 
-            List<Encomenda> aux = encs.stream().filter(a->a.getCodLoja().equals(loj.getCodigo())).collect(Collectors.toList());
+            List<Encomenda> aux = this.encomendas.getEnc().stream().filter(a->a.getCodLoja().equals(loj.getCodigo())).collect(Collectors.toList());
             loj.setFilaEspera(aux);
         }
     }
