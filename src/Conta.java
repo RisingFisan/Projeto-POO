@@ -15,6 +15,7 @@ public class Conta implements Comparable {
         this.email = null;
         this.password = null;
     }
+    
 
     public Conta(String cod, String nome, double x, double y) {
         this.codigo = cod;
@@ -44,6 +45,7 @@ public class Conta implements Comparable {
     public String getCodigo(){
         return this.codigo;
     }
+    
     
     public String getNome(){
         return this.nome;

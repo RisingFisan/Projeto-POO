@@ -17,6 +17,7 @@ public class Encomenda implements Comparable<Encomenda> {
         this.peso = peso;
         this.produtos = new HashMap<>();
     }
+    
 
     public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le){
         this.codEnc = newCodEnc;

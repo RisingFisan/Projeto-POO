@@ -25,6 +25,7 @@ public class Estado implements Serializable {
         this.voluntarios = new Contas();
         this.transportadoras = new Contas();
         this.lojas = new Contas();
+        this.encomendas = new Encomendas();
     }
     
     public Estado (Estado outro){
@@ -77,14 +78,12 @@ public class Estado implements Serializable {
        
 
     }
-    public Contas getUtilizadores(){
-        return this.utilizadores.clone();
-    }
+    
     
     //Outras opcao de leitura --Nao tenho a certeza se está certo.
-     public void loadEstado1(String fileName) {
+     public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
          Estado e = parse1();
-         this.utilizadores = e.getUtilizadores();
+         this.utilizadores = e.utilizadores;
          //...
         
 
@@ -102,61 +101,71 @@ public class Estado implements Serializable {
    
     
     public void parse() {
+        
         List<String> linhas = lerFicheiro("logs.csv");
+        List<Encomenda> encs = new ArrayList<>();
+        List<Conta> listaVol = new ArrayList<>();
+        List<Conta> listaTransportadora = new ArrayList<>();
+        List<Conta> listaLoja = new ArrayList<>();
+        List<String> listaAceite = new ArrayList<>();
+        
         for (String linha : linhas) {
             String[] linhaPartida = linha.split(":", 2);
             switch (linhaPartida[0]) {
                 case "Utilizador":
                     Conta u = parseUtilizador(linhaPartida[1]);
-                    //System.out.println(u.toString()); 
+                    //System.out.println(u.toString());
                     this.utilizadores.addConta(u);
                     break;
                 case "Loja":
                     Conta l = parseLoja(linhaPartida[1]);
                     //System.out.println(l.toString());
-                    this.lojas.addConta(l);
+                    listaLoja.add(l);
                     break;
                 case "Voluntario":
                     Conta v = parseVoluntario(linhaPartida[1]);
                     //System.out.println(v.toString());
-                    this.voluntarios.addConta(v);
+                    listaVol.add(v);
                     break;
                 case "Transportadora":
                     Conta t = parseTransportadora(linhaPartida[1]);
                     //System.out.println(t.toString());
-                    this.transportadoras.addConta(t);
+                    listaTransportadora.add(t);
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
-                    this.encomendas.addEnc(enc);
+                    encs.add(enc);
                     break;
                 case "Aceite":
+                    listaAceite.add(linhaPartida[1]); 
                     break;
                 default:
                     System.out.println("Linha inválida.");
                     break;
             }
-            putEncInQueues();
+            
+            putEncInQueues(listaLoja,encs);
+            //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras
+            //distributeEncs();
+            
         }
         System.out.println("----Ficheiros carregados!---");
 
     }
+    
+    
+    public void distributeEncAceites(List<String> lista){
+        
+        
+    }
    
     
-    public void putEncInQueues() {
-        Contas lj = new Contas();
-        Map<String,Conta> cont = this.lojas.getContas();
-        for (Map.Entry<String,Conta> conta : cont.entrySet()) {
-                List <Encomenda> encDaLoja = this.encomendas.getEnc().stream()
-                        .filter(a -> a.getCodLoja().equals(conta.getValue().getCodigo()))
-                        .collect(Collectors.toList());
-                Loja l = (Loja) conta.getValue();
-                l.setFilaEspera(encDaLoja);
-            
-
+    public void putEncInQueues(List<Conta> lj,List<Encomenda> encs) {
+       for (Conta c : lj){
+            Loja loj = (Loja) c; 
+            List<Encomenda> aux = encs.stream().filter(a->a.getCodLoja().equals(loj.getCodigo())).collect(Collectors.toList());
+            loj.setFilaEspera(aux);
         }
-       this.lojas = lj; 
-
     }
 
 
@@ -222,7 +231,7 @@ public class Estado implements Serializable {
         return e;
 
     }
-
+    
     public List<String> lerFicheiro(String nomeFich) {
         List<String> lines = new ArrayList<>();
         try {
