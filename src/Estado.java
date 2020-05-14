@@ -1,3 +1,6 @@
+
+
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
@@ -84,7 +87,9 @@ public class Estado implements Serializable {
      public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
          Estado e = parse1();
          this.utilizadores = e.utilizadores;
-         //...
+         this.voluntarios = e.voluntarios;
+         this.lojas = e.lojas;
+         this.transportadoras = e.transportadoras;
         
 
     }
@@ -103,9 +108,10 @@ public class Estado implements Serializable {
     public void parse() {
         
         List<String> linhas = lerFicheiro("logs.csv");
-        List<Conta> listaVol = new ArrayList<>();
-        List<Conta> listaTransportadora = new ArrayList<>();
+        //List<Conta> listaVol = new ArrayList<>();
+        List<Conta> listaTransporte = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
+        List<Encomenda> listaEnc = new ArrayList<>();
         List<String> listaAceite = new ArrayList<>();
         
         for (String linha : linhas) {
@@ -124,16 +130,16 @@ public class Estado implements Serializable {
                 case "Voluntario":
                     Conta v = parseVoluntario(linhaPartida[1]);
                     //System.out.println(v.toString());
-                    listaVol.add(v);
+                    listaTransporte.add(v);
                     break;
                 case "Transportadora":
                     Conta t = parseTransportadora(linhaPartida[1]);
                     //System.out.println(t.toString());
-                    listaTransportadora.add(t);
+                    listaTransporte.add(t);
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
-                    this.encomendas.addEnc(enc);
+                    listaEnc.add(enc);
                     break;
                 case "Aceite":
                     listaAceite.add(linhaPartida[1]); 
@@ -143,9 +149,10 @@ public class Estado implements Serializable {
                     break;
             }
             
-            putEncInQueues(listaLoja);
+            putEncInQueues(listaLoja,listaEnc);
+            
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
-            distributeEncAceites(listaAceite,listaVol,listaTransportadora);
+            distributeEncAceites(listaEnc,listaAceite,listaTransporte);
             
         }
         System.out.println("----Ficheiros carregados!---");
@@ -153,18 +160,21 @@ public class Estado implements Serializable {
     }
     
     
-    public void distributeEncAceites(List<String> lista,List<Conta> vol,List<Conta> transp){
-        
-        
-        
-        
+    public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t){
+        int i = 0;
+        for (String s : encAceites){
+            Encomenda e = encomendas.stream().filter(a->a.getCodEnc().equals(s)).findFirst().orElse(null);
+            
+            
+            
+        }
     }
    
     
-    public void putEncInQueues(List<Conta> lj) {
+    public void putEncInQueues(List<Conta> lj,List<Encomenda> encs) {
        for (Conta c : lj){
             Loja loj = (Loja) c; 
-            List<Encomenda> aux = this.encomendas.getEnc().stream().filter(a->a.getCodLoja().equals(loj.getCodigo())).collect(Collectors.toList());
+            List<Encomenda> aux = encs.stream().filter(a->a.getCodLoja().equals(loj.getCodigo())).collect(Collectors.toList());
             loj.setFilaEspera(aux);
         }
     }

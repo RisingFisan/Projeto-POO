@@ -1,22 +1,32 @@
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Transportadora extends Conta {
     private String nif;
     private double raio;
     private double precoKm;
     
+    //Encomendas que aceitou
+    private List <String> encAceites;
+    private boolean disponivel;
+    
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.encAceites = new ArrayList<>();
+        this.disponivel = true;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass) {
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista) {
        super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.encAceites = lista;
+        this.disponivel = lista.isEmpty();
     }
 
 
@@ -25,6 +35,8 @@ public class Transportadora extends Conta {
         this.nif = t.nif;
         this.raio = t.raio;
         this.precoKm = t.precoKm;
+        this.encAceites = t.getEncAceites();
+        this.disponivel = t.disponivel;
     }
 
     //GETTERS
@@ -39,6 +51,14 @@ public class Transportadora extends Conta {
     public double getPrecoPorKm() {
         return this.precoKm;
     }
+    
+    public boolean getDisponibilidade(){
+        return this.disponivel;
+    }
+    
+    public List<String> getEncAceites(){
+        return new ArrayList(this.encAceites);
+    }
 
     //SETTERS
     public void setNIF(String nif) {
@@ -51,6 +71,14 @@ public class Transportadora extends Conta {
 
     public void setPrecoPorKm(double preco) {
         this.precoKm = preco;
+    }
+    
+     public void setDisponibilidade(boolean b){
+        this.disponivel=b;
+    }
+    
+    public void getEncAceites(List<String> e){
+        this.encAceites = new ArrayList(e);
     }
     
     
@@ -81,6 +109,12 @@ public class Transportadora extends Conta {
 
     public int hashCode() {
         return Objects.hash(super.hashCode(), nif, raio, precoKm);
+    }
+    
+    public void addEncomenda (String cod){
+        if (this.encAceites.contains(cod))return;
+        else if (this.encAceites.isEmpty()) this.disponivel=true;
+        this.encAceites.add(cod);
     }
 }
 

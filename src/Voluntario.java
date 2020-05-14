@@ -1,5 +1,6 @@
 import java.util.Objects;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Voluntario extends Conta {
     private double raio;
@@ -26,8 +27,8 @@ public class Voluntario extends Conta {
     public Voluntario(Voluntario outro) {
         super(outro);
         this.raio = outro.raio;
-        this.disponivel = outro.disponivel;
         this.encAceites = outro.getEncAceites();
+        this.disponivel = outro.disponivel;
     }
 
     // GETTERS
@@ -80,5 +81,11 @@ public class Voluntario extends Conta {
         sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
         return sb.toString();
+    }
+    
+    public void addEncomenda (String cod){
+        if (this.encAceites.contains(cod))return;
+        else if (this.encAceites.isEmpty()) this.disponivel=true;
+        this.encAceites.add(cod);
     }
 }
