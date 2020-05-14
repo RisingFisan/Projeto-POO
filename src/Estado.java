@@ -109,7 +109,8 @@ public class Estado implements Serializable {
         
         List<String> linhas = lerFicheiro("logs.csv");
         //List<Conta> listaVol = new ArrayList<>();
-        List<Conta> listaTransporte = new ArrayList<>();
+        List<Conta> listaVol = new ArrayList<>();
+        List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
         List<Encomenda> listaEnc = new ArrayList<>();
         List<String> listaAceite = new ArrayList<>();
@@ -130,12 +131,12 @@ public class Estado implements Serializable {
                 case "Voluntario":
                     Conta v = parseVoluntario(linhaPartida[1]);
                     //System.out.println(v.toString());
-                    listaTransporte.add(v);
+                    listaVol.add(v);
                     break;
                 case "Transportadora":
                     Conta t = parseTransportadora(linhaPartida[1]);
                     //System.out.println(t.toString());
-                    listaTransporte.add(t);
+                    listaTransportadora.add(t);
                     break;
                 case "Encomenda":
                     Encomenda enc = parseEnc(linhaPartida[1]);
@@ -152,7 +153,7 @@ public class Estado implements Serializable {
             putEncInQueues(listaLoja,listaEnc);
             
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
-            distributeEncAceites(listaEnc,listaAceite,listaTransporte);
+            distributeEncAceites(listaEnc,listaAceite,listaTransportadora,listaVol);
             
         }
         System.out.println("----Ficheiros carregados!---");
@@ -160,8 +161,7 @@ public class Estado implements Serializable {
     }
     
     
-    public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t){
-        int i = 0;
+    public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v){
         for (String s : encAceites){
             Encomenda e = encomendas.stream().filter(a->a.getCodEnc().equals(s)).findFirst().orElse(null);
             
