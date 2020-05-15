@@ -8,6 +8,8 @@ public class Voluntario extends Conta {
     //Encomendas que aceitou
     private List <String> encAceites;
     private boolean disponivel;
+    //numero máximo de encomendas que transporta de cada vez
+    private int maxCapacidade;
 
    
     public Voluntario(String cod, String nome, double x, double y, double raio) {
@@ -15,13 +17,15 @@ public class Voluntario extends Conta {
         this.raio = raio;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
+        this.maxCapacidade = 1;
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,List<String> lista) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,List<String> lista,int max) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceites = lista;
         this.disponivel = lista.isEmpty();
+        this.maxCapacidade = max;
     }
 
     public Voluntario(Voluntario outro) {
@@ -29,6 +33,7 @@ public class Voluntario extends Conta {
         this.raio = outro.raio;
         this.encAceites = outro.getEncAceites();
         this.disponivel = outro.disponivel;
+        this.maxCapacidade = outro.maxCapacidade;
     }
 
     // GETTERS
@@ -43,6 +48,10 @@ public class Voluntario extends Conta {
     public List<String> getEncAceites(){
         return new ArrayList(this.encAceites);
     }
+    
+    public int getMaxCapacidade(){
+        return this.maxCapacidade;
+    }
 
     //SETTERS
     public void setRaio(double raio) {
@@ -55,6 +64,10 @@ public class Voluntario extends Conta {
     
     public void getEncAceites(List<String> e){
         this.encAceites = new ArrayList(e);
+    }
+    
+    public void setMaxCapacidade(int max){
+        this.maxCapacidade = max;
     }
 
     //CLONE
@@ -84,8 +97,9 @@ public class Voluntario extends Conta {
     }
     
     public void addEncomenda (String cod){
-        if (this.encAceites.contains(cod))return;
+       if (this.encAceites.contains(cod) || this.encAceites.size()==this.maxCapacidade) return;
         else if (this.encAceites.isEmpty()) this.disponivel=true;
         this.encAceites.add(cod);
+        if (this.encAceites.size()==this.maxCapacidade) this.disponivel = false;
     }
 }

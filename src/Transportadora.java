@@ -10,6 +10,8 @@ public class Transportadora extends Conta {
     //Encomendas que aceitou
     private List <String> encAceites;
     private boolean disponivel;
+    //numero máximo de encomendas que transporta de cada vez
+    private int maxCapacidade;
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
@@ -18,15 +20,18 @@ public class Transportadora extends Conta {
         this.precoKm = preco;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
+        this.maxCapacidade = 1;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista) {
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max) {
        super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
         this.encAceites = lista;
         this.disponivel = lista.isEmpty();
+        this.disponivel = lista.isEmpty();
+        this.maxCapacidade = max;
     }
 
 
@@ -37,6 +42,7 @@ public class Transportadora extends Conta {
         this.precoKm = t.precoKm;
         this.encAceites = t.getEncAceites();
         this.disponivel = t.disponivel;
+        this.maxCapacidade = t.maxCapacidade;
     }
 
     //GETTERS
@@ -59,6 +65,10 @@ public class Transportadora extends Conta {
     public List<String> getEncAceites(){
         return new ArrayList(this.encAceites);
     }
+    
+    public int getMaxCapacidade(){
+        return this.maxCapacidade;
+    }
 
     //SETTERS
     public void setNIF(String nif) {
@@ -77,8 +87,12 @@ public class Transportadora extends Conta {
         this.disponivel=b;
     }
     
-    public void getEncAceites(List<String> e){
+    public void setEncAceites(List<String> e){
         this.encAceites = new ArrayList(e);
+    }
+    
+    public void setMaxCapacidade(int max){
+        this.maxCapacidade = max;
     }
     
     
@@ -112,9 +126,10 @@ public class Transportadora extends Conta {
     }
     
     public void addEncomenda (String cod){
-        if (this.encAceites.contains(cod))return;
+        if (this.encAceites.contains(cod) || this.encAceites.size()==this.maxCapacidade)return;
         else if (this.encAceites.isEmpty()) this.disponivel=true;
         this.encAceites.add(cod);
+        if (this.encAceites.size()==this.maxCapacidade) this.disponivel = false;
     }
 }
 

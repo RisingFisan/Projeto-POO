@@ -1,6 +1,3 @@
-
-
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
@@ -15,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.io.*;
 import java.util.*;
+import java.awt.geom.Point2D;
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -90,9 +88,8 @@ public class Estado implements Serializable {
          this.voluntarios = e.voluntarios;
          this.lojas = e.lojas;
          this.transportadoras = e.transportadoras;
-        
-
-    }
+      }
+      
     public Estado parse1() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.txt"));
         Estado e = (Estado) ois.readObject();
@@ -108,7 +105,6 @@ public class Estado implements Serializable {
     public void parse() {
         
         List<String> linhas = lerFicheiro("logs.csv");
-        //List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
@@ -153,22 +149,41 @@ public class Estado implements Serializable {
             putEncInQueues(listaLoja,listaEnc);
             
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
-            distributeEncAceites(listaEnc,listaAceite,listaTransportadora,listaVol);
-            
+            distributeEncAceites(listaEnc,listaAceite,listaTransportadora,listaVol,listaLoja);
+            listaVol.stream().forEach(a->this.voluntarios.addConta(a));
+            listaTransportadora.stream().forEach(a->this.transportadoras.addConta(a));
+            listaLoja.stream().forEach(a->this.lojas.addConta(a));
+            listaEnc.stream().forEach(a->this.encomendas.addEnc(a));
         }
         System.out.println("----Ficheiros carregados!---");
 
     }
     
-    
-    public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v){
+    //Está meio "badalhoca"
+    public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v,List<Conta> l){
+        int found;
         for (String s : encAceites){
+            found = 0;
             Encomenda e = encomendas.stream().filter(a->a.getCodEnc().equals(s)).findFirst().orElse(null);
-            
-            
-            
+            Conta loja = l.stream().filter(a->a.getCodigo().equals(e.getCodLoja())).findFirst().orElse(null);
+            for(Conta c : v){
+                Voluntario vol = (Voluntario) c;
+                double raioV = vol.getRaio();
+                Point2D ponto = new Point2D.Double(vol.getGPSx(),vol.getGPSy());
+                if (vol.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioV) {vol.addEncomenda(s);found=1;break;}
+            }
+            if (found==1) continue;
+            else{
+                for(Conta c : t){
+                Transportadora tps = (Transportadora) c;
+                double raioT = tps.getRaio();
+                Point2D ponto = new Point2D.Double(tps.getGPSx(),tps.getGPSy());
+                if (tps.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioT) {tps.addEncomenda(s);break;}
+            }
+            }
         }
     }
+    
    
     
     public void putEncInQueues(List<Conta> lj,List<Encomenda> encs) {
