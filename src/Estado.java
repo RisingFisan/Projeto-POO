@@ -109,7 +109,7 @@ public class Estado implements Serializable {
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
         List<Encomenda> listaEnc = new ArrayList<>();
-        List<String> listaAceite = new ArrayList<>();
+        List<String> listaAceite = new ArrayList<String>();
         
         for (String linha : linhas) {
             String[] linhaPartida = linha.split(":", 2);
@@ -139,13 +139,16 @@ public class Estado implements Serializable {
                     listaEnc.add(enc);
                     break;
                 case "Aceite":
-                    listaAceite.add(linhaPartida[1]); 
-                    break;
+                    listaAceite.add(linhaPartida[1]);
+                    System.out.println(listaAceite);
+                     break;
                 default:
                     System.out.println("Linha inválida.");
                     break;
+              }
             }
             
+            //System.out.println(listaAceite);
             putEncInQueues(listaLoja,listaEnc);
             
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
@@ -154,14 +157,14 @@ public class Estado implements Serializable {
             listaTransportadora.stream().forEach(a->this.transportadoras.addConta(a));
             listaLoja.stream().forEach(a->this.lojas.addConta(a));
             listaEnc.stream().forEach(a->this.encomendas.addEnc(a));
-        }
-        System.out.println("----Ficheiros carregados!---");
+            
+            System.out.println("----Ficheiros carregados!---");
 
     }
     
     //Está meio "badalhoca"
     public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v,List<Conta> l){
-        int found;
+        int found=1;
         for (String s : encAceites){
             found = 0;
             Encomenda e = encomendas.stream().filter(a->a.getCodEnc().equals(s)).findFirst().orElse(null);

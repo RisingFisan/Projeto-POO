@@ -108,6 +108,7 @@ public class Transportadora extends Conta {
         sb.append("NIF: '").append(this.nif).append("'\n");
         sb.append("Raio: ").append(this.raio).append("km\n");
         sb.append("Preço por km: ").append(this.precoKm).append("\n");
+        sb.append("Encomendas Aceites: ").append(this.encAceites);
         return sb.toString();
     }
 

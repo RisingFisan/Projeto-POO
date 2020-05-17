@@ -93,6 +93,7 @@ public class Voluntario extends Conta {
         StringBuilder sb = new StringBuilder("Voluntario\n");
         sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
+        sb.append("Encomendas Aceites: ").append(this.encAceites);
         return sb.toString();
     }
     
