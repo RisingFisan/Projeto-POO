@@ -9,7 +9,7 @@ public class TrazAqui {
 
     public void login(String email, String password) {
         Conta conta = this.estado.getContaFromCredentials(email, password);
-        if(conta == null) System.out.println("Erro - Credenciais inv√°lidas.");
+        if(conta == null) System.out.println("Erro - Credenciais inv·lidas.");
         else contaLoggedIn = conta;
     }
 }
