@@ -14,8 +14,15 @@ public class Voluntario extends Conta {
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
         this.raio = raio;
-        this.encAceite = "";
+        this.encAceite = null;
         this.disponivel = true;
+    }
+
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
+        super(cod,nome,x,y,novoEmail,novaPassword);
+        this.raio = raio;
+        this.encAceite = null;
+        this.disponivel = false;
     }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite) {
@@ -23,7 +30,6 @@ public class Voluntario extends Conta {
         this.raio = raio;
         this.encAceite = aceite;
         this.disponivel = false;
-        
     }
 
     public Voluntario(Voluntario outro) {
