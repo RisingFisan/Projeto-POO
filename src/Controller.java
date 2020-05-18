@@ -24,7 +24,10 @@ public class Controller {
 
                 Conta conta;
 
-                // Criar conta dependendo de tipoConta
+                if(tipoConta.equals(TipoConta.Utilizador)) conta = Menu.menuRegistoUtilizador();
+                else if(tipoConta.equals(TipoConta.Voluntario)) conta = Menu.menuRegistoVoluntario();
+                else if(tipoConta.equals(TipoConta.Loja)) conta = Menu.menuRegistoLoja();
+                else conta = Menu.menuRegistoTransportadora();
 
                 trazAqui.registo(conta);
                 break;
@@ -32,5 +35,7 @@ public class Controller {
                 System.exit(0);
                 break;
         }
+
+        // Aqui chamar o controlador respetivo dependendo do tipo de conta.
     }
 }

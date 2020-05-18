@@ -10,6 +10,11 @@ public class Loja extends Conta {
         this.filaEspera = new ArrayDeque<>();
     }
 
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword) {
+        super(cod, nome, x, y, novoEmail, novaPassword);
+        this.filaEspera = new ArrayDeque<>();
+    }
+
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.setFilaEspera(l);
