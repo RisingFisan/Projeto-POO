@@ -104,12 +104,12 @@ public class Estado implements Serializable {
     
     public void parse() {
         
-        List<String> linhas = lerFicheiro("logs.csv");
+        List<String> linhas = lerFicheiro("log.txt");
         List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
         List<Encomenda> listaEnc = new ArrayList<>();
-        List<String> listaAceite = new ArrayList<String>();
+        List<String> listaAceite = new ArrayList<>();
         
         for (String linha : linhas) {
             String[] linhaPartida = linha.split(":", 2);
@@ -140,7 +140,6 @@ public class Estado implements Serializable {
                     break;
                 case "Aceite":
                     listaAceite.add(linhaPartida[1]);
-                    System.out.println(listaAceite);
                      break;
                 default:
                     System.out.println("Linha inválida.");
@@ -148,21 +147,26 @@ public class Estado implements Serializable {
               }
             }
             
-            //System.out.println(listaAceite);
+            
             putEncInQueues(listaLoja,listaEnc);
             
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
             distributeEncAceites(listaEnc,listaAceite,listaTransportadora,listaVol,listaLoja);
+            System.out.println(listaVol);
+            System.out.println(listaTransportadora);
+            //System.out.println(listaAceite);
+            
             listaVol.stream().forEach(a->this.voluntarios.addConta(a));
             listaTransportadora.stream().forEach(a->this.transportadoras.addConta(a));
             listaLoja.stream().forEach(a->this.lojas.addConta(a));
             listaEnc.stream().forEach(a->this.encomendas.addEnc(a));
             
+            
             System.out.println("----Ficheiros carregados!---");
 
     }
     
-    //Está meio "badalhoca"
+  //Meio estranha.A ideia é que faça com que algumas transportadoras transportem mais que uma encomenda
     public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v,List<Conta> l){
         int found=1;
         for (String s : encAceites){
@@ -173,7 +177,11 @@ public class Estado implements Serializable {
                 Voluntario vol = (Voluntario) c;
                 double raioV = vol.getRaio();
                 Point2D ponto = new Point2D.Double(vol.getGPSx(),vol.getGPSy());
-                if (vol.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioV) {vol.addEncomenda(s);found=1;break;}
+                if (vol.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioV) {
+                    vol.addEncomenda(s);
+                    found=1;
+                    break;
+                }
             }
             if (found==1) continue;
             else{
@@ -181,7 +189,10 @@ public class Estado implements Serializable {
                 Transportadora tps = (Transportadora) c;
                 double raioT = tps.getRaio();
                 Point2D ponto = new Point2D.Double(tps.getGPSx(),tps.getGPSy());
-                if (tps.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioT) {tps.addEncomenda(s);break;}
+                if (ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioT) {
+                    tps.setMaxCapacidade(tps.getEncAceites().size()+1);
+                    tps.addEncomenda(s);
+                    break;}
             }
             }
         }

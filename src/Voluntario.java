@@ -6,34 +6,31 @@ public class Voluntario extends Conta {
     private double raio;
     
     //Encomendas que aceitou
-    private List <String> encAceites;
+    private String encAceite;
     private boolean disponivel;
-    //numero máximo de encomendas que transporta de cada vez
-    private int maxCapacidade;
+    
 
    
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
         this.raio = raio;
-        this.encAceites = new ArrayList<>();
+        this.encAceite = "";
         this.disponivel = true;
-        this.maxCapacidade = 1;
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,List<String> lista,int max) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
-        this.encAceites = lista;
-        this.disponivel = lista.isEmpty();
-        this.maxCapacidade = max;
+        this.encAceite = aceite;
+        this.disponivel = false;
+        
     }
 
     public Voluntario(Voluntario outro) {
         super(outro);
         this.raio = outro.raio;
-        this.encAceites = outro.getEncAceites();
+        this.encAceite = outro.getEncAceite();
         this.disponivel = outro.disponivel;
-        this.maxCapacidade = outro.maxCapacidade;
     }
 
     // GETTERS
@@ -45,13 +42,11 @@ public class Voluntario extends Conta {
         return this.disponivel;
     }
     
-    public List<String> getEncAceites(){
-        return new ArrayList(this.encAceites);
+    public String getEncAceite(){
+        return this.encAceite;
     }
     
-    public int getMaxCapacidade(){
-        return this.maxCapacidade;
-    }
+    
 
     //SETTERS
     public void setRaio(double raio) {
@@ -62,14 +57,11 @@ public class Voluntario extends Conta {
         this.disponivel=b;
     }
     
-    public void getEncAceites(List<String> e){
-        this.encAceites = new ArrayList(e);
+    public void setEncAceite(String e){
+        this.encAceite = e;
     }
     
-    public void setMaxCapacidade(int max){
-        this.maxCapacidade = max;
-    }
-
+    
     //CLONE
     public Voluntario clone() {
         return new Voluntario(this);
@@ -93,14 +85,12 @@ public class Voluntario extends Conta {
         StringBuilder sb = new StringBuilder("Voluntario\n");
         sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Encomendas Aceites: ").append(this.encAceites);
+        sb.append("Encomenda Aceite: ").append(this.encAceite);
         return sb.toString();
     }
     
     public void addEncomenda (String cod){
-       if (this.encAceites.contains(cod) || this.encAceites.size()==this.maxCapacidade) return;
-        else if (this.encAceites.isEmpty()) this.disponivel=true;
-        this.encAceites.add(cod);
-        if (this.encAceites.size()==this.maxCapacidade) this.disponivel = false;
+       if (this.disponivel) {setEncAceite(cod);this.disponivel = false;}
+       else return;
     }
 }
