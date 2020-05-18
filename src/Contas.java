@@ -42,8 +42,9 @@ public class Contas {
     }
 
     public Conta getContaByEmail(String email){
-        return this.mapContas.values().stream()
-                .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc)
-                .clone();
+        Conta conta = this.mapContas.values().stream()
+                .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc);
+        if(conta != null) return conta.clone();
+        else return null;
     }
 }

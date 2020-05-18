@@ -7,9 +7,17 @@ public class TrazAqui {
         this.contaLoggedIn = null;
     }
 
-    public void login(String email, String password) {
+    public boolean login(String email, String password) {
         Conta conta = this.estado.getContaFromCredentials(email, password);
-        if(conta == null) System.out.println("Erro - Credenciais inválidas.");
-        else contaLoggedIn = conta;
+        if(conta != null) {
+            this.contaLoggedIn = conta;
+            return true;
+        }
+        else return false;
+    }
+
+    public void registo(Conta conta) {
+       this.estado.addConta(conta);
+       this.contaLoggedIn = conta.clone();
     }
 }

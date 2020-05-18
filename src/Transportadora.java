@@ -10,7 +10,7 @@ public class Transportadora extends Conta {
     //Encomendas que aceitou
     private List <String> encAceites;
     private boolean disponivel;
-    //numero máximo de encomendas que transporta de cada vez
+    //numero mï¿½ximo de encomendas que transporta de cada vez
     private int maxCapacidade;
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
@@ -29,7 +29,6 @@ public class Transportadora extends Conta {
         this.nif = nif;
         this.precoKm = preco;
         this.encAceites = lista;
-        this.disponivel = lista.isEmpty();
         this.disponivel = lista.isEmpty();
         this.maxCapacidade = max;
     }

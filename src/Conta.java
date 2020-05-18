@@ -112,7 +112,6 @@ public class Conta implements Comparable {
         return sb.toString();
     }
 
-    @Override
     public int compareTo(Object o) {
         Conta u = (Conta) o;
         return this.codigo.compareTo(u.codigo);

@@ -36,28 +36,31 @@ public class Estado implements Serializable {
        this.lojas = outro.lojas;
        this.encomendas = outro.encomendas;
     }
-    
+
 
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
-        
-        if(conta == null || !conta.checkPassword(password)) {
-            conta = this.voluntarios.getContaByEmail(email);
-            
-        if (conta == null || !conta.checkPassword(password)){
-            conta = this.transportadoras.getContaByEmail(email);
-            
-        if(conta == null || !conta.checkPassword(password)){
-            conta = this.lojas.getContaByEmail(email);
-             }
-        else return null;     
-                 
-          }
-       }
-        
-       return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta.clone();
+
+        conta = this.voluntarios.getContaByEmail(email);
+        if (conta != null && conta.checkPassword(password)) return conta.clone();
+
+        conta = this.transportadoras.getContaByEmail(email);
+        if (conta != null && conta.checkPassword(password)) return conta.clone();
+
+        conta = this.lojas.getContaByEmail(email);
+        if (conta != null && conta.checkPassword(password)) return conta.clone();
+
+        return null;
     }
-    
+
+    public void addConta(Conta conta) {
+        if(conta instanceof Utilizador) this.utilizadores.addConta(conta);
+        else if(conta instanceof Voluntario) this.voluntarios.addConta(conta);
+        else if(conta instanceof Loja) this.lojas.addConta(conta);
+        else this.transportadoras.addConta(conta);
+    }
+
     public Estado clone(){
         return new Estado(this);
     }
@@ -81,7 +84,7 @@ public class Estado implements Serializable {
     }
     
     
-    //Outras opcao de leitura --Nao tenho a certeza se está certo.
+    //Outras opcao de leitura --Nao tenho a certeza se estï¿½ certo.
      public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
          Estado e = parse1();
          this.utilizadores = e.utilizadores;
@@ -142,7 +145,7 @@ public class Estado implements Serializable {
                     listaAceite.add(linhaPartida[1]);
                      break;
                 default:
-                    System.out.println("Linha inválida.");
+                    System.out.println("Linha invï¿½lida.");
                     break;
               }
             }
@@ -166,7 +169,7 @@ public class Estado implements Serializable {
 
     }
     
-  //Meio estranha.A ideia é que faça com que algumas transportadoras transportem mais que uma encomenda
+  //Meio estranha.A ideia ï¿½ que faï¿½a com que algumas transportadoras transportem mais que uma encomenda
     public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v,List<Conta> l){
         int found=1;
         for (String s : encAceites){
