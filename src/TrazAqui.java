@@ -1,55 +1,23 @@
-/** Controlador Temporario */
+public class TrazAqui {
+    private Conta contaLoggedIn;
+    private Estado estado;
 
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.io.*;
+    public TrazAqui() {
+        this.estado = new Estado();
+        this.contaLoggedIn = null;
+    }
 
-public class TrazAqui implements Serializable {
-   Contas contas;
-   Encomendas encomendas;
-   
-   public TrazAqui(){
-       this.contas = new Contas();
-       this.encomendas = new Encomendas();
-       
+    public boolean login(String email, String password) {
+        Conta conta = this.estado.getContaFromCredentials(email, password);
+        if(conta != null) {
+            this.contaLoggedIn = conta;
+            return true;
+        }
+        else return false;
     }
-   
-    public TrazAqui(TrazAqui t){
-        //por copia
-} 
 
-
-    public TrazAqui loadFiles(){
-      Parse p = new Parse();
-      TrazAqui t = new TrazAqui();
-       p.parse();
-       t.contas = new Contas(p.getContas());
-       t.encomendas = new Encomendas(p.getEncomendas());
-       return t;
-     
-     
+    public void registo(Conta conta) {
+       this.estado.addConta(conta);
+       this.contaLoggedIn = conta.clone();
     }
-   
-   
-    
-    public void fazerRegistoUser(){
-        
-    }
-    
-    public void fazerRegistoVoluntario(){
-        
-    }
-    
-    public void fazerRegistoTransportadora(){
-        
-    }
-    
-    public void fazerRegistoEmpresa(){
-    }
-    
-    
-    
-   
-   
 }

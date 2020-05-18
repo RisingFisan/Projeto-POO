@@ -1,62 +1,50 @@
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class Contas {
-    private Set<Conta> setContas;
+    private Map<String,Conta> mapContas;
 
     public Contas() {
-        this.setContas = new TreeSet<>();
+        this.mapContas = new TreeMap<>();
     }
 
-    public Contas(Set<Conta> set) {
-        this.setContas(set);
+    public Contas(Map<String, Conta> map) {
+        this.setContas(map);
     }
 
     public Contas(Contas us) {
-        this.setContas = us.getContas();
+        this.mapContas = us.getContas();
     }
 
-    public Set<Conta> getContas() {
-        return this.setContas.stream()
-                .map(Conta::clone)
-                .collect(Collectors.toSet());
+    public Map<String, Conta> getContas() {
+        return this.mapContas.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue().clone(), (a,b)->a, TreeMap::new));
     }
     
     public void addConta (Conta conta) {
-        this.setContas.add(conta.clone());
+        this.mapContas.put(conta.getCodigo(), conta.clone());
     }
     
-    public void setContas(Set<Conta> set) {
-        this.setContas = set.stream()
-                .map(Conta::clone)
-                .collect(Collectors.toSet());
+    public void setContas(Map<String,Conta> map) {
+        this.mapContas = map.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue().clone(), (a,b)->a, TreeMap::new));
     }
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append("Contas na app: ").append(setContas.toString()).append('\n');
+        sb.append("Contas: ").append(mapContas.toString()).append('\n');
         return sb.toString();
-    }
-    
-    public boolean checkCredenciais (String email, String pass) {
-        for (Conta c: this.setContas) {
-            if (c.checkCredenciais(email, pass)) return true;
-        }
-        return false;
     }
     
     public Contas clone(){
         return new Contas(this);
     }
-    
-    public void addConta (Conta c){
-        this.setContas.add(c);
-    }
-    
-    public Conta getContaByCod(String cod){
-        for (Conta c : this.setContas)
-           if (c.getCodigo().equals(cod)) return c.clone();
-        return null;   
+
+    public Conta getContaByEmail(String email){
+        Conta conta = this.mapContas.values().stream()
+                .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc);
+        if(conta != null) return conta.clone();
+        else return null;
     }
 }

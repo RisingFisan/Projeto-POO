@@ -1,12 +1,10 @@
-import java.awt.geom.Point2D;
-
 public class Utilizador extends Conta {
     public Utilizador(String codigo, String nome, double x, double y) {
-       super(codigo,nome,x,y);
+        super(codigo, nome, x, y);
     }
 
     public Utilizador(String codigo, String nome, double x, double y, String email, String password) {
-       super(codigo,nome,x,y,email,password);
+        super(codigo, nome, x, y, email, password);
     }
 
     public Utilizador(Utilizador outro) {
@@ -22,8 +20,8 @@ public class Utilizador extends Conta {
     public Utilizador clone() {
         return new Utilizador(this);
     }
-    
-    public boolean equals(Utilizador u){
+
+    public boolean equals(Utilizador u) {
         return super.equals(u);
     }
 }
