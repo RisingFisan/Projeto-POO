@@ -83,36 +83,30 @@ public class Estado implements Serializable {
         return new Estado(this);
     }
 
-    public void loadEstado() {
+    public void loadEstadoLogs() {
         parse();
 
     }
 
     public void saveEstado() throws FileNotFoundException, IOException  {
-        try {
              ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.obj"));
              oos.writeObject(this);
              oos.flush();
              oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-       
-
     }
     
     
     //carregar de ficheiro objeto
-     public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
-         Estado e = parse1();
+     public void loadEstadoObj(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+         Estado e = loadAux(file);
          this.utilizadores = e.utilizadores;
          this.voluntarios = e.voluntarios;
          this.lojas = e.lojas;
          this.transportadoras = e.transportadoras;
       }
       
-    public Estado parse1() throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.obj"));
+    public Estado loadAux(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream (new FileInputStream(file));
         Estado e = (Estado) ois.readObject();
         ois.close();
         return e;
@@ -125,7 +119,7 @@ public class Estado implements Serializable {
     
     public void parse() {
         
-        List<String> linhas = lerFicheiro("log.txt");
+        List<String> linhas = lerFicheiro("logs.csv");
         List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();

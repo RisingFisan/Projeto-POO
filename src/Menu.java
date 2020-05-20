@@ -6,12 +6,23 @@ public class Menu {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
         sb.append("1) Iniciar sessao.\n");
         sb.append("2) Registar nova conta.\n\n");
+        sb.append("3) Carregar logs.\n\n");
+        sb.append("4) Salvar Estado.\n\n");
+        sb.append("5) Carregar Estado.\n\n");
         sb.append("0) Sair.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
+    
+    //Tentar encontrar outra forma mais elegante
+    public static void clearWindow() {
+        for (int i = 0;i<100;i++){
+            System.out.println();
+        }
+    }
+
     
     public static String getEmail (boolean b){
         if (b) System.out.println("O email digitado já existe.Tente novamente. "); 
@@ -79,6 +90,14 @@ public class Menu {
 
         String password = scanner.nextLine();
         return new AbstractMap.SimpleEntry<>(email, password);
+    }
+    
+    public static void errors(int i){
+         StringBuilder sb = new StringBuilder();
+        if (i==1) sb.append("****Ficheiro nao encontrado***").append("\n");
+        else if (i==2) sb.append("****Não foi possível guardar o Estado***").append("\n");
+        else if (i==3) sb.append("****Erro ao ler para as estruturas de dados***").append("\n");
+        System.out.print(sb.toString());
     }
     
     

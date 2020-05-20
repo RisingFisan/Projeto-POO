@@ -1,3 +1,5 @@
+
+import java.io.*;
 public class TrazAqui {
     private Conta contaLoggedIn;
     private Estado estado;
@@ -27,5 +29,17 @@ public class TrazAqui {
     
     public String getNewCode(TipoConta t){
     return estado.newCode(t);
+    }
+    
+    public void carregaLogs(){
+        this.estado.loadEstadoLogs();
+    }
+    
+    public void salvaEstadoObj() throws FileNotFoundException, IOException{
+        this.estado.saveEstado();
+    }
+    
+    public void carregaEstadoObj() throws FileNotFoundException, IOException, ClassNotFoundException{
+        this.estado.loadEstadoObj("Estado.obj");
     }
   }

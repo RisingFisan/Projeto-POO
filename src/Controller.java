@@ -1,4 +1,5 @@
 import java.util.AbstractMap;
+import java.io.*;
 
 public class Controller {
     public static void run() {
@@ -18,6 +19,8 @@ public class Controller {
                     else errorMessage = true;
                 }
                 //errorMessage = false;
+                Menu.clearWindow();
+                //runLoggedAccount();
                 break;
                 
             case 2:
@@ -53,9 +56,30 @@ public class Controller {
                 }
                 trazAqui.registo(conta);
                 break;
+                
+                case 3:
+                trazAqui.carregaLogs();
+                break;
+                
+                case 4:
+                try{trazAqui.salvaEstadoObj();}
+                catch (FileNotFoundException e) {Menu.errors(1);}
+                catch (IOException e) {Menu.errors(2);}
+                break;
+                
+                case 5:
+                try {trazAqui.carregaEstadoObj();}
+                catch (FileNotFoundException e) {Menu.errors(1);}
+                catch (IOException e) {Menu.errors(2);}
+                catch (ClassNotFoundException e) {Menu.errors(3);}
+                break;
+                
+                
             case 0:
                 System.exit(0);
                 break;
         }
     }
+    
+    
 }
