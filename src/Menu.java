@@ -4,24 +4,50 @@ import java.util.Scanner;
 public class Menu {
     public static int MenuInicial() {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
-        sb.append("1) Iniciar sessão.\n");
+        sb.append("1) Iniciar sessao.\n");
         sb.append("2) Registar nova conta.\n\n");
         sb.append("0) Sair.\n\n");
-        sb.append("Selecione a opção pretendida: ");
+        sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
+    
+    public static String getEmail (boolean b){
+        if (b) System.out.println("O email digitado j� existe.Tente novamente. "); 
+        System.out.print("Digite um e-mail de registo: ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
+    public static String getGeneralContaInfo(int i){
+        if (i==1) System.out.print("Digite uma password: ");
+        else if (i==2) System.out.print("Digite o seu nome: ");
+        else if (i==3) System.out.print("Digite a sua coordenada em x: ");
+        else if (i==4) System.out.print("Digite a sua coordenada em y: ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    public static String getSpecificContaInfo(int i){
+        if (i==1) System.out.print("Raio de A��o: ");
+        else if (i==2) System.out.print("Numero maximo de encomendas a transportar: ");
+        else if (i==3) System.out.print("NIF da transportadora: ");
+        else if (i==4) System.out.print("Preco por KM: ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
+    
 
     public static TipoConta menuRegisto() {
         StringBuilder sb = new StringBuilder();
         sb.append("------------REGISTAR NOVA CONTA---------").append("\n");
-        sb.append("Como é que se deseja registar?\n\n");
+        sb.append("Como se deseja registar?\n\n");
         sb.append("1) Utilizador\n");
-        sb.append("2) Voluntário\n");
+        sb.append("2) Voluntario\n");
         sb.append("3) Loja\n");
         sb.append("4) Transportadora\n\n");
-        sb.append("Introduza a opção pretendida: ");
+        sb.append("Introduza a opcao pretendida: ");
 
         System.out.println(sb.toString());
 
@@ -39,10 +65,10 @@ public class Menu {
 
     public static AbstractMap.SimpleEntry<String,String> menuLogin(boolean errorMessage) {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------INICIAR SESSÃO---------").append("\n\n");
-        if(errorMessage) sb.append("Erro - Dados inválidos! Tente novamente!\n\n");
+        sb.append("------------INICIAR SESS�O---------").append("\n\n");
+        if(errorMessage) sb.append("Erro - Dados invalidos! Tente novamente!\n\n");
         sb.append("Introduza os seus dados.\n\n");
-        sb.append("Endereço de e-mail: ");
+        sb.append("Endere�o de e-mail: ");
 
         System.out.print(sb.toString());
 
@@ -54,6 +80,8 @@ public class Menu {
         String password = scanner.nextLine();
         return new AbstractMap.SimpleEntry<>(email, password);
     }
+    
+    
 
 
 }

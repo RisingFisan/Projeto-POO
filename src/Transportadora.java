@@ -22,6 +22,16 @@ public class Transportadora extends Conta {
         this.disponivel = true;
         this.maxCapacidade = 1;
     }
+    
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
+        super(cod,nome,x,y);
+        this.raio = raio;
+        this.nif = nif;
+        this.precoKm = preco;
+        this.encAceites = new ArrayList<>();
+        this.disponivel = true;
+        this.maxCapacidade = max;
+    }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max) {
        super(cod,nome,x,y,novoEmail,novaPass);

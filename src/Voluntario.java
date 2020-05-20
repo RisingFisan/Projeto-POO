@@ -17,6 +17,14 @@ public class Voluntario extends Conta {
         this.encAceite = "";
         this.disponivel = true;
     }
+    
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
+        super(cod,nome,x,y,novoEmail,novaPassword);
+        this.raio = raio;
+        this.encAceite = "";
+        this.disponivel = true;
+        
+    }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite) {
         super(cod,nome,x,y,novoEmail,novaPassword);

@@ -1,6 +1,9 @@
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Contas {
     private Map<String,Conta> mapContas;
@@ -47,4 +50,17 @@ public class Contas {
         if(conta != null) return conta.clone();
         else return null;
     }
+    
+    public boolean existeEmail(String s){
+        return this.mapContas.entrySet().stream().anyMatch(a->s.equals(a.getValue().getEmail()));
+    }
+    
+    public String lastCode(){
+        Set<String> set = this.mapContas.keySet();
+        TreeSet<String> res = new TreeSet<>(new ComparatorCod());
+        set.stream().forEach(a->res.add(a));
+        return res.last();
+        
+    }
+    
 }

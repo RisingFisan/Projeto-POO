@@ -36,6 +36,24 @@ public class Estado implements Serializable {
        this.lojas = outro.lojas;
        this.encomendas = outro.encomendas;
     }
+    
+    public boolean existeEmail(String s){
+        return !this.utilizadores.existeEmail(s) && !this.voluntarios.existeEmail(s) 
+                                                 && !this.lojas.existeEmail(s) 
+                                                 && !this.transportadoras.existeEmail(s);
+    }
+    
+    public String newCode(TipoConta tipoConta){
+        String cod="";
+        if (tipoConta.equals(TipoConta.Utilizador)) cod = this.utilizadores.lastCode();
+        else if (tipoConta.equals(TipoConta.Voluntario)) cod = this.voluntarios.lastCode();
+        else if (tipoConta.equals(TipoConta.Loja)) cod = this.lojas.lastCode();
+        else if (tipoConta.equals(TipoConta.Transportadora)) cod = this.transportadoras.lastCode();
+        char first = cod.charAt(0);
+        int newNum = Integer.valueOf(cod.substring(1))+1;
+        return (first+String.valueOf(newNum));
+        
+    }
 
 
     public Conta getContaFromCredentials(String email, String password) {
@@ -72,7 +90,7 @@ public class Estado implements Serializable {
 
     public void saveEstado() throws FileNotFoundException, IOException  {
         try {
-             ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.txt"));
+             ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.obj"));
              oos.writeObject(this);
              oos.flush();
              oos.close();
@@ -84,7 +102,7 @@ public class Estado implements Serializable {
     }
     
     
-    //Outras opcao de leitura --Nao tenho a certeza se est� certo.
+    //carregar de ficheiro objeto
      public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
          Estado e = parse1();
          this.utilizadores = e.utilizadores;
@@ -94,7 +112,7 @@ public class Estado implements Serializable {
       }
       
     public Estado parse1() throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.txt"));
+        ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.obj"));
         Estado e = (Estado) ois.readObject();
         ois.close();
         return e;
@@ -102,7 +120,7 @@ public class Estado implements Serializable {
     }
     
     /*--------------------FUNCOES QUE ESTAVAM NA PARSE-----------------------*/
-    
+    //ler do ficheiro log
    
     
     public void parse() {

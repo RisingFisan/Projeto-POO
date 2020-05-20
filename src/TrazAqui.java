@@ -20,4 +20,12 @@ public class TrazAqui {
        this.estado.addConta(conta);
        this.contaLoggedIn = conta.clone();
     }
-}
+    
+    public boolean existeEmail(String s){
+        return this.estado.existeEmail(s);
+    }
+    
+    public String getNewCode(TipoConta t){
+    return estado.newCode(t);
+    }
+  }
