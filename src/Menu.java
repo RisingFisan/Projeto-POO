@@ -1,6 +1,8 @@
 import java.util.AbstractMap;
 import java.util.Scanner;
-
+import java.util.Map;
+import java.util.List;
+import java.time.LocalDateTime;
 public class Menu {
     public static int MenuInicial() {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
@@ -22,6 +24,63 @@ public class Menu {
             System.out.println();
         }
     }
+    
+    public static int menuUtilizador(){
+        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        sb.append("1) Efetuar uma compra.\n");
+        sb.append("2) Solicitar entrega de uma encomenda.\n");
+        sb.append("3) Verificar ofertas de transportadora.\n");
+        sb.append("4) Historico de encomendas.\n");
+        sb.append("5) Classificar voluntario ou transportadora.\n");
+        sb.append("0) Logout.\n\n");
+        sb.append("Selecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+    
+    public static String userMenuData(int i){
+        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        if (i==1)sb.append("Digite um código da entidade: ");
+        else if (i==2) sb.append("Digite a sua avaliacao(1-10): ");
+        else if (i==3) sb.append("Digite o código de uma loja: ");
+        else if (i==4) sb.append("Digite o numero de linhas de encomenda: ");
+        else if (i==5) sb.append("Digite o codigo de produto: ");
+        else if (i==6) sb.append("Digite a descricao: ");
+        else if (i==7) sb.append("Digite a quantidade: ");
+        else if (i==8) sb.append("Digite o preco: ");
+        else if (i==9) sb.append("Digite o peso: ");
+        else if (i==10) sb.append("Digite um codigo de encomenda: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+     }
+     
+     public static int dataInfo(int i,boolean b){
+       StringBuilder sb = new StringBuilder();
+       if (b) sb.append("*****Data de inicio***** ");
+       else sb.append("*****Data de fim***** ");
+        if (i==1) sb.append("Digite o ano: ");
+        else if (i==2) sb.append("Digite o mes: ");
+        else if (i==3) sb.append("Digite o dia: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+        }
+     
+     
+     
+     
+    public static void printHistorico(List<Encomenda>me,String entidade,LocalDateTime i,LocalDateTime f) {
+        StringBuilder sb = new StringBuilder("----------Historico de Encomendas-----------\n\n");
+        sb.append("********Entidade "+entidade+"********");
+        sb.append("Encomendas entre "+i.toString()+" e "+f.toString());
+        me.stream().forEach(a->sb.append(a));
+        System.out.println(sb.toString());
+        
+        
+    }
+  
 
     
     public static String getEmail (boolean b){
@@ -97,8 +156,14 @@ public class Menu {
         if (i==1) sb.append("****Ficheiro nao encontrado***").append("\n");
         else if (i==2) sb.append("****Não foi possível guardar o Estado***").append("\n");
         else if (i==3) sb.append("****Erro ao ler para as estruturas de dados***").append("\n");
+        else if (i==4) sb.append("****Codigo inválido***").append("\n");
+        else if (i==5) sb.append("****Datas inválidas***").append("\n");
+        else if (i==6) sb.append("****Não foi possível carregar o Estado***").append("\n");
         System.out.print(sb.toString());
     }
+    
+    
+    
     
     
 

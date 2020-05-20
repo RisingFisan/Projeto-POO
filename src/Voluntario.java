@@ -1,13 +1,19 @@
 import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+import java.io.*;
 
-public class Voluntario extends Conta {
+public class Voluntario extends Conta implements Serializable {
     private double raio;
     
     //Encomendas que aceitou
     private String encAceite;
     private boolean disponivel;
+    private List<Integer> classificacao;
+    private Set<String> historico;
+    
     
 
    
@@ -16,6 +22,8 @@ public class Voluntario extends Conta {
         this.raio = raio;
         this.encAceite = "";
         this.disponivel = true;
+        this.classificacao = new ArrayList<>();
+        this.historico=new TreeSet<>();
     }
     
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
@@ -23,14 +31,18 @@ public class Voluntario extends Conta {
         this.raio = raio;
         this.encAceite = "";
         this.disponivel = true;
+        this.classificacao = new ArrayList<>();
+        this.historico=new TreeSet<>();
         
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite,List<Integer>list,Set<String>s) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
         this.disponivel = false;
+        this.classificacao = new ArrayList<>(list);
+        this.historico=new TreeSet<>(s);
         
     }
 
@@ -39,6 +51,8 @@ public class Voluntario extends Conta {
         this.raio = outro.raio;
         this.encAceite = outro.getEncAceite();
         this.disponivel = outro.disponivel;
+        this.classificacao = outro.getClassif();
+        this.historico = outro.getHistorico();
     }
 
     // GETTERS
@@ -54,6 +68,14 @@ public class Voluntario extends Conta {
         return this.encAceite;
     }
     
+    public List<Integer> getClassif(){
+        return new ArrayList(this.classificacao);
+    }
+    
+    public Set<String> getHistorico(){
+        return new TreeSet<>(this.historico);
+    }
+    
     
 
     //SETTERS
@@ -67,6 +89,14 @@ public class Voluntario extends Conta {
     
     public void setEncAceite(String e){
         this.encAceite = e;
+    }
+    
+    public void setClassif(List<Integer> e){
+        this.classificacao = new ArrayList(e);
+    }
+    
+    public void setHistorico(Set<String>s){
+        this.historico = new TreeSet<>(s);
     }
     
     
@@ -100,5 +130,14 @@ public class Voluntario extends Conta {
     public void addEncomenda (String cod){
        if (this.disponivel) {setEncAceite(cod);this.disponivel = false;}
        else return;
+    }
+    
+    public void addClassif(int i){
+        this.classificacao.add(i);
+    }
+    
+    public double getAverageClassif(){
+        double average = this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
+        return average;
     }
 }

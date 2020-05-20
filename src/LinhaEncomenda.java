@@ -1,6 +1,7 @@
 import java.util.Objects;
+import java.io.*;
 
-public class LinhaEncomenda {
+public class LinhaEncomenda implements Serializable {
 
     private String codProduto;
     private String descricao;

@@ -4,8 +4,9 @@ import java.util.stream.Collectors;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.io.*;
 
-public class Contas {
+public class Contas implements Serializable {
     private Map<String,Conta> mapContas;
 
     public Contas() {
@@ -51,6 +52,10 @@ public class Contas {
         else return null;
     }
     
+    public Conta getContaByCode(String code){
+        return this.mapContas.get(code).clone();
+    }
+    
     public boolean existeEmail(String s){
         return this.mapContas.entrySet().stream().anyMatch(a->s.equals(a.getValue().getEmail()));
     }
@@ -62,5 +67,6 @@ public class Contas {
         return res.last();
         
     }
+    
     
 }

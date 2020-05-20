@@ -54,6 +54,54 @@ public class Estado implements Serializable {
         return (first+String.valueOf(newNum));
         
     }
+    
+    public void addToEncomendas(Encomenda e){
+        this.encomendas.addEnc(e);
+    }
+    
+    public void addNewEncToQueue (Encomenda e){
+        String cod = e.getCodLoja();
+        Loja l = (Loja) this.lojas.getContaByCode(cod);
+        l.addEncomenda(e);
+    }
+    
+    public void solicitaEnc(String e) {
+        Encomenda enc = this.encomendas.getEncomendaByCod(e);
+        enc.setFoiSolicitada(true);
+        addToEncomendas(enc);
+    }
+    
+    public boolean lojaCodeValid(String loja){
+        return this.lojas.getContas().values().stream().anyMatch(a->a.getCodigo().equals(loja));
+    }
+    
+    public boolean encCodeValid(String enc){
+        return this.encomendas.getEnc().stream().anyMatch(a->a.getCodEnc().equals(enc));
+    }
+    
+    public Map<String,List<Encomenda>> getHistoricoUser(String cod){
+        Utilizador u = (Utilizador) this.utilizadores.getContaByCode(cod);
+        Map<String,List<Encomenda>> res = new HashMap<>();
+        for(Map.Entry<String,List<String>> me : u.getHistorico().entrySet()){
+            List<Encomenda> e = this.encomendas.getListaEncomenda(me.getValue());
+            res.put(me.getKey(),e);
+        }
+        return res;
+    }
+    
+    
+    public void classifica (int c,String code){
+        Voluntario v = (Voluntario)this.voluntarios.getContaByCode(code);
+        Transportadora t =(Transportadora)this.transportadoras.getContaByCode(code);
+        if (v!=null) {
+            v.addClassif(c);
+            this.voluntarios.addConta(v);
+        }
+        else {
+            t.addClassif(c);
+            this.transportadoras.addConta(t);
+        }   
+    }
 
 
     public Conta getContaFromCredentials(String email, String password) {
