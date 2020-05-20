@@ -5,10 +5,10 @@ public class Menu {
     public static int MenuInicial() {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
         sb.append("1) Iniciar sessao.\n");
-        sb.append("2) Registar nova conta.\n\n");
-        sb.append("3) Carregar logs.\n\n");
-        sb.append("4) Salvar Estado.\n\n");
-        sb.append("5) Carregar Estado.\n\n");
+        sb.append("2) Registar nova conta.\n");
+        sb.append("3) Carregar logs.\n");
+        sb.append("4) Salvar Estado.\n");
+        sb.append("5) Carregar Estado.\n");
         sb.append("0) Sair.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());

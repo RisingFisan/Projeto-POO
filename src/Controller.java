@@ -62,13 +62,13 @@ public class Controller {
                 break;
                 
                 case 4:
-                try{trazAqui.salvaEstadoObj();}
+                try{trazAqui.salvaEstadoObj();System.out.println("Ficheiros salvos com sucesso!!!\n");}
                 catch (FileNotFoundException e) {Menu.errors(1);}
                 catch (IOException e) {Menu.errors(2);}
                 break;
                 
                 case 5:
-                try {trazAqui.carregaEstadoObj();}
+                try {trazAqui.carregaEstadoObj();System.out.println("Ficheiros carregados com sucesso!!!\n");}
                 catch (FileNotFoundException e) {Menu.errors(1);}
                 catch (IOException e) {Menu.errors(2);}
                 catch (ClassNotFoundException e) {Menu.errors(3);}
