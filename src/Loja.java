@@ -6,31 +6,26 @@ import java.io.*;
 public class Loja extends Conta implements Serializable {
 
     private Queue<Encomenda> filaEspera;
-    private Set<String> historico;
 
     public Loja(String cod, String nome, double x, double y) {
         super(cod, nome, x, y);
         this.filaEspera = new ArrayDeque<>();
-        this.historico=new TreeSet<>();
     }
     
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.filaEspera = new ArrayDeque<>();
-        this.historico=new TreeSet<>();
     }
     
 
-    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l,Set<String> s) {
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.setFilaEspera(l);
-        this.historico=new TreeSet<>(s);
     }
 
     public Loja(Loja outro) {
         super(outro);
         this.filaEspera = outro.getFilaEspera();
-        this.historico = outro.getHistorico();
         
     }
     
@@ -38,9 +33,6 @@ public class Loja extends Conta implements Serializable {
         this.filaEspera.add(e.clone());
     }
     
-    public void setHistorico(Set<String>s){
-        this.historico = new TreeSet<>(s);
-    }
 
     public void setFilaEspera(List<Encomenda> l) {
         this.filaEspera = l.stream()
@@ -54,9 +46,7 @@ public class Loja extends Conta implements Serializable {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
     
-    public Set<String> getHistorico(){
-        return new TreeSet<>(this.historico);
-    }
+    
 
     //CLONE
     public Loja clone() {
@@ -68,7 +58,6 @@ public class Loja extends Conta implements Serializable {
         StringBuilder sb = new StringBuilder("Loja\n");
         sb.append(super.toString());
         sb.append("Fila de espera: ").append(this.filaEspera.toString()).append("\n");
-        sb.append("Historico ").append(this.historico.toString()).append("\n");;
         return sb.toString();
         
     }

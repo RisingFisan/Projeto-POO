@@ -13,6 +13,8 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     private Map<String, LinhaEncomenda> produtos;
     private LocalDateTime data;
     private boolean foiSolicitada;
+    private boolean foiEntregue;
+    private String quemTransportou;
 
     public Encomenda(String codEnc, String codUtil, String codLoja, double peso) {
         this.codEnc = codEnc;
@@ -22,10 +24,12 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.produtos = new HashMap<>();
         this.data = LocalDateTime.now();
         this.foiSolicitada = false;
+        this.foiEntregue = false;
+        this.quemTransportou = "";
     }
     
 
-    public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le,LocalDateTime dt,boolean b){
+    public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le,LocalDateTime dt,boolean b,boolean fe,String qt){
         this.codEnc = newCodEnc;
         this.codUtil = newCodUtil;
         this.codLoja = newCodLoja;
@@ -33,6 +37,8 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.setProdutos(le);
         this.data = dt;
         this.foiSolicitada = b;
+        this.foiEntregue = fe;
+        this.quemTransportou = qt;
     }
     
      public Encomenda (Encomenda e){
@@ -43,6 +49,8 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.produtos = e.getProdutos();
         this.data = e.getData();
         this.foiSolicitada = e.foiSolicitada;
+        this.foiEntregue = e.foiEntregue;
+        this.quemTransportou = e.quemTransportou;
     }
     
     public String getCodEnc() {return this.codEnc;}
@@ -65,6 +73,14 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         return this.foiSolicitada;
     }
     
+    public boolean getFoiEntregue(){
+        return this.foiEntregue;
+    }
+    public String getQuemTransportou(){
+        return this.quemTransportou;
+    }
+    
+    
     public void setCodEnc(String newCod) {this.codEnc = newCod;}
     
     public void setCodUtil(String newCod) {this.codUtil = newCod;}
@@ -84,6 +100,14 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     public void setFoiSolicitada(boolean b){
         this.foiSolicitada=b;
     }
+    
+    public void setFoiEntregue(boolean b){
+        this.foiEntregue=b;
+    }
+    
+    public void setQuemTransportou(String qt){
+       this.quemTransportou = qt;
+    }
 
     public void addProduto(LinhaEncomenda le) {
         this.produtos.put(le.getCodProduto(), le.clone());
@@ -102,6 +126,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         sb.append("Peso: ").append(this.peso).append("\n");
         sb.append("Produtos: ").append(this.produtos.toString()).append("\n");
         sb.append("Data: ").append(this.data.toString()).append("\n");
+         sb.append("Quem Transportou: ").append(this.data.toString()).append("\n");
         sb.append("Foi solicitada entrega pelo utilizador?: ").append(this.foiSolicitada).append("\n");
 
         return sb.toString();

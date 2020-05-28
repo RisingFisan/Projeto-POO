@@ -3,6 +3,7 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.List;
 import java.time.LocalDateTime;
+import javafx.util.Pair; 
 public class Menu {
     public static int MenuInicial() {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
@@ -20,6 +21,7 @@ public class Menu {
     
     //Tentar encontrar outra forma mais elegante
     public static void clearWindow() {
+        
         for (int i = 0;i<100;i++){
             System.out.println();
         }
@@ -41,20 +43,38 @@ public class Menu {
     
     public static String userMenuData(int i){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
-        if (i==1)sb.append("Digite um código da entidade: ");
-        else if (i==2) sb.append("Digite a sua avaliacao(1-10): ");
-        else if (i==3) sb.append("Digite o código de uma loja: ");
-        else if (i==4) sb.append("Digite o numero de linhas de encomenda: ");
-        else if (i==5) sb.append("Digite o codigo de produto: ");
-        else if (i==6) sb.append("Digite a descricao: ");
-        else if (i==7) sb.append("Digite a quantidade: ");
-        else if (i==8) sb.append("Digite o preco: ");
-        else if (i==9) sb.append("Digite o peso: ");
-        else if (i==10) sb.append("Digite um codigo de encomenda: ");
+        if (i==1)sb.append("Digite um código da entidade:\n ");
+        else if (i==2) sb.append("Digite a sua avaliacao(1-10):\n ");
+        else if (i==3) sb.append("Digite o código de uma loja:\n ");
+        else if (i==4) sb.append("Digite o numero de linhas de encomenda:\n ");
+        else if (i==5) sb.append("Digite o codigo de produto:\n ");
+        else if (i==6) sb.append("Digite a descricao:\n ");
+        else if (i==7) sb.append("Digite a quantidade:\n ");
+        else if (i==8) sb.append("Digite o preco:\n ");
+        else if (i==9) sb.append("Digite o peso:\n ");
+        else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
      }
+     
+     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
+        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        for (Map.Entry<String,List<Pair <String, Double>>> a : transp.entrySet()){
+            sb.append("* ").append("Encomenda: ").append(a.getKey()).append("\n ");
+            for (Pair <String, Double> p : a.getValue()){
+                sb.append("Transportadora: ").append(p.getKey()).append ("---->").append("Custo: ").append(p.getValue()).append("\n");
+                
+            }
+            
+            
+        }
+        sb.append("1) Escolher uma das opcoes:\n ");
+        sb.append("0) Nenhuma das opcoes:\n ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+        }
      
      public static int dataInfo(int i,boolean b){
        StringBuilder sb = new StringBuilder();

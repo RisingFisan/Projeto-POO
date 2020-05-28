@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import javafx.util.Pair; 
 public class TrazAqui implements Serializable {
     private Conta contaLoggedIn;
     private Estado estado;
@@ -37,6 +38,12 @@ public class TrazAqui implements Serializable {
         this.estado.addNewEncToQueue(e.clone());
         this.estado.addToEncomendas(e.clone());
     }
+    public void encomendaParaSerEntregue(String codEnc,String transportadora){
+        ((Utilizador)this.contaLoggedIn).addToEncTransp();
+        this.estado.encomendaParaSerEntregue(codEnc,transportadora);
+    }
+    
+    
     
     public boolean isValidoLoja(String loja){
         return this.estado.lojaCodeValid(loja);
@@ -47,8 +54,7 @@ public class TrazAqui implements Serializable {
     }
     
     public boolean checkIfEntityWorkedForUser(String code){
-        Utilizador u = (Utilizador) contaLoggedIn;
-        return u.contains(code);
+        return this.estado.checkIfEntityWorkedForUser(code,this.contaLoggedIn.getCodigo());
     }
     
     public void classificaEntidade(int c,String code){
@@ -62,9 +68,16 @@ public class TrazAqui implements Serializable {
     public String getNewCode(TipoConta t){
     return estado.newCode(t);
     }
+    public String getNewCodeEnc(){
+    return estado.newCodeEnc();
+    }
     
-    public Map<String,List<Encomenda>> getHistoricoUser(){
+    public List<Encomenda> getHistoricoUser(){
        return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
+    }
+    
+    public Map<String,List<Pair <String, Double>>> getTranspOptions(){
+        return this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
     }
     
     public void solicitaEnc(String e) {

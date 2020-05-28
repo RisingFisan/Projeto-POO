@@ -12,7 +12,6 @@ public class Voluntario extends Conta implements Serializable {
     private String encAceite;
     private boolean disponivel;
     private List<Integer> classificacao;
-    private Set<String> historico;
     
     
 
@@ -23,7 +22,6 @@ public class Voluntario extends Conta implements Serializable {
         this.encAceite = "";
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
-        this.historico=new TreeSet<>();
     }
     
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
@@ -32,17 +30,15 @@ public class Voluntario extends Conta implements Serializable {
         this.encAceite = "";
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
-        this.historico=new TreeSet<>();
         
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite,List<Integer>list,Set<String>s) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite,List<Integer>list) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
         this.disponivel = false;
         this.classificacao = new ArrayList<>(list);
-        this.historico=new TreeSet<>(s);
         
     }
 
@@ -52,7 +48,6 @@ public class Voluntario extends Conta implements Serializable {
         this.encAceite = outro.getEncAceite();
         this.disponivel = outro.disponivel;
         this.classificacao = outro.getClassif();
-        this.historico = outro.getHistorico();
     }
 
     // GETTERS
@@ -72,9 +67,6 @@ public class Voluntario extends Conta implements Serializable {
         return new ArrayList(this.classificacao);
     }
     
-    public Set<String> getHistorico(){
-        return new TreeSet<>(this.historico);
-    }
     
     
 
@@ -95,9 +87,6 @@ public class Voluntario extends Conta implements Serializable {
         this.classificacao = new ArrayList(e);
     }
     
-    public void setHistorico(Set<String>s){
-        this.historico = new TreeSet<>(s);
-    }
     
     
     //CLONE

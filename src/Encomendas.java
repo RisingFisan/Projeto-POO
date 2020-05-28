@@ -51,11 +51,26 @@ public class Encomendas implements Serializable
     public boolean equals (Encomendas e){
         return this.encomendas.equals(e);
     }
+    
+    public void solicitaEnc(String e){
+        this.encomendas.stream().filter(a->a.getCodEnc().equals(e)).forEach(a->a.setFoiSolicitada(true));
+    }
+    
+    public void quemTransportou(String e,String t){
+        this.encomendas.stream().filter(a->a.getCodEnc().equals(e)).forEach(a->a.setQuemTransportou(t));
+    }
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
         sb.append("Encomendas: ").append(encomendas.toString()).append('\n');
         return sb.toString();
+    }
+    
+    public String getLastCode(){
+        if (this.encomendas.isEmpty()) return "";
+        TreeSet t = (TreeSet)(this.encomendas);
+        Encomenda e = (Encomenda) t.last();
+        return e.getCodEnc();
     }
     
     

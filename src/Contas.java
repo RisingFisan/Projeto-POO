@@ -53,7 +53,9 @@ public class Contas implements Serializable {
     }
     
     public Conta getContaByCode(String code){
+        if (this.mapContas.keySet().contains(code))
         return this.mapContas.get(code).clone();
+        return null;
     }
     
     public boolean existeEmail(String s){
@@ -61,10 +63,10 @@ public class Contas implements Serializable {
     }
     
     public String lastCode(){
-        Set<String> set = this.mapContas.keySet();
-        TreeSet<String> res = new TreeSet<>(new ComparatorCod());
-        set.stream().forEach(a->res.add(a));
-        return res.last();
+        TreeSet<String> set = this.mapContas.keySet().stream()
+                                  .collect(Collectors.toCollection(() -> new TreeSet<>(new ComparatorCod())));
+        
+        return set.last();
         
     }
     

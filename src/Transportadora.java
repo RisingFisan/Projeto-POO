@@ -10,7 +10,6 @@ public class Transportadora extends Conta implements Serializable {
     private double raio;
     private double precoKm;
     private List<Integer> classificacao;
-    private Set<String> historico;
     
     //Encomendas que aceitou
     private List <String> encAceites;
@@ -27,7 +26,6 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = 1;
         this.classificacao = new ArrayList<>();
-        this.historico=new TreeSet<>();
     }
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
@@ -39,10 +37,9 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>();
-        this.historico=new TreeSet<>();
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max,List<Integer> list,Set<String> s) {
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max,List<Integer> list) {
        super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
@@ -51,7 +48,6 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = lista.isEmpty();
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>(list);
-        this.historico=new TreeSet<>(s);
     }
 
 
@@ -64,7 +60,6 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = t.disponivel;
         this.maxCapacidade = t.maxCapacidade;
         this.classificacao = t.getClassif();
-        this.historico=t.getHistorico();
     }
 
     //GETTERS
@@ -96,9 +91,7 @@ public class Transportadora extends Conta implements Serializable {
         return new ArrayList(this.classificacao);
     }
     
-    public Set<String> getHistorico(){
-        return new TreeSet<>(this.historico);
-    }
+    
 
     //SETTERS
     public void setNIF(String nif) {
@@ -129,9 +122,7 @@ public class Transportadora extends Conta implements Serializable {
         this.classificacao = new ArrayList(e);
     }
     
-    public void setHistorico(Set<String>s){
-        this.historico = new TreeSet<>(s);
-    }
+    
     
     
     //CLONE
@@ -179,6 +170,10 @@ public class Transportadora extends Conta implements Serializable {
     public double getAverageClassif(){
         double average = this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
         return average;
+    }
+    
+    public double totalPreco (double dist){
+        return this.precoKm*dist;
     }
 }
 
