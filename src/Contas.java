@@ -23,7 +23,7 @@ public class Contas implements Serializable {
 
     public Map<String, Conta> getContas() {
         return this.mapContas.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue().clone(), (a,b)->a, TreeMap::new));
+                .collect(Collectors.toMap(Map.Entry::getKey, e->e.getValue(), (a,b)->a, TreeMap::new));
     }
     
     public void addConta (Conta conta) {
@@ -48,13 +48,13 @@ public class Contas implements Serializable {
     public Conta getContaByEmail(String email){
         Conta conta = this.mapContas.values().stream()
                 .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc);
-        if(conta != null) return conta.clone();
+        if(conta != null) return conta;
         else return null;
     }
     
     public Conta getContaByCode(String code){
         if (this.mapContas.keySet().contains(code))
-        return this.mapContas.get(code).clone();
+        return this.mapContas.get(code);
         return null;
     }
     

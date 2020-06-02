@@ -13,7 +13,9 @@ import java.util.Map;
 import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
-import javafx.util.Pair; 
+import javafx.util.Pair;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit; 
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -21,7 +23,7 @@ public class Estado implements Serializable {
     private Contas transportadoras;
     private Contas lojas;
     private Encomendas encomendas;
-    private Set<Pair<String,String>> pedidosTransporte;
+    private Set<Pair<String,String>> pedidosTransporte; // -> (codEnc, transp)
     
     public Estado() {
         this.utilizadores = new Contas();
@@ -101,16 +103,18 @@ public class Estado implements Serializable {
         return this.encomendas.getEnc().stream().anyMatch(a->(a.getCodUtil().equals(user) && a.getQuemTransportou().equals(code)));
     }
     
+    public boolean encFoiSolicitada (String enc) {
+        return this.encomendas.getEnc().stream().anyMatch(a->a.getFoiSolicitada());
+    } 
+    
     public List<Encomenda> getHistoricoUser(String user){
         return this.encomendas.getEnc().stream().filter(a->a.getCodUtil().equals(user)).collect(Collectors.toList());
         
     }
     
     public void encomendaParaSerEntregue(String codEnc,String transp){
-        Pair <String,String> aux = new Pair(codEnc,transp);
         this.encomendas.quemTransportou(codEnc,transp);
-        this.pedidosTransporte.remove(aux);
-        
+        this.pedidosTransporte.removeIf(a->a.getKey().equals(codEnc));
     }
     
     public Map<String,List<Pair <String, Double>>> getTranspOptions(String user){
@@ -150,24 +154,43 @@ public class Estado implements Serializable {
             this.transportadoras.addConta(t.clone());
         }   
     }
-
-
+    
+    // Voluntario
+    
+    public void alteraDisp(String code,int i) {
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(code);
+        if (i == 1) v.setDisponibilidade(true);
+        if (i == 2) v.setDisponibilidade(false);
+    }
+    
+    
+    public long entregaEnc (String enc) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        e.setFoiEntregue(true);
+        LocalDateTime d = e.getData();
+        return d.until(LocalDateTime.now(), ChronoUnit.HOURS);
+    }
+    
+    public void pedirTransporte(String transp, String enc) {
+        this.pedidosTransporte.add(new Pair(enc,transp));
+    }
+    
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.voluntarios.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.transportadoras.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.lojas.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         return null;
     }
-
+ 
     public void addConta(Conta conta) {
         if(conta instanceof Utilizador) this.utilizadores.addConta(conta);
         else if(conta instanceof Voluntario) this.voluntarios.addConta(conta);
@@ -253,7 +276,7 @@ public class Estado implements Serializable {
                     listaAceite.add(linhaPartida[1]);
                      break;
                 default:
-                    System.out.println("Linha inv�lida.");
+                    System.out.println("Linha invalida.");
                     break;
               }
             }

@@ -56,9 +56,44 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
-     }
+    }
+    
+    public static int menuVoluntario(){
+        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+        sb.append("1) Alterar disponibilidade.\n");
+        sb.append("2) Selecionar encomenda a transportar.\n");
+        sb.append("3) Registar entrega de uma encomenda.\n");
+        sb.append("0) Logout.\n\n");
+        sb.append("Selecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+    
+    public static String voluntarioMenuData(int i){
+        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+        if (i==1) sb.append("1) Ficar disponivel;\n2) Ficar indisponivel;\nSelecione a opcao pretendida: ");
+        else if (i==2) sb.append("Digite um codigo de encomenda:\n ");
+        else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
+        
+        
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
+    public static void voluntarioMenuResult(int i, String res){
+        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+        if (i==1) sb.append("Disponibilidade alterada com sucesso!\n");
+        else if (i==2) sb.append("Pedido de transporte efetuado com sucesso!\n ");
+        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append(" horas");
+        sb.append("Pressione enter para continuar...");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+    }
      
-     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
+    public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
         for (Map.Entry<String,List<Pair <String, Double>>> a : transp.entrySet()){
             sb.append("* ").append("Encomenda: ").append(a.getKey()).append("\n ");
@@ -74,9 +109,9 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
-        }
+    }
      
-     public static int dataInfo(int i,boolean b){
+    public static int dataInfo(int i,boolean b){
        StringBuilder sb = new StringBuilder();
        if (b) sb.append("*****Data de inicio***** ");
        else sb.append("*****Data de fim***** ");
@@ -86,9 +121,7 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
-        }
-     
-     
+    }
      
      
     public static void printHistorico(List<Encomenda>me,String entidade,LocalDateTime i,LocalDateTime f) {
@@ -149,7 +182,7 @@ public class Menu {
             case 2: return TipoConta.Voluntario;
             case 3: return TipoConta.Loja;
             case 4: return TipoConta.Transportadora;
-            default: return null;
+            default: return null; 
         }
     }
 
@@ -179,6 +212,7 @@ public class Menu {
         else if (i==4) sb.append("****Codigo invalido***").append("\n");
         else if (i==5) sb.append("****Datas invalidas***").append("\n");
         else if (i==6) sb.append("****Nao foi possivel carregar o Estado***").append("\n");
+        else if (i==7) sb.append("****Voluntario nao disponivel***").append("\n");
         System.out.print(sb.toString());
     }
     

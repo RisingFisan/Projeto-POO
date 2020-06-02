@@ -107,6 +107,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     
     public void setQuemTransportou(String qt){
        this.quemTransportou = qt;
+       setData(LocalDateTime.now());
     }
 
     public void addProduto(LinhaEncomenda le) {

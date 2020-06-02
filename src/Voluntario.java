@@ -12,7 +12,7 @@ public class Voluntario extends Conta implements Serializable {
     private String encAceite;
     private boolean disponivel;
     private List<Integer> classificacao;
-    
+   
     
 
    

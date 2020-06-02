@@ -38,6 +38,7 @@ public class TrazAqui implements Serializable {
         this.estado.addNewEncToQueue(e.clone());
         this.estado.addToEncomendas(e.clone());
     }
+    
     public void encomendaParaSerEntregue(String codEnc,String transportadora){
         ((Utilizador)this.contaLoggedIn).addToEncTransp();
         this.estado.encomendaParaSerEntregue(codEnc,transportadora);
@@ -82,6 +83,29 @@ public class TrazAqui implements Serializable {
     
     public void solicitaEnc(String e) {
        this.estado.solicitaEnc(e);
+    }
+    
+    // Voluntario
+    
+    public void alteraDisp(int i) {
+        this.estado.alteraDisp(this.contaLoggedIn.getCodigo(), i);
+    }
+    
+    public boolean pedirTranspVol(String enc) throws VolNaoDisponivelException {
+        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        if (v.getDisponibilidade()) throw new VolNaoDisponivelException(this.contaLoggedIn.getCodigo());
+        if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("")) return false;
+        this.estado.encomendaParaSerEntregue(enc, this.contaLoggedIn.getCodigo());
+        v.setEncAceite(enc);
+        return true;
+    }
+    
+    public long entregaEnc () throws VolNaoDisponivelException {
+        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        if (!v.getDisponibilidade()) throw new VolNaoDisponivelException(this.contaLoggedIn.getCodigo());
+        String enc = v.getEncAceite();
+        if (enc.equals("")) return -1;
+        return this.estado.entregaEnc(enc);
     }
     
     public void carregaLogs(){
