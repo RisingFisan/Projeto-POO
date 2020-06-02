@@ -12,84 +12,83 @@ public class Controller {
 
         boolean errorMessage = false;
         while(true){
-        int opcao = -1;
-        while(opcao < 0 || opcao > 5) {
-            opcao = Menu.MenuInicial();
-        }
+            int opcao = -1;
+            while(opcao < 0 || opcao > 5) {
+                opcao = Menu.MenuInicial();
+            }
        
-        switch(opcao) {
-            
-            case 1:
-                while(true) {
-                    AbstractMap.SimpleEntry<String, String> dados = Menu.menuLogin(errorMessage);
-                    if(trazAqui.login(dados.getKey(), dados.getValue())) break;
-                    else errorMessage = true;
-                }
+            switch(opcao) {
                 
-                errorMessage = false;
-                Menu.clearWindow();
-                TipoConta tc = trazAqui.getTipoConta();
-                if (tc.equals(TipoConta.Utilizador)) runLoggedAccountUser(trazAqui);
-                
-                break;
-                
-            case 2:
-                TipoConta tipoConta = null;
-                while(tipoConta == null) tipoConta = Menu.menuRegisto();
-
-                Conta conta= null;
-                String email= "";
-               while(true) {
-                    email = Menu.getEmail(errorMessage);
-                    if(!trazAqui.existeEmail(email)) break;
-                    else errorMessage = true;
-                }
-                String password = Menu.getGeneralContaInfo(1);
-                String nome = Menu.getGeneralContaInfo(2);
-                double x = Double.valueOf(Menu.getGeneralContaInfo(3));
-                double y = Double.valueOf(Menu.getGeneralContaInfo(4));
-                String code = trazAqui.getNewCodeEnc();
-                if (tipoConta.equals(TipoConta.Utilizador)) conta = new Utilizador(code,nome,x,y,email,password);
-                
-                else if (tipoConta.equals(TipoConta.Voluntario)){
-                    double raioV = Double.valueOf(Menu.getSpecificContaInfo(1));
-                    conta = new Voluntario(code,nome,x,y,raioV,email,password);
-                }
-                else if (tipoConta.equals(TipoConta.Loja)) conta = new Loja(code,nome,x,y,email,password);
-                
-                else if (tipoConta.equals(TipoConta.Transportadora)){
-                    double raioT = Double.valueOf(Menu.getSpecificContaInfo(1));
-                    int max = Integer.valueOf(Menu.getSpecificContaInfo(2));
-                    String nif = Menu.getSpecificContaInfo(3);
-                    double preco = Double.valueOf(Menu.getSpecificContaInfo(4));
-                    conta = new Transportadora(code,nome,x,y,nif, raioT,preco,max);
-                }
-                trazAqui.registo(conta);
-                break;
-                
+                case 1:
+                    while(true) {
+                        AbstractMap.SimpleEntry<String, String> dados = Menu.menuLogin(errorMessage);
+                        if(trazAqui.login(dados.getKey(), dados.getValue())) break;
+                        else errorMessage = true;
+                    }
+                    
+                    errorMessage = false;
+                    Menu.clearWindow();
+                    TipoConta tc = trazAqui.getTipoConta();
+                    if (tc.equals(TipoConta.Utilizador)) runLoggedAccountUser(trazAqui);
+                    
+                    break;
+                    
+                case 2:
+                    TipoConta tipoConta = null;
+                    while(tipoConta == null) tipoConta = Menu.menuRegisto();
+    
+                    Conta conta= null;
+                    String email= "";
+                    while(true) {
+                        email = Menu.getEmail(errorMessage);
+                        if(!trazAqui.existeEmail(email)) break;
+                        else errorMessage = true;
+                    }
+                    String password = Menu.getGeneralContaInfo(1);
+                    String nome = Menu.getGeneralContaInfo(2);
+                    double x = Double.valueOf(Menu.getGeneralContaInfo(3));
+                    double y = Double.valueOf(Menu.getGeneralContaInfo(4));
+                    String code = trazAqui.getNewCodeEnc();
+                    if (tipoConta.equals(TipoConta.Utilizador)) conta = new Utilizador(code,nome,x,y,email,password);
+                    
+                    else if (tipoConta.equals(TipoConta.Voluntario)){
+                        double raioV = Double.valueOf(Menu.getSpecificContaInfo(1));
+                        conta = new Voluntario(code,nome,x,y,raioV,email,password);
+                    }
+                    else if (tipoConta.equals(TipoConta.Loja)) conta = new Loja(code,nome,x,y,email,password);
+                    
+                    else if (tipoConta.equals(TipoConta.Transportadora)){
+                        double raioT = Double.valueOf(Menu.getSpecificContaInfo(1));
+                        int max = Integer.valueOf(Menu.getSpecificContaInfo(2));
+                        String nif = Menu.getSpecificContaInfo(3);
+                        double preco = Double.valueOf(Menu.getSpecificContaInfo(4));
+                        conta = new Transportadora(code,nome,x,y,nif, raioT,preco,max);
+                    }
+                    trazAqui.registo(conta);
+                    break;
+                    
                 case 3:
-                trazAqui.carregaLogs();
-                break;
-                
+                    trazAqui.carregaLogs();
+                    break;
+                    
                 case 4:
-                try{trazAqui.salvaEstadoObj();System.out.println("Ficheiros salvos com sucesso!!!\n");}
-                catch (FileNotFoundException e) {Menu.errors(1);}
-                catch (IOException e) {Menu.errors(2);}
-                break;
-                
+                    try{trazAqui.salvaEstadoObj();System.out.println("Ficheiros salvos com sucesso!!!\n");}
+                    catch (FileNotFoundException e) {Menu.errors(1);}
+                    catch (IOException e) {Menu.errors(2);}
+                    break;
+                    
                 case 5:
-                try {trazAqui.carregaEstadoObj();System.out.println("Ficheiros carregados com sucesso!!!\n");}
-                catch (FileNotFoundException e) {Menu.errors(1);}
-                catch (IOException e) {Menu.errors(6);}
-                catch (ClassNotFoundException e) {Menu.errors(3);}
-                break;
+                    try {trazAqui.carregaEstadoObj();System.out.println("Ficheiros carregados com sucesso!!!\n");}
+                    catch (FileNotFoundException e) {Menu.errors(1);}
+                    catch (IOException e) {Menu.errors(6);}
+                    catch (ClassNotFoundException e) {Menu.errors(3);}
+                    break;
                 
-                
-            case 0:
-                System.exit(0);
-                break;
+                case 0:
+                    System.exit(0);
+                    break;
+            }
         }
-    }
     }
     
     public static void runLoggedAccountUser(TrazAqui trazAqui){
