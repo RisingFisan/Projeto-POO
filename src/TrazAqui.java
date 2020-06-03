@@ -1,6 +1,8 @@
 import java.util.*;
 import java.io.*;
-import javafx.util.Pair; 
+import javafx.util.Pair;
+import java.time.Duration;
+ 
 public class TrazAqui implements Serializable {
     private Conta contaLoggedIn;
     private Estado estado;
@@ -87,24 +89,27 @@ public class TrazAqui implements Serializable {
     
     // Voluntario
     
+    public boolean getDisp() {
+        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        return v.getDisponibilidade();
+    }
+    
     public void alteraDisp(int i) {
         this.estado.alteraDisp(this.contaLoggedIn.getCodigo(), i);
     }
     
-    public boolean pedirTranspVol(String enc) throws VolNaoDisponivelException {
+    public boolean pedirTranspVol(String enc) {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
-        if (v.getDisponibilidade()) throw new VolNaoDisponivelException(this.contaLoggedIn.getCodigo());
         if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("")) return false;
         this.estado.encomendaParaSerEntregue(enc, this.contaLoggedIn.getCodigo());
         v.setEncAceite(enc);
         return true;
     }
     
-    public long entregaEnc () throws VolNaoDisponivelException {
+    public Duration entregaEnc () {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
-        if (!v.getDisponibilidade()) throw new VolNaoDisponivelException(this.contaLoggedIn.getCodigo());
         String enc = v.getEncAceite();
-        if (enc.equals("")) return -1;
+        if (enc.equals("")) return null;
         return this.estado.entregaEnc(enc);
     }
     

@@ -84,9 +84,9 @@ public class Menu {
     
     public static void voluntarioMenuResult(int i, String res){
         StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
-        if (i==1) sb.append("Disponibilidade alterada com sucesso!\n");
-        else if (i==2) sb.append("Pedido de transporte efetuado com sucesso!\n ");
-        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append(" horas");
+        if (i==1) sb.append("O voluntario esta agora ").append(res).append("\n");
+        else if (i==2) sb.append("Pedido de transporte da encomenda ").append(res).append(" efetuado com sucesso!\n ");
+        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append(" horas\n");
         sb.append("Pressione enter para continuar...");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -207,12 +207,14 @@ public class Menu {
     public static void errors(int i){
          StringBuilder sb = new StringBuilder();
         if (i==1) sb.append("****Ficheiro nao encontrado***").append("\n");
-        else if (i==2) sb.append("****Nao foi possivel guardar o Estado***").append("\n");
-        else if (i==3) sb.append("****Erro ao ler para as estruturas de dados***").append("\n");
-        else if (i==4) sb.append("****Codigo invalido***").append("\n");
-        else if (i==5) sb.append("****Datas invalidas***").append("\n");
-        else if (i==6) sb.append("****Nao foi possivel carregar o Estado***").append("\n");
-        else if (i==7) sb.append("****Voluntario nao disponivel***").append("\n");
+        else if (i==2) sb.append("****Nao foi possivel guardar o Estado****").append("\n");
+        else if (i==3) sb.append("****Erro ao ler para as estruturas de dados****").append("\n");
+        else if (i==4) sb.append("****Codigo invalido****").append("\n");
+        else if (i==5) sb.append("****Datas invalidas****").append("\n");
+        else if (i==6) sb.append("****Nao foi possivel carregar o Estado****").append("\n");
+        else if (i==7) sb.append("****Voluntario nao disponivel****").append("\n");
+        else if (i==8) sb.append("****Nao existe encomenda a transportar****").append("\n");
+        else if (i==9) sb.append("****A encomenda nao foi solicitada****").append("\n");
         System.out.print(sb.toString());
     }
     

@@ -15,7 +15,8 @@ import java.util.*;
 import java.awt.geom.Point2D;
 import javafx.util.Pair;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit; 
+import java.time.temporal.ChronoUnit;
+import java.time.Duration;
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -161,14 +162,13 @@ public class Estado implements Serializable {
         Voluntario v = (Voluntario) this.voluntarios.getContaByCode(code);
         if (i == 1) v.setDisponibilidade(true);
         if (i == 2) v.setDisponibilidade(false);
-    }
+    }        
     
-    
-    public long entregaEnc (String enc) {
+    public Duration entregaEnc (String enc) {
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
         e.setFoiEntregue(true);
         LocalDateTime d = e.getData();
-        return d.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        return Duration.between(d, LocalDateTime.now()); //d.until(LocalDateTime.now(), ChronoUnit.HOURS);
     }
     
     public void pedirTransporte(String transp, String enc) {

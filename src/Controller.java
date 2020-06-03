@@ -5,7 +5,8 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 import java.util.Collections;
-import javafx.util.Pair; 
+import javafx.util.Pair;
+import java.time.Duration; 
 public class Controller {
     public static void run() {
         TrazAqui trazAqui = new TrazAqui();
@@ -212,6 +213,7 @@ public class Controller {
         while(!exit){
             int opcao = -1;
             String s;
+            boolean disp = trazAqui.getDisp();
             while(opcao < 0 || opcao > 3) {
                 opcao = Menu.menuVoluntario();
             }
@@ -221,30 +223,29 @@ public class Controller {
                     while(op<1 || op >2)
                         op = Integer.valueOf(Menu.voluntarioMenuData(1));
                     trazAqui.alteraDisp(op);
-                    Menu.voluntarioMenuResult(1, "");
+                    Menu.voluntarioMenuResult(1, (op == 1) ? "disponivel" : "indisponivel");
                     break;
                 case 2:
-                    String codEnc = Menu.voluntarioMenuData(2);
-                    if (trazAqui.isValidCodeEnc(codEnc)) {
-                        try { 
+                    
+                    if (!disp) Menu.errors(7);
+                    else {
+                        String codEnc = Menu.voluntarioMenuData(2);
+                        if (trazAqui.isValidCodeEnc(codEnc)) {  
                             boolean res = trazAqui.pedirTranspVol(codEnc);
-                            if (res) Menu.voluntarioMenuResult(2, "");
-                            else Menu.errors(4);
+                            if (res) Menu.voluntarioMenuResult(2, codEnc);
+                            else Menu.errors(9);
                         }
-                        catch (VolNaoDisponivelException e) {
-                            Menu.errors(7);
-                        }
+                        else 
+                            Menu.errors(4);
                     }
-                    else 
-                        Menu.errors(4);
                     break;
                 case 3:
-                    try { 
-                        long time = trazAqui.entregaEnc();
-                        if (time == -1) Menu.errors(4);
+                    if (disp) { 
+                        Duration time = trazAqui.entregaEnc();
+                        if (time == null) Menu.errors(8);
                         else Menu.voluntarioMenuResult(3, String.valueOf(time));
                     }
-                    catch (VolNaoDisponivelException e) {
+                    else {
                         Menu.errors(7);
                     }
                     break;
