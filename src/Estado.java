@@ -170,9 +170,22 @@ public class Estado implements Serializable {
         LocalDateTime d = e.getData();
         return Duration.between(d, LocalDateTime.now()); //d.until(LocalDateTime.now(), ChronoUnit.HOURS);
     }
+    /* Teste*/
+    public double dist(String enc, String vol) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        String l = e.getCodLoja();
+        Loja loja = (Loja) this.lojas.getContaByCode(l);
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
+        return Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy());
+    }
     
-    public void pedirTransporte(String transp, String enc) {
-        this.pedidosTransporte.add(new Pair(enc,transp));
+    public boolean podeTranportar(String enc, String vol) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        String l = e.getCodLoja();
+        Loja loja = (Loja) this.lojas.getContaByCode(l);
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
+        if (Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < 5000) return true;
+        return false;
     }
     
     public Conta getContaFromCredentials(String email, String password) {
@@ -222,6 +235,8 @@ public class Estado implements Serializable {
          this.voluntarios = e.voluntarios;
          this.lojas = e.lojas;
          this.transportadoras = e.transportadoras;
+         this.encomendas = e.encomendas;
+         this.pedidosTransporte = e.pedidosTransporte;
       }
       
     public Estado loadAux(String file) throws FileNotFoundException, IOException, ClassNotFoundException {

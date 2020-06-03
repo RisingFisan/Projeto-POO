@@ -97,10 +97,14 @@ public class TrazAqui implements Serializable {
     public void alteraDisp(int i) {
         this.estado.alteraDisp(this.contaLoggedIn.getCodigo(), i);
     }
+    /* Teste */
+    public double dist (String enc) {
+        return this.estado.dist(enc, this.contaLoggedIn.getCodigo());
+    }
     
     public boolean pedirTranspVol(String enc) {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
-        if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("")) return false;
+        if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("") || !this.estado.podeTranportar(enc, this.contaLoggedIn.getCodigo())) return false;
         this.estado.encomendaParaSerEntregue(enc, this.contaLoggedIn.getCodigo());
         v.setEncAceite(enc);
         return true;

@@ -230,7 +230,7 @@ public class Controller {
                     if (!disp) Menu.errors(7);
                     else {
                         String codEnc = Menu.voluntarioMenuData(2);
-                        if (trazAqui.isValidCodeEnc(codEnc)) {  
+                        if (trazAqui.isValidCodeEnc(codEnc)) {                            
                             boolean res = trazAqui.pedirTranspVol(codEnc);
                             if (res) Menu.voluntarioMenuResult(2, codEnc);
                             else Menu.errors(9);

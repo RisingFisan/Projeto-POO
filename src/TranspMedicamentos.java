@@ -7,6 +7,7 @@
  */
 
 public interface TranspMedicamentos {
+    
     public boolean aceitoTransporteMedicamentos();
     
     public void aceitaMedicamentos(boolean state);
