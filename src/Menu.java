@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 import javafx.util.Pair; 
 public class Menu {
     public static int MenuInicial() {
-        StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU INICIAL-----------\n\n");
         sb.append("1) Iniciar sessao.\n");
         sb.append("2) Registar nova conta.\n");
         sb.append("3) Carregar logs.\n");
@@ -28,7 +29,7 @@ public class Menu {
     }
     
     public static int menuUtilizador(){
-        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        StringBuilder sb = new StringBuilder("-----------MENU UTILIZADOR-----------\n\n");
         sb.append("1) Efetuar uma compra.\n");
         sb.append("2) Solicitar entrega de uma encomenda.\n");
         sb.append("3) Verificar ofertas de transportadora.\n");
@@ -42,7 +43,7 @@ public class Menu {
     }
     
     public static String userMenuData(int i){
-        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        StringBuilder sb = new StringBuilder("-----------MENU UTILIZADOR-----------\n\n");
         if (i==1)sb.append("Digite um codigo da entidade:\n ");
         else if (i==2) sb.append("Digite a sua avaliacao(1-10):\n ");
         else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
@@ -58,8 +59,9 @@ public class Menu {
         return scanner.nextLine();
     }
     
-    public static int menuVoluntario(){
-        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+    public static int menuVoluntario(boolean disp){
+        StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
+        sb.append(disp ? "-> Disponivel\n\n" : "-> Indisponivel\n\n");
         sb.append("1) Alterar disponibilidade.\n");
         sb.append("2) Selecionar encomenda a transportar.\n");
         sb.append("3) Registar entrega de uma encomenda.\n");
@@ -71,7 +73,8 @@ public class Menu {
     }
     
     public static String voluntarioMenuData(int i){
-        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
         if (i==1) sb.append("1) Ficar disponivel;\n2) Ficar indisponivel;\nSelecione a opcao pretendida: ");
         else if (i==2) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
@@ -83,18 +86,20 @@ public class Menu {
     }
     
     public static void voluntarioMenuResult(int i, String res){
-        StringBuilder sb = new StringBuilder("----------MENU VOLUNTARIO-----------\n\n");
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
         if (i==1) sb.append("O voluntario esta agora ").append(res).append("\n");
         else if (i==2) sb.append("Pedido de transporte da encomenda ").append(res).append(" efetuado com sucesso!\n ");
-        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append(" horas\n");
+        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append("\n");
         sb.append("Pressione enter para continuar...");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
+        clearWindow();
     }
      
     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
-        StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
+        StringBuilder sb = new StringBuilder("-----------MENU UTILIZADOR-----------\n\n");
         for (Map.Entry<String,List<Pair <String, Double>>> a : transp.entrySet()){
             sb.append("* ").append("Encomenda: ").append(a.getKey()).append("\n ");
             for (Pair <String, Double> p : a.getValue()){
@@ -125,7 +130,7 @@ public class Menu {
      
      
     public static void printHistorico(List<Encomenda>me,String entidade,LocalDateTime i,LocalDateTime f) {
-        StringBuilder sb = new StringBuilder("----------Historico de Encomendas-----------\n\n");
+        StringBuilder sb = new StringBuilder("-----------Historico de Encomendas-----------\n\n");
         sb.append("********Entidade "+entidade+"********");
         sb.append("Encomendas entre "+i.toString()+" e "+f.toString());
         me.stream().forEach(a->sb.append(a));
@@ -164,7 +169,7 @@ public class Menu {
 
     public static TipoConta menuRegisto() {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------REGISTAR NOVA CONTA---------").append("\n");
+        sb.append("------------REGISTAR NOVA CONTA------------").append("\n");
         sb.append("Como se deseja registar?\n\n");
         sb.append("1) Utilizador\n");
         sb.append("2) Voluntario\n");
@@ -188,7 +193,7 @@ public class Menu {
 
     public static AbstractMap.SimpleEntry<String,String> menuLogin(boolean errorMessage) {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------INICIAR SESSAO---------").append("\n\n");
+        sb.append("------------INICIAR SESSAO------------").append("\n\n");
         if(errorMessage) sb.append("Erro - Dados invalidos! Tente novamente!\n\n");
         sb.append("Introduza os seus dados.\n\n");
         sb.append("Endereco de e-mail: ");
@@ -212,10 +217,14 @@ public class Menu {
         else if (i==4) sb.append("****Codigo invalido****").append("\n");
         else if (i==5) sb.append("****Datas invalidas****").append("\n");
         else if (i==6) sb.append("****Nao foi possivel carregar o Estado****").append("\n");
-        else if (i==7) sb.append("****Voluntario nao disponivel****").append("\n");
+        else if (i==7) sb.append("****Voluntario indisponivel****").append("\n");
         else if (i==8) sb.append("****Nao existe encomenda a transportar****").append("\n");
         else if (i==9) sb.append("****A encomenda nao foi solicitada****").append("\n");
+        sb.append("\nPressione enter para continuar...");
         System.out.print(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        clearWindow();
     }
     
     

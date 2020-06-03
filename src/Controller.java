@@ -215,7 +215,7 @@ public class Controller {
             String s;
             boolean disp = trazAqui.getDisp();
             while(opcao < 0 || opcao > 3) {
-                opcao = Menu.menuVoluntario();
+                opcao = Menu.menuVoluntario(disp);
             }
             switch(opcao) {
                 case 1:
