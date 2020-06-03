@@ -142,7 +142,7 @@ public class Menu {
 
     
     public static String getEmail (boolean b){
-        if (b) System.out.println("O email digitado j� existe.Tente novamente. "); 
+        if (b) System.out.println("O email digitado ja existe.Tente novamente. "); 
         System.out.print("Digite um e-mail de registo: ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
