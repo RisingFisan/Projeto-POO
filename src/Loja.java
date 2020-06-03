@@ -1,7 +1,9 @@
 import java.util.*;
 import java.util.stream.Collectors;
-
-public class Loja extends Conta {
+import java.util.Set;
+import java.util.TreeSet;
+import java.io.*;
+public class Loja extends Conta implements Serializable {
 
     private Queue<Encomenda> filaEspera;
 
@@ -9,6 +11,12 @@ public class Loja extends Conta {
         super(cod, nome, x, y);
         this.filaEspera = new ArrayDeque<>();
     }
+    
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword) {
+        super(cod, nome, x, y, novoEmail, novaPassword);
+        this.filaEspera = new ArrayDeque<>();
+    }
+    
 
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword) {
         super(cod, nome, x, y, novoEmail, novaPassword);
@@ -23,7 +31,13 @@ public class Loja extends Conta {
     public Loja(Loja outro) {
         super(outro);
         this.filaEspera = outro.getFilaEspera();
+        
     }
+    
+    public void addEncomenda(Encomenda e) {
+        this.filaEspera.add(e.clone());
+    }
+    
 
     public void setFilaEspera(List<Encomenda> l) {
         this.filaEspera = l.stream()
@@ -36,6 +50,8 @@ public class Loja extends Conta {
                 .map(Encomenda::clone)
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
+    
+    
 
     //CLONE
     public Loja clone() {
@@ -46,8 +62,9 @@ public class Loja extends Conta {
     public String toString() {
         StringBuilder sb = new StringBuilder("Loja\n");
         sb.append(super.toString());
-        sb.append("Fila de espera: ").append(this.filaEspera.toString());
+        sb.append("Fila de espera: ").append(this.filaEspera.toString()).append("\n");
         return sb.toString();
+        
     }
 
     public boolean equals(Object o) {

@@ -1,8 +1,12 @@
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
+import java.io.*;
 
-public class Contas {
+public class Contas implements Serializable {
     private Map<String,Conta> mapContas;
 
     public Contas() {
@@ -47,4 +51,24 @@ public class Contas {
         if(conta != null) return conta.clone();
         else return null;
     }
+    
+    public Conta getContaByCode(String code){
+        if (this.mapContas.keySet().contains(code))
+        return this.mapContas.get(code).clone();
+        return null;
+    }
+    
+    public boolean existeEmail(String s){
+        return this.mapContas.entrySet().stream().anyMatch(a->s.equals(a.getValue().getEmail()));
+    }
+    
+    public String lastCode(){
+        TreeSet<String> set = this.mapContas.keySet().stream()
+                                  .collect(Collectors.toCollection(() -> new TreeSet<>(new ComparatorCod())));
+        
+        return set.last();
+        
+    }
+    
+    
 }

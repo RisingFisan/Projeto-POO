@@ -1,11 +1,15 @@
 import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+import java.io.*;
 
-public class Transportadora extends Conta {
+public class Transportadora extends Conta implements Serializable {
     private String nif;
     private double raio;
     private double precoKm;
+    private List<Integer> classificacao;
     
     //Encomendas que aceitou
     private List <String> encAceites;
@@ -21,6 +25,18 @@ public class Transportadora extends Conta {
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
         this.maxCapacidade = Integer.MAX_VALUE;
+        this.classificacao = new ArrayList<>();
+    }
+    
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
+        super(cod,nome,x,y);
+        this.raio = raio;
+        this.nif = nif;
+        this.precoKm = preco;
+        this.encAceites = new ArrayList<>();
+        this.disponivel = true;
+        this.maxCapacidade = max;
+        this.classificacao = new ArrayList<>();
     }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
@@ -48,9 +64,10 @@ public class Transportadora extends Conta {
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
-        this.encAceites = lista;
+        this.encAceites = new ArrayList<>(lista);
         this.disponivel = lista.isEmpty();
         this.maxCapacidade = max;
+        this.classificacao = new ArrayList<>(list);
     }
 
 
@@ -62,6 +79,7 @@ public class Transportadora extends Conta {
         this.encAceites = t.getEncAceites();
         this.disponivel = t.disponivel;
         this.maxCapacidade = t.maxCapacidade;
+        this.classificacao = t.getClassif();
     }
 
     //GETTERS
@@ -88,6 +106,12 @@ public class Transportadora extends Conta {
     public int getMaxCapacidade(){
         return this.maxCapacidade;
     }
+    
+    public List<Integer> getClassif(){
+        return new ArrayList(this.classificacao);
+    }
+    
+    
 
     //SETTERS
     public void setNIF(String nif) {
@@ -114,6 +138,12 @@ public class Transportadora extends Conta {
         this.maxCapacidade = max;
     }
     
+    public void setClassif(List<Integer> e){
+        this.classificacao = new ArrayList(e);
+    }
+    
+    
+    
     
     //CLONE
     public Transportadora clone() {
@@ -126,9 +156,14 @@ public class Transportadora extends Conta {
         sb.append(super.toString());
         sb.append("NIF: '").append(this.nif).append("'\n");
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Preço por km: ").append(this.precoKm).append("\n");
+        sb.append("Preco por km: ").append(this.precoKm).append("\n");
         sb.append("Encomendas Aceites: ").append(this.encAceites);
+        sb.append("Classificacoes: ").append(this.classificacao);
         return sb.toString();
+    }
+    
+    public void addClassif(int i){
+        this.classificacao.add(i);
     }
 
     public boolean equals(Object o) {
@@ -150,6 +185,15 @@ public class Transportadora extends Conta {
         else if (this.encAceites.isEmpty()) this.disponivel=true;
         this.encAceites.add(cod);
         if (this.encAceites.size()==this.maxCapacidade) this.disponivel = false;
+    }
+    
+    public double getAverageClassif(){
+        double average = this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
+        return average;
+    }
+    
+    public double totalPreco (double dist){
+        return this.precoKm*dist;
     }
 }
 

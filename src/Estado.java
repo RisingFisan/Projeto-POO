@@ -13,6 +13,7 @@ import java.util.Map;
 import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
+import javafx.util.Pair; 
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -20,13 +21,15 @@ public class Estado implements Serializable {
     private Contas transportadoras;
     private Contas lojas;
     private Encomendas encomendas;
-
+    private Set<Pair<String,String>> pedidosTransporte;
+    
     public Estado() {
         this.utilizadores = new Contas();
         this.voluntarios = new Contas();
         this.transportadoras = new Contas();
         this.lojas = new Contas();
         this.encomendas = new Encomendas();
+        this.pedidosTransporte = new TreeSet<>();
     }
     
     public Estado (Estado outro){
@@ -35,6 +38,117 @@ public class Estado implements Serializable {
        this.transportadoras =outro.transportadoras;
        this.lojas = outro.lojas;
        this.encomendas = outro.encomendas;
+       this.pedidosTransporte = outro.getPedidos();
+    }
+    
+    
+    
+    public Set<Pair<String,String>> getPedidos(){
+        return new TreeSet<>(this.pedidosTransporte);
+    }
+    
+    public boolean existeEmail(String s){
+        return this.utilizadores.existeEmail(s) || this.voluntarios.existeEmail(s) 
+                                                || this.lojas.existeEmail(s) 
+                                                || this.transportadoras.existeEmail(s);
+    }
+    
+    public String newCode(TipoConta tipoConta){
+        String cod="";
+        if (tipoConta.equals(TipoConta.Utilizador)) cod = this.utilizadores.lastCode();
+        else if (tipoConta.equals(TipoConta.Voluntario)) cod = this.voluntarios.lastCode();
+        else if (tipoConta.equals(TipoConta.Loja)) cod = this.lojas.lastCode();
+        else if (tipoConta.equals(TipoConta.Transportadora)) cod = this.transportadoras.lastCode();
+        char first = cod.charAt(0);
+        int newNum = Integer.valueOf(cod.substring(1))+1;
+        return (first+String.valueOf(newNum));
+        
+    }
+    
+    public String newCodeEnc(){
+        String cod = this.encomendas.getLastCode();
+        char first = cod.charAt(0);
+        int newNum = Integer.valueOf(cod.substring(1))+1;
+        return (first+String.valueOf(newNum));
+        
+    }
+    
+    public void addToEncomendas(Encomenda e){
+        this.encomendas.addEnc(e.clone());
+    }
+    
+    public void addNewEncToQueue (Encomenda e){
+        String cod = e.getCodLoja();
+        Loja l = (Loja) this.lojas.getContaByCode(cod);
+        l.addEncomenda(e.clone());
+        /*Substituindo a loja antiga pela atual com a encomenda adicionada*/
+        this.lojas.addConta(l);
+    }
+    
+    public void solicitaEnc(String e) {
+        this.encomendas.solicitaEnc(e);
+    }
+    
+    public boolean lojaCodeValid(String loja){
+        return this.lojas.getContas().values().stream().anyMatch(a->a.getCodigo().equals(loja));
+    }
+    
+    public boolean encCodeValid(String enc){
+        return this.encomendas.getEnc().stream().anyMatch(a->a.getCodEnc().equals(enc));
+    }
+    
+    public boolean checkIfEntityWorkedForUser(String code,String user){
+        return this.encomendas.getEnc().stream().anyMatch(a->(a.getCodUtil().equals(user) && a.getQuemTransportou().equals(code)));
+    }
+    
+    public List<Encomenda> getHistoricoUser(String user){
+        return this.encomendas.getEnc().stream().filter(a->a.getCodUtil().equals(user)).collect(Collectors.toList());
+        
+    }
+    
+    public void encomendaParaSerEntregue(String codEnc,String transp){
+        Pair <String,String> aux = new Pair(codEnc,transp);
+        this.encomendas.quemTransportou(codEnc,transp);
+        this.pedidosTransporte.remove(aux);
+        
+    }
+    
+    public Map<String,List<Pair <String, Double>>> getTranspOptions(String user){
+        Map<String,List<Pair <String, Double>>> res = new HashMap<>();
+        
+        for (Pair<String,String> a : this.pedidosTransporte){
+            Encomenda e = this.encomendas. getEncomendaByCod(a.getValue());
+            if (e.getCodUtil().equals(user)){
+                Conta util = (Utilizador)this.utilizadores.getContaByCode(user);
+                Transportadora transp = (Transportadora)this.transportadoras.getContaByCode(a.getValue());
+                Conta loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
+                Point2D p = new Point2D.Double(util.getGPSx(),util.getGPSy());
+                Point2D p1 = new Point2D.Double(transp.getGPSx(),transp.getGPSy());
+                double jessica = transp.totalPreco(p.distance(loja.getGPSx(),loja.getGPSy())+ p1.distance(loja.getGPSx(),loja.getGPSy()));
+                Pair <String, Double> ans = new Pair <String, Double> (a.getValue(),jessica); 
+                if (!res.containsKey(a.getKey())){
+                    List<Pair<String,Double>> l = new ArrayList<>();
+                    res.put(a.getKey(),l);
+              }
+              res.get(a.getKey()).add(ans);
+                 
+            }
+        }
+        return res;
+    }
+    
+    
+    public void classifica (int c,String code){
+        Voluntario v = (Voluntario)this.voluntarios.getContaByCode(code);
+        Transportadora t =(Transportadora)this.transportadoras.getContaByCode(code);
+        if (v!=null) {
+            v.addClassif(c);
+            this.voluntarios.addConta(v.clone());
+        }
+        else {
+            t.addClassif(c);
+            this.transportadoras.addConta(t.clone());
+        }   
     }
 
 
@@ -65,36 +179,30 @@ public class Estado implements Serializable {
         return new Estado(this);
     }
 
-    public void loadEstado() {
+    public void loadEstadoLogs() {
         parse();
 
     }
 
     public void saveEstado() throws FileNotFoundException, IOException  {
-        try {
-             ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.txt"));
+             ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.obj"));
              oos.writeObject(this);
              oos.flush();
              oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-       
-
     }
     
     
-    //Outras opcao de leitura --Nao tenho a certeza se est� certo.
-     public void loadEstado1(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException {
-         Estado e = parse1();
+    //carregar de ficheiro objeto
+     public void loadEstadoObj(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+         Estado e = loadAux(file);
          this.utilizadores = e.utilizadores;
          this.voluntarios = e.voluntarios;
          this.lojas = e.lojas;
          this.transportadoras = e.transportadoras;
       }
       
-    public Estado parse1() throws FileNotFoundException, IOException, ClassNotFoundException {
-        ObjectInputStream ois = new ObjectInputStream (new FileInputStream("estado.txt"));
+    public Estado loadAux(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
+        ObjectInputStream ois = new ObjectInputStream (new FileInputStream(file));
         Estado e = (Estado) ois.readObject();
         ois.close();
         return e;
@@ -102,12 +210,12 @@ public class Estado implements Serializable {
     }
     
     /*--------------------FUNCOES QUE ESTAVAM NA PARSE-----------------------*/
-    
+    //ler do ficheiro log
    
     
     public void parse() {
         
-        List<String> linhas = lerFicheiro("log.txt");
+        List<String> linhas = lerFicheiro("logs.csv");
         List<Conta> listaVol = new ArrayList<>();
         List<Conta> listaTransportadora = new ArrayList<>();
         List<Conta> listaLoja = new ArrayList<>();
@@ -155,9 +263,7 @@ public class Estado implements Serializable {
             
             //Distribuir aleatoriamente encomendas aceites pelas entidades transportadoras(tendo em atencao o raio)
             distributeEncAceites(listaEnc,listaAceite,listaTransportadora,listaVol,listaLoja);
-            System.out.println(listaVol);
-            System.out.println(listaTransportadora);
-            //System.out.println(listaAceite);
+            System.out.println(this.utilizadores);
             
             listaVol.stream().forEach(a->this.voluntarios.addConta(a));
             listaTransportadora.stream().forEach(a->this.transportadoras.addConta(a));
@@ -181,8 +287,9 @@ public class Estado implements Serializable {
                 double raioV = vol.getRaio();
                 Point2D ponto = new Point2D.Double(vol.getGPSx(),vol.getGPSy());
                 if (vol.getDisponibilidade() && ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioV) {
+                    e.setQuemTransportou (vol.getCodigo());
                     vol.addEncomenda(s);
-                    found=1;
+                   found=1;
                     break;
                 }
             }
@@ -194,6 +301,7 @@ public class Estado implements Serializable {
                 Point2D ponto = new Point2D.Double(tps.getGPSx(),tps.getGPSy());
                 if (ponto.distance(loja.getGPSx(),loja.getGPSy())<=raioT) {
                     tps.setMaxCapacidade(tps.getEncAceites().size()+1);
+                    e.setQuemTransportou (tps.getCodigo());
                     tps.addEncomenda(s);
                     break;}
             }
@@ -214,8 +322,8 @@ public class Estado implements Serializable {
 
     public Conta parseUtilizador(String input) {
         String[] campos = input.split(",");
-        String nome = campos[0];
-        String codUtilizador = campos[1];
+        String nome = campos[1];
+        String codUtilizador = campos[0];
         double x = Double.parseDouble(campos[2]);
         double y = Double.parseDouble(campos[3]);
         return new Utilizador(codUtilizador, nome, x, y);

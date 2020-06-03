@@ -1,8 +1,9 @@
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.List;
 import java.util.stream.Collectors;
-
-public class Encomendas
+import java.io.*;
+public class Encomendas implements Serializable
 {
      private Set<Encomenda> encomendas;
 
@@ -34,6 +35,15 @@ public class Encomendas
         this.encomendas.add(e);
     }
     
+    public Encomenda getEncomendaByCod(String code){
+        return this.encomendas.stream().filter(e->e.getCodEnc().equals(code)).findFirst().orElse(null).clone();
+        
+    }
+    
+    public List<Encomenda> getListaEncomenda(List<String>lista){
+        return lista.stream().map(a->getEncomendaByCod(a)).collect(Collectors.toList());
+    }
+    
     public Encomendas clone() {
         return new Encomendas(this);
     }
@@ -41,10 +51,27 @@ public class Encomendas
     public boolean equals (Encomendas e){
         return this.encomendas.equals(e);
     }
+    
+    public void solicitaEnc(String e){
+        this.encomendas.stream().filter(a->a.getCodEnc().equals(e)).forEach(a->a.setFoiSolicitada(true));
+    }
+    
+    public void quemTransportou(String e,String t){
+        this.encomendas.stream().filter(a->a.getCodEnc().equals(e)).forEach(a->a.setQuemTransportou(t));
+    }
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
         sb.append("Encomendas: ").append(encomendas.toString()).append('\n');
         return sb.toString();
     }
+    
+    public String getLastCode(){
+        if (this.encomendas.isEmpty()) return "";
+        TreeSet t = (TreeSet)(this.encomendas);
+        Encomenda e = (Encomenda) t.last();
+        return e.getCodEnc();
+    }
+    
+    
 }

@@ -1,12 +1,16 @@
 import java.awt.geom.Point2D;
 import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
+import java.io.*;
 
-public class Conta implements Comparable {
+public class Conta implements Comparable,Serializable {
     private String codigo;
     private String nome;
     private Point2D gps;
     private String email;
     private String password;
+    
     
     public Conta() {
         this.codigo = null;
@@ -33,6 +37,7 @@ public class Conta implements Comparable {
         this.password = password;
     }
     
+    
     public Conta(Conta outro){
         this.codigo = outro.codigo;
         this.nome = outro.nome;
@@ -57,6 +62,8 @@ public class Conta implements Comparable {
     public String getEmail(){
         return this.email;
     }
+    
+    
 
     //SETTERS
     
@@ -79,6 +86,7 @@ public class Conta implements Comparable {
     public void setPassword(String novaPass){
         this.password = novaPass;
     }
+    
     
     //CLONE
     public Conta clone() {
