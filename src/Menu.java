@@ -157,7 +157,7 @@ public class Menu {
         return scanner.nextLine();
     }
     public static String getSpecificContaInfo(int i){
-        if (i==1) System.out.print("Raio de A��o: ");
+        if (i==1) System.out.print("Raio de Acao: ");
         else if (i==2) System.out.print("Numero maximo de encomendas a transportar: ");
         else if (i==3) System.out.print("NIF da transportadora: ");
         else if (i==4) System.out.print("Preco por KM: ");
