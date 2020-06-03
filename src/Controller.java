@@ -256,4 +256,45 @@ public class Controller {
             }
         }
     }
+
+    public static void runLoggedAccountTransportadora(TrazAqui trazAqui){
+        boolean errorMessage = false;
+        boolean exit = false;
+        while(!exit){
+            int opcao = -1;
+            String s;
+            boolean disp = trazAqui.getDisp();
+            while(opcao < 0 || opcao > 3) {
+                opcao = Menu.menuTransportadora(disp);
+            }
+            switch(opcao) {
+                case 1:
+                    int op = -1;
+                    while(op<1 || op >2)
+                        op = Integer.valueOf(Menu.transportadoraMenuData(1));
+                    trazAqui.alteraDisp(op);
+                    Menu.transportadoraMenuResult(1, (op == 1) ? "disponivel" : "indisponivel");
+                    break;
+                case 2:
+                    
+                    if (!disp) Menu.errors(7);
+                    else {
+                        
+                    }
+                    break;
+                case 3:
+                    if (disp) { 
+                        
+                    }
+                    else {
+                        Menu.errors(7);
+                    }
+                    break;
+                case 0:
+                    exit=true;
+                    Menu.clearWindow();
+                    break;
+            }
+        }
+    }    
 }

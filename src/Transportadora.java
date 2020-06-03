@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Transportadora extends Conta implements Serializable, TranspMedicamentos {
+public class Transportadora extends Conta implements Serializable, TranspVolunt {
     private String nif;
     private double raio;
     private double precoKm;

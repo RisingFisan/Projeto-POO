@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Voluntario extends Conta implements Serializable, TranspMedicamentos {
+public class Voluntario extends Conta implements Serializable, TranspVolunt {
     private double raio;
     private String encAceite; //Encomenda que aceitou
     private boolean disponivel;

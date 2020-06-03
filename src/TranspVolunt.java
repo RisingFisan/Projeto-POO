@@ -6,9 +6,13 @@
  * @version (número da versão ou data)
  */
 
-public interface TranspMedicamentos {
+public interface TranspVolunt {
     
     public boolean aceitoTransporteMedicamentos();
     
     public void aceitaMedicamentos(boolean state);
+    
+    public boolean getDisponibilidade();
+    
+    public void setDisponibilidade(boolean b);
 }

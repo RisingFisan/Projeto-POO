@@ -159,9 +159,10 @@ public class Estado implements Serializable {
     // Voluntario
     
     public void alteraDisp(String code,int i) {
-        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(code);
-        if (i == 1) v.setDisponibilidade(true);
-        if (i == 2) v.setDisponibilidade(false);
+        TranspVolunt tv = (TranspVolunt) this.voluntarios.getContaByCode(code);
+        if (tv == null) tv = (TranspVolunt) this.transportadoras.getContaByCode(code);
+        if (i == 1) tv.setDisponibilidade(true);
+        if (i == 2) tv.setDisponibilidade(false);
     }        
     
     public Duration entregaEnc (String enc) {
@@ -187,6 +188,11 @@ public class Estado implements Serializable {
         if (Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < 5000) return true;
         return false;
     }
+    
+    // Transportadora
+    
+    
+    
     
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);

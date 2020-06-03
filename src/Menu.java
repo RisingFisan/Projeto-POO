@@ -98,6 +98,45 @@ public class Menu {
         clearWindow();
     }
      
+    public static int menuTransportadora(boolean disp){
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+        sb.append(disp ? "-> Disponivel\n\n" : "-> Indisponivel\n\n");
+        sb.append("1) Alterar disponibilidade.\n");
+        sb.append("2) Selecionar encomenda a transportar.\n");
+        sb.append("3) Registar entrega de uma encomenda.\n");
+        sb.append("0) Logout.\n\n");
+        sb.append("Selecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+    
+    public static String transportadoraMenuData(int i){
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+        if (i==1) sb.append("1) Ficar disponivel;\n2) Ficar indisponivel;\nSelecione a opcao pretendida: ");
+        else if (i==2) sb.append("Digite um codigo de encomenda:\n ");
+        else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
+        
+        
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
+    public static void transportadoraMenuResult(int i, String res){
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+        if (i==1) sb.append("A transportadora esta agora ").append(res).append("\n");
+        else if (i==2) sb.append("Pedido de transporte da encomenda ").append(res).append(" efetuado com sucesso!\n ");
+        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append("\n");
+        sb.append("Pressione enter para continuar...");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        clearWindow();
+    }
+    
     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
         StringBuilder sb = new StringBuilder("-----------MENU UTILIZADOR-----------\n\n");
         for (Map.Entry<String,List<Pair <String, Double>>> a : transp.entrySet()){
