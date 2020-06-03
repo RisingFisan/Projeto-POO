@@ -19,7 +19,7 @@ public class Voluntario extends Conta implements Serializable {
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
         this.raio = raio;
-        this.encAceite = "";
+        this.encAceite = null;
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
     }
@@ -33,13 +33,19 @@ public class Voluntario extends Conta implements Serializable {
         
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite,List<Integer>list) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
+        super(cod,nome,x,y,novoEmail,novaPassword);
+        this.raio = raio;
+        this.encAceite = null;
+        this.disponivel = false;
+    }
+
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite, List<Integer>list) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
         this.disponivel = false;
         this.classificacao = new ArrayList<>(list);
-        
     }
 
     public Voluntario(Voluntario outro) {

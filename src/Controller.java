@@ -64,6 +64,15 @@ public class Controller {
                     double preco = Double.valueOf(Menu.getSpecificContaInfo(4));
                     conta = new Transportadora(code,nome,x,y,nif, raioT,preco,max);
                 }
+/*
+                Conta conta;
+
+                if(tipoConta.equals(TipoConta.Utilizador)) conta = Menu.menuRegistoUtilizador();
+                else if(tipoConta.equals(TipoConta.Voluntario)) conta = Menu.menuRegistoVoluntario();
+                else if(tipoConta.equals(TipoConta.Loja)) conta = Menu.menuRegistoLoja();
+                else conta = Menu.menuRegistoTransportadora();
+
+*/
                 trazAqui.registo(conta);
                 break;
                 
@@ -89,6 +98,8 @@ public class Controller {
                 System.exit(0);
                 break;
         }
+
+        // Aqui chamar o controlador respetivo dependendo do tipo de conta.
     }
     }
     
