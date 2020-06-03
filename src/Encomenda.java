@@ -109,7 +109,9 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
        this.quemTransportou = qt;
        setData(LocalDateTime.now());
     }
-
+    
+    
+    
     public void addProduto(LinhaEncomenda le) {
         this.produtos.put(le.getCodProduto(), le.clone());
     }

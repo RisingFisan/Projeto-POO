@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Transportadora extends Conta implements Serializable {
+public class Transportadora extends Conta implements Serializable, TranspMedicamentos {
     private String nif;
     private double raio;
     private double precoKm;
@@ -14,8 +14,9 @@ public class Transportadora extends Conta implements Serializable {
     //Encomendas que aceitou
     private List <String> encAceites;
     private boolean disponivel;
-    //numero m�ximo de encomendas que transporta de cada vez
+    //numero maximo de encomendas que transporta de cada vez
     private int maxCapacidade;
+    private boolean medicamentos;
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
@@ -26,6 +27,7 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = 1;
         this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
     }
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
@@ -37,6 +39,7 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
     }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max,List<Integer> list) {
@@ -48,6 +51,7 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = lista.isEmpty();
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>(list);
+        this.medicamentos = false;
     }
 
 
@@ -60,6 +64,7 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = t.disponivel;
         this.maxCapacidade = t.maxCapacidade;
         this.classificacao = t.getClassif();
+        this.medicamentos = t.aceitoTransporteMedicamentos();
     }
 
     //GETTERS
@@ -91,7 +96,9 @@ public class Transportadora extends Conta implements Serializable {
         return new ArrayList(this.classificacao);
     }
     
-    
+    public boolean aceitoTransporteMedicamentos() {
+        return this.medicamentos;
+    }
 
     //SETTERS
     public void setNIF(String nif) {
@@ -122,6 +129,9 @@ public class Transportadora extends Conta implements Serializable {
         this.classificacao = new ArrayList(e);
     }
     
+    public void aceitaMedicamentos(boolean state) {
+        this.medicamentos = state;
+    }
     
     
     
