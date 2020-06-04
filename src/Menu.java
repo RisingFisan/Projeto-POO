@@ -13,6 +13,8 @@ public class Menu {
         sb.append("3) Carregar logs.\n");
         sb.append("4) Salvar Estado.\n");
         sb.append("5) Carregar Estado.\n");
+        sb.append("6) Utilizadores que mais utilizam o sistema(em número de encomendas transportadas).\n");
+        sb.append("7) Empresas transportadoras que mais utilizam o sistema(em número de kms percorridos).\n");
         sb.append("0) Sair.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -40,6 +42,13 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+    }
+    
+    public static void maisFreq(List<String> l, String c) {
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------Entidades que utilizam mais o sistema-----------\n\n");
+        sb.append(c).append(":\n").append(l);
+        System.out.println(sb.toString());
     }
     
     public static String userMenuData(int i){

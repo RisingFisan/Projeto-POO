@@ -44,7 +44,21 @@ public class Estado implements Serializable {
        this.pedidosTransporte = outro.getPedidos();
     }
     
+    public List<String> utilMaisFreq() {
+        return this.utilizadores.getContas().values().stream().map(a->(Utilizador)a)
+                         .sorted(Comparator.comparingInt(Utilizador::getEncTransportadas).reversed())
+                         .map(a->a.getCodigo())
+                         .limit(10)
+                         .collect(Collectors.toList());
+    }
     
+    public List<String> transpMaisFreq() {
+        return this.transportadoras.getContas().values().stream().map(a->(Transportadora)a)
+                         .sorted(Comparator.comparingDouble(Transportadora::getKmPercorridos).reversed())
+                         .map(a->a.getCodigo())
+                         .limit(10)
+                         .collect(Collectors.toList());
+    }
     
     public Set<Pair<String,String>> getPedidos(){
         return new TreeSet<>(this.pedidosTransporte);

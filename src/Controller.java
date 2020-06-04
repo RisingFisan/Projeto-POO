@@ -1,3 +1,4 @@
+
 import java.util.AbstractMap;
 import java.io.*;
 import java.util.Map;
@@ -85,7 +86,14 @@ public class Controller {
                     catch (IOException e) {Menu.errors(6);}
                     catch (ClassNotFoundException e) {Menu.errors(3);}
                     break;
-                
+                case 6:
+                    List<String> l  = trazAqui.utilMaisFreq();
+                    Menu.maisFreq(l, "Utilizadores");
+                    break;
+                case 7:
+                    List<String> l1  = trazAqui.transpMaisFreq();
+                    Menu.maisFreq(l1, "Transportadoras");
+                    break;    
                 case 0:
                     System.exit(0);
                     break;

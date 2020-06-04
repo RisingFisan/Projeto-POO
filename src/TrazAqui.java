@@ -36,6 +36,14 @@ public class TrazAqui implements Serializable {
         else return TipoConta.Loja;
     }
     
+    public List<String> utilMaisFreq() {
+        return this.estado.utilMaisFreq();
+    }
+    
+    public List<String> transpMaisFreq() {
+        return this.estado.transpMaisFreq();
+    }
+    
     public void addEncToEstado(Encomenda e){
         this.estado.addNewEncToQueue(e.clone());
         this.estado.addToEncomendas(e.clone());
