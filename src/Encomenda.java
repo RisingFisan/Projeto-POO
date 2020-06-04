@@ -15,6 +15,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     private boolean foiSolicitada;
     private boolean foiEntregue;
     private String quemTransportou;
+    private boolean encMedica;
 
     public Encomenda(String codEnc, String codUtil, String codLoja, double peso) {
         this.codEnc = codEnc;
@@ -26,10 +27,24 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiSolicitada = false;
         this.foiEntregue = false;
         this.quemTransportou = "";
+        this.encMedica = false;
+    }
+    
+    public Encomenda(String codEnc, String codUtil, String codLoja, double peso,boolean em) {
+        this.codEnc = codEnc;
+        this.codUtil = codUtil;
+        this.codLoja = codLoja;
+        this.peso = peso;
+        this.produtos = new HashMap<>();
+        this.data = LocalDateTime.now();
+        this.foiSolicitada = false;
+        this.foiEntregue = false;
+        this.quemTransportou = "";
+        this.encMedica = em;
     }
     
 
-    public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le,LocalDateTime dt,boolean b,boolean fe,String qt){
+    public Encomenda (String newCodEnc, String newCodUtil, String newCodLoja, double newPeso, HashMap<String, LinhaEncomenda> le,LocalDateTime dt,boolean b,boolean fe,String qt,boolean em){
         this.codEnc = newCodEnc;
         this.codUtil = newCodUtil;
         this.codLoja = newCodLoja;
@@ -39,6 +54,8 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiSolicitada = b;
         this.foiEntregue = fe;
         this.quemTransportou = qt;
+        this.encMedica = em;
+        
     }
     
      public Encomenda (Encomenda e){
@@ -51,7 +68,9 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiSolicitada = e.foiSolicitada;
         this.foiEntregue = e.foiEntregue;
         this.quemTransportou = e.quemTransportou;
+        this.encMedica = e.aceitoTransporteMedicamentos();
     }
+    
     
     public String getCodEnc() {return this.codEnc;}
     
@@ -80,6 +99,9 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         return this.quemTransportou;
     }
     
+    public boolean aceitoTransporteMedicamentos() {
+        return this.encMedica;
+    }
     
     public void setCodEnc(String newCod) {this.codEnc = newCod;}
     
@@ -110,6 +132,9 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
        setData(LocalDateTime.now());
     }
     
+     public void aceitaMedicamentos(boolean state) {
+        this.encMedica = state;
+    }
     
     
     public void addProduto(LinhaEncomenda le) {

@@ -94,8 +94,10 @@ public class TrazAqui implements Serializable {
         return v.getDisponibilidade();
     }
     
-    public void alteraDisp(int i) {
-        this.estado.alteraDisp(this.contaLoggedIn.getCodigo(), i);
+    public void alteraDispV(boolean i) {
+        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        v.setDisponibilidade(i); 
+        this.estado.alteraDispV(this.contaLoggedIn.getCodigo(), i);
     }
     /* Teste */
     public double dist (String enc) {
@@ -107,6 +109,7 @@ public class TrazAqui implements Serializable {
         if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("") || !this.estado.podeTranportar(enc, this.contaLoggedIn.getCodigo())) return false;
         this.estado.encomendaParaSerEntregue(enc, this.contaLoggedIn.getCodigo());
         v.setEncAceite(enc);
+        this.contaLoggedIn = v.clone();
         return true;
     }
     
@@ -115,6 +118,41 @@ public class TrazAqui implements Serializable {
         String enc = v.getEncAceite();
         if (enc.equals("")) return null;
         return this.estado.entregaEnc(enc);
+    }
+    
+    public Map<String,Double> transpInfo () {
+        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        return this.estado.transpInfo(v);
+    }
+    
+    // Transportadora
+    
+    public void alteraDispT(int i) {
+        this.estado.alteraDispT(this.contaLoggedIn.getCodigo(), i);
+    }
+    
+    public Map<String,List<Double>> transpInfoT () {
+        Transportadora t  = (Transportadora) this.contaLoggedIn;
+        return this.estado.transpInfoT(t); 
+    } 
+    
+    public boolean pedirTranspT(String enc) {
+        Transportadora v  = (Transportadora) this.contaLoggedIn;
+        if (!this.estado.encFoiSolicitada(enc) || v.getEncAceites().size() >= v.getMaxCapacidade() || !this.estado.podeTranportar(enc, this.contaLoggedIn.getCodigo())) return false;
+        this.estado.encomendaParaSerEntregueT(enc, this.contaLoggedIn.getCodigo());
+        v.addEncomenda(enc);
+        this.contaLoggedIn = v.clone();
+        return true;
+    }
+    
+    public Pair<Duration,Double> entregaEnc (String enc) {
+        boolean b = false;
+        Transportadora v  = (Transportadora) this.contaLoggedIn;
+        List<String> encs = v.getEncAceites();
+        for (String e: encs)
+            if (e.equals(enc)) b = true;
+        if (!b) return null;
+        return this.estado.entregaEnc(v,enc);
     }
     
     public void carregaLogs(){

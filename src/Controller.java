@@ -112,7 +112,9 @@ public class Controller {
                     String codEnc = trazAqui.getNewCodeEnc();
                     double peso = Double.valueOf(Menu.userMenuData(9));
                     String codUt = trazAqui.getCodLoggedIn();
-                    Encomenda e = new Encomenda(codEnc,codUt, loja, peso);
+                    String encMedica = null;
+                    while (encMedica!="S" || encMedica!="N" || encMedica!="s" || encMedica!="n"){encMedica = Menu.userMenuData(11);}
+                    Encomenda e = new Encomenda(codEnc,codUt, loja, peso,(encMedica=="S"||encMedica=="s") ? true : false);
                     int numLinhas = -1;
                     while (numLinhas<0) numLinhas = Integer.valueOf(Menu.userMenuData(4));
                     while (numLinhas>0){
@@ -214,32 +216,29 @@ public class Controller {
             int opcao = -1;
             String s;
             boolean disp = trazAqui.getDisp();
-            while(opcao < 0 || opcao > 3) {
+            while(opcao < 0 || opcao > 2) {
                 opcao = Menu.menuVoluntario(disp);
             }
             switch(opcao) {
                 case 1:
-                    int op = -1;
-                    while(op<1 || op >2)
-                        op = Integer.valueOf(Menu.voluntarioMenuData(1));
-                    trazAqui.alteraDisp(op);
-                    Menu.voluntarioMenuResult(1, (op == 1) ? "disponivel" : "indisponivel");
-                    break;
-                case 2:
-                    
                     if (!disp) Menu.errors(7);
                     else {
-                        String codEnc = Menu.voluntarioMenuData(2);
-                        if (trazAqui.isValidCodeEnc(codEnc)) {                            
-                            boolean res = trazAqui.pedirTranspVol(codEnc);
-                            if (res) Menu.voluntarioMenuResult(2, codEnc);
-                            else Menu.errors(9);
+                        int op2 = -1;
+                        while(op2 != 1 && op2 != 0)
+                            op2 = Menu.volEncInfo(trazAqui.transpInfo());
+                        if (op2 == 1) {    
+                            String codEnc = Menu.voluntarioMenuData(2);
+                            if (trazAqui.isValidCodeEnc(codEnc)) {                            
+                                boolean res = trazAqui.pedirTranspVol(codEnc);
+                                if (res) Menu.voluntarioMenuResult(2, codEnc);
+                                else Menu.errors(9);
+                            }
+                            else 
+                                Menu.errors(4);
                         }
-                        else 
-                            Menu.errors(4);
                     }
                     break;
-                case 3:
+                case 2:
                     if (disp) { 
                         Duration time = trazAqui.entregaEnc();
                         if (time == null) Menu.errors(8);
@@ -264,27 +263,38 @@ public class Controller {
             int opcao = -1;
             String s;
             boolean disp = trazAqui.getDisp();
-            while(opcao < 0 || opcao > 3) {
+            while(opcao < 0 || opcao > 2) {
                 opcao = Menu.menuTransportadora(disp);
             }
             switch(opcao) {
                 case 1:
-                    int op = -1;
-                    while(op<1 || op >2)
-                        op = Integer.valueOf(Menu.transportadoraMenuData(1));
-                    trazAqui.alteraDisp(op);
-                    Menu.transportadoraMenuResult(1, (op == 1) ? "disponivel" : "indisponivel");
-                    break;
-                case 2:
-                    
                     if (!disp) Menu.errors(7);
                     else {
-                        
+                        int op2 = -1;
+                        while(op2 != 1 && op2 != 0)
+                            op2 = Menu.transpEncInfo(trazAqui.transpInfoT());
+                        if (op2 == 1) {    
+                            String codEnc = Menu.transportadoraMenuData(2);
+                            if (trazAqui.isValidCodeEnc(codEnc)) {                            
+                                boolean res = trazAqui.pedirTranspT(codEnc);
+                                if (res) Menu.transportadoraMenuResult(2, codEnc);
+                                else Menu.errors(9);
+                            }
+                            else 
+                                Menu.errors(4);
+                        }
                     }
                     break;
-                case 3:
-                    if (disp) { 
-                        
+                case 2:
+                    if (disp) {
+                        String codEnc = Menu.transportadoraMenuData(2);
+                        if (trazAqui.isValidCodeEnc(codEnc)) {                            
+                            Pair<Duration,Double> p = trazAqui.entregaEnc(codEnc);
+                            if (p != null) Menu.transportadoraMenuResult(3, String.valueOf(p));
+                            else Menu.errors(9);
+                        }
+                        else 
+                            Menu.errors(4);
                     }
                     else {
                         Menu.errors(7);

@@ -48,13 +48,13 @@ public class Contas implements Serializable {
     public Conta getContaByEmail(String email){
         Conta conta = this.mapContas.values().stream()
                 .reduce(null, (acc, x) -> x.getEmail().equals(email) ? x : acc);
-        if(conta != null) return conta;
+        if(conta != null) return conta.clone();
         else return null;
     }
     
     public Conta getContaByCode(String code){
         if (this.mapContas.keySet().contains(code))
-            return this.mapContas.get(code);
+            return this.mapContas.get(code).clone();
         return null;
     }
     

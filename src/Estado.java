@@ -118,6 +118,12 @@ public class Estado implements Serializable {
         this.pedidosTransporte.removeIf(a->a.getKey().equals(codEnc));
     }
     
+    public void encomendaParaSerEntregueT(String codEnc,String transp){
+        this.encomendas.quemTransportou(codEnc,transp);
+        Pair<String,String> p = new Pair(codEnc, transp);
+        this.pedidosTransporte.add(p);
+    }
+    
     public Map<String,List<Pair <String, Double>>> getTranspOptions(String user){
         Map<String,List<Pair <String, Double>>> res = new HashMap<>();
         
@@ -158,18 +164,21 @@ public class Estado implements Serializable {
     
     // Voluntario
     
-    public void alteraDisp(String code,int i) {
-        TranspVolunt tv = (TranspVolunt) this.voluntarios.getContaByCode(code);
-        if (tv == null) tv = (TranspVolunt) this.transportadoras.getContaByCode(code);
-        if (i == 1) tv.setDisponibilidade(true);
-        if (i == 2) tv.setDisponibilidade(false);
+    public void alteraDispV(String code,boolean i) {
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(code);
+        v.setDisponibilidade(i);
+        this.voluntarios.addConta(v);
     }        
     
     public Duration entregaEnc (String enc) {
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        Utilizador u = (Utilizador)this.utilizadores.getContaByCode(e.getCodUtil());
+        u.addToEncTransp();
+        this.utilizadores.addConta(u.clone());
         e.setFoiEntregue(true);
+        this.encomendas.addEnc(e);
         LocalDateTime d = e.getData();
-        return Duration.between(d, LocalDateTime.now()); //d.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        return Duration.between(d, LocalDateTime.now()); // d.until(LocalDateTime.now(), ChronoUnit.HOURS);
     }
     /* Teste*/
     public double dist(String enc, String vol) {
@@ -185,14 +194,48 @@ public class Estado implements Serializable {
         String l = e.getCodLoja();
         Loja loja = (Loja) this.lojas.getContaByCode(l);
         Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
-        if (Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < 5000) return true;
+        if (Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < 5000 && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())) return true;
         return false;
+    }
+    
+    public Map<String,Double> transpInfo(Voluntario v) {
+        Map<String,Double> res = new HashMap<>();
+        for (Encomenda e: this.encomendas.getEnc()) {
+             String l = e.getCodLoja();
+             String u = e.getCodUtil();
+             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
+             Loja loja = (Loja) this.lojas.getContaByCode(l);
+            if (Point.distance(loja.getGPSx(),loja.getGPSy(), util.getGPSx(),util.getGPSy()) < v.getRaio() 
+                && Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < v.getRaio() 
+                && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos()) && encFoiSolicitada(e.getCodEnc())) {
+                    res.put(e.getCodEnc(),Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()));
+            }
+        }
+        return res;
     }
     
     // Transportadora
     
+    public void alteraDispT(String code,int i) {
+        Transportadora v = (Transportadora) this.transportadoras.getContaByCode(code);
+        if (i == 1) v.setDisponibilidade(true);
+        if (i == 2) v.setDisponibilidade(false);
+        this.transportadoras.addConta(v);
+    }     
     
-    
+    public Pair<Duration,Double> entregaEnc (Transportadora t , String enc) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        Utilizador u = (Utilizador)this.utilizadores.getContaByCode(e.getCodUtil());
+        u.addToEncTransp();
+        this.utilizadores.addConta(u.clone());
+        e.setFoiEntregue(true);
+        this.encomendas.addEnc(e);
+        LocalDateTime d = e.getData();
+        Double custo = t.getKmPercorridos()* t.getPrecoPorKm();
+        Duration data = Duration.between(d, LocalDateTime.now());
+        Pair<Duration,Double> p = new Pair(data,custo);
+        return p; 
+    }
     
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
@@ -209,7 +252,29 @@ public class Estado implements Serializable {
 
         return null;
     }
- 
+    
+    public Map<String,List<Double>> transpInfoT(Transportadora v) {
+        Map<String,List<Double>> res = new HashMap<>();
+        for (Encomenda e: this.encomendas.getEnc()) {
+             String l = e.getCodLoja();
+             String u = e.getCodUtil();
+             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
+             Loja loja = (Loja) this.lojas.getContaByCode(l);
+            if (Point.distance(loja.getGPSx(),loja.getGPSy(), util.getGPSx(),util.getGPSy()) < v.getRaio() 
+                && Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < v.getRaio() 
+                && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos()) && encFoiSolicitada(e.getCodEnc())) {
+                    List<Double> list = new ArrayList<>();
+                    Double d = Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy());
+                    list.add(d);
+                    list.add(d* v.getPrecoPorKm());
+                    res.put(e.getCodEnc(),list);
+            }
+        }
+        return res;
+    }
+    
+    
+    
     public void addConta(Conta conta) {
         if(conta instanceof Utilizador) this.utilizadores.addConta(conta);
         else if(conta instanceof Voluntario) this.voluntarios.addConta(conta);

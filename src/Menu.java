@@ -54,6 +54,7 @@ public class Menu {
         else if (i==8) sb.append("Digite o preco:\n ");
         else if (i==9) sb.append("Digite o peso:\n ");
         else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
+        else if (i==11) sb.append("Encomenda medica?(S/N):\n ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -61,10 +62,8 @@ public class Menu {
     
     public static int menuVoluntario(boolean disp){
         StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
-        sb.append(disp ? "-> Disponivel\n\n" : "-> Indisponivel\n\n");
-        sb.append("1) Alterar disponibilidade.\n");
-        sb.append("2) Selecionar encomenda a transportar.\n");
-        sb.append("3) Registar entrega de uma encomenda.\n");
+        sb.append("1) Selecionar encomenda a transportar.\n");
+        sb.append("2) Registar entrega de uma encomenda.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -75,8 +74,7 @@ public class Menu {
     public static String voluntarioMenuData(int i){
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
-        if (i==1) sb.append("1) Ficar disponivel;\n2) Ficar indisponivel;\nSelecione a opcao pretendida: ");
-        else if (i==2) sb.append("Digite um codigo de encomenda:\n ");
+        if (i==2) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
         
         
@@ -97,13 +95,21 @@ public class Menu {
         scanner.nextLine();
         clearWindow();
     }
-     
+    
+    public static int volEncInfo(Map<String,Double> encInfo) {
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU VOLUNTARIO-----------\n\n");
+        sb.append(encInfo).append("\n");
+        sb.append("1) Escolher encomenda a transportar;\n0) Retroceder;\nSelecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+    
     public static int menuTransportadora(boolean disp){
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
-        sb.append(disp ? "-> Disponivel\n\n" : "-> Indisponivel\n\n");
-        sb.append("1) Alterar disponibilidade.\n");
-        sb.append("2) Selecionar encomenda a transportar.\n");
-        sb.append("3) Registar entrega de uma encomenda.\n");
+        sb.append("1) Preco de transporte de uma encomenda.\n");
+        sb.append("2) Registar entrega de uma encomenda.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -114,27 +120,34 @@ public class Menu {
     public static String transportadoraMenuData(int i){
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
-        if (i==1) sb.append("1) Ficar disponivel;\n2) Ficar indisponivel;\nSelecione a opcao pretendida: ");
-        else if (i==2) sb.append("Digite um codigo de encomenda:\n ");
-        else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
-        
+        if (i==1) sb.append("Digite um codigo de encomenda:\n ");
+        else if (i==2) sb.append("Digite o codigo de uma loja:\n ");
         
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
     
-    public static void transportadoraMenuResult(int i, String res){
+    public static void transportadoraMenuResult(int i, String res) {
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
-        if (i==1) sb.append("A transportadora esta agora ").append(res).append("\n");
-        else if (i==2) sb.append("Pedido de transporte da encomenda ").append(res).append(" efetuado com sucesso!\n ");
-        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte: ").append(res).append("\n");
+        if (i==2) sb.append("Pedido de transporte da encomenda ").append(res).append(" efetuado com sucesso!\n ");
+        else if (i==3) sb.append("Entrega registada com sucesso!\n").append("Tempo de transporte e custo: ").append(res).append("\n");
         sb.append("Pressione enter para continuar...");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
         clearWindow();
+    }
+    
+    public static int transpEncInfo(Map<String,List<Double>> encInfo) {
+        clearWindow();
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+        sb.append(encInfo).append("\n");
+        sb.append("1) Escolher encomenda a transportar;\n0) Retroceder;\nSelecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
     }
     
     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){

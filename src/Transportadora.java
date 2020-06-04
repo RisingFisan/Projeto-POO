@@ -17,6 +17,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     //numero maximo de encomendas que transporta de cada vez
     private int maxCapacidade;
     private boolean medicamentos;
+    private double kmPercorridos;
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
@@ -28,6 +29,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = 1;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
@@ -40,6 +42,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max,List<Integer> list) {
@@ -52,6 +55,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>(list);
         this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
 
 
@@ -65,6 +69,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = t.maxCapacidade;
         this.classificacao = t.getClassif();
         this.medicamentos = t.aceitoTransporteMedicamentos();
+        this.kmPercorridos = t.getKmPercorridos();
     }
 
     //GETTERS
@@ -99,7 +104,11 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     public boolean aceitoTransporteMedicamentos() {
         return this.medicamentos;
     }
-
+    
+    public double getKmPercorridos() {
+        return this.kmPercorridos;
+    }
+    
     //SETTERS
     public void setNIF(String nif) {
         this.nif = nif;
@@ -113,7 +122,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.precoKm = preco;
     }
     
-     public void setDisponibilidade(boolean b){
+    public void setDisponibilidade(boolean b){
         this.disponivel=b;
     }
     
@@ -133,7 +142,9 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.medicamentos = state;
     }
     
-    
+    public void setKmPercorridos(double km) {
+        this.kmPercorridos = km;
+    }
     
     //CLONE
     public Transportadora clone() {
