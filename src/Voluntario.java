@@ -5,21 +5,20 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Voluntario extends Conta implements Serializable {
+public class Voluntario extends Conta implements Serializable, TranspVolunt {
     private double raio;
-    
-    //Encomendas que aceitou
-    private String encAceite;
+    private String encAceite; //Encomenda que aceitou
     private boolean disponivel;
     private List<Integer> classificacao;
+    private boolean medicamentos;
 
-   
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
         this.raio = raio;
         this.encAceite = null;
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
     }
     
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
@@ -28,15 +27,16 @@ public class Voluntario extends Conta implements Serializable {
         this.encAceite = "";
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
-        
+        this.medicamentos = false;
     }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite, List<Integer>list) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
-        this.disponivel = false;
+        this.disponivel = true;
         this.classificacao = new ArrayList<>(list);
+        this.medicamentos = false;
     }
 
     public Voluntario(Voluntario outro) {
@@ -45,6 +45,7 @@ public class Voluntario extends Conta implements Serializable {
         this.encAceite = outro.getEncAceite();
         this.disponivel = outro.disponivel;
         this.classificacao = outro.getClassif();
+        this.medicamentos = outro.aceitoTransporteMedicamentos();
     }
 
     // GETTERS
@@ -64,7 +65,9 @@ public class Voluntario extends Conta implements Serializable {
         return new ArrayList(this.classificacao);
     }
     
-    
+    public boolean aceitoTransporteMedicamentos() {
+        return this.medicamentos;
+    }
     
 
     //SETTERS
@@ -84,7 +87,9 @@ public class Voluntario extends Conta implements Serializable {
         this.classificacao = new ArrayList(e);
     }
     
-    
+    public void aceitaMedicamentos(boolean state) {
+        this.medicamentos = state;
+    }
     
     //CLONE
     public Voluntario clone() {

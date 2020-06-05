@@ -5,7 +5,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Transportadora extends Conta implements Serializable {
+public class Transportadora extends Conta implements Serializable, TranspVolunt {
     private String nif;
     private double raio;
     private double precoKm;
@@ -16,6 +16,8 @@ public class Transportadora extends Conta implements Serializable {
     private boolean disponivel;
     //numero máximo de encomendas que transporta de cada vez
     private int maxCapacidade;
+    private boolean medicamentos;
+    private double kmPercorridos;
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
         super(cod,nome,x,y);
@@ -26,6 +28,8 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = Integer.MAX_VALUE;
         this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
     
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
@@ -37,6 +41,8 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = true;
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
 
     public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
@@ -67,7 +73,9 @@ public class Transportadora extends Conta implements Serializable {
         this.encAceites = new ArrayList<>(list);
         this.disponivel = list.isEmpty();
         this.maxCapacidade = max;
-        this.classificacao = new ArrayList<>();
+        this.classificacao = new ArrayList<>(list);
+        this.medicamentos = false;
+        this.kmPercorridos = 0;
     }
 
 
@@ -80,6 +88,8 @@ public class Transportadora extends Conta implements Serializable {
         this.disponivel = t.disponivel;
         this.maxCapacidade = t.maxCapacidade;
         this.classificacao = t.getClassif();
+        this.medicamentos = t.aceitoTransporteMedicamentos();
+        this.kmPercorridos = t.getKmPercorridos();
     }
 
     //GETTERS
@@ -111,8 +121,14 @@ public class Transportadora extends Conta implements Serializable {
         return new ArrayList(this.classificacao);
     }
     
+    public boolean aceitoTransporteMedicamentos() {
+        return this.medicamentos;
+    }
     
-
+    public double getKmPercorridos() {
+        return this.kmPercorridos;
+    }
+    
     //SETTERS
     public void setNIF(String nif) {
         this.nif = nif;
@@ -126,7 +142,7 @@ public class Transportadora extends Conta implements Serializable {
         this.precoKm = preco;
     }
     
-     public void setDisponibilidade(boolean b){
+    public void setDisponibilidade(boolean b){
         this.disponivel=b;
     }
     
@@ -142,8 +158,13 @@ public class Transportadora extends Conta implements Serializable {
         this.classificacao = new ArrayList(e);
     }
     
+    public void aceitaMedicamentos(boolean state) {
+        this.medicamentos = state;
+    }
     
-    
+    public void setKmPercorridos(double km) {
+        this.kmPercorridos = km;
+    }
     
     //CLONE
     public Transportadora clone() {

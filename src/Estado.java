@@ -4,6 +4,9 @@ import java.nio.charset.StandardCharsets;
 import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.Duration;
 import java.util.stream.Collectors;
 
 public class Estado implements Serializable {
@@ -12,7 +15,7 @@ public class Estado implements Serializable {
     private Contas transportadoras;
     private Contas lojas;
     private Encomendas encomendas;
-    private Set<AbstractMap.SimpleEntry<String,String>> pedidosTransporte;
+    private Set<AbstractMap.SimpleEntry<String,String>> pedidosTransporte; // -> (codEnc, transp)
     
     public Estado() {
         this.utilizadores = new Contas();
@@ -32,6 +35,21 @@ public class Estado implements Serializable {
        this.pedidosTransporte = outro.getPedidos();
     }
     
+    public List<String> utilMaisFreq() {
+        return this.utilizadores.getContas().values().stream().map(a->(Utilizador)a)
+                         .sorted(Comparator.comparingInt(Utilizador::getEncTransportadas).reversed())
+                         .map(a->a.getCodigo())
+                         .limit(10)
+                         .collect(Collectors.toList());
+    }
+    
+    public List<String> transpMaisFreq() {
+        return this.transportadoras.getContas().values().stream().map(a->(Transportadora)a)
+                         .sorted(Comparator.comparingDouble(Transportadora::getKmPercorridos).reversed())
+                         .map(a->a.getCodigo())
+                         .limit(10)
+                         .collect(Collectors.toList());
+    }
 
     public Set<AbstractMap.SimpleEntry<String,String>> getPedidos(){
         return new TreeSet<>(this.pedidosTransporte);
@@ -91,16 +109,24 @@ public class Estado implements Serializable {
         return this.encomendas.getEnc().stream().anyMatch(a->(a.getCodUtil().equals(user) && a.getQuemTransportou().equals(code)));
     }
     
+    public boolean encFoiSolicitada (String enc) {
+        return this.encomendas.getEnc().stream().anyMatch(a->a.getFoiSolicitada());
+    } 
+    
     public List<Encomenda> getHistoricoUser(String user){
         return this.encomendas.getEnc().stream().filter(a->a.getCodUtil().equals(user)).collect(Collectors.toList());
         
     }
     
     public void encomendaParaSerEntregue(String codEnc,String transp){
-        AbstractMap.SimpleEntry <String,String> aux = new AbstractMap.SimpleEntry(codEnc,transp);
         this.encomendas.quemTransportou(codEnc,transp);
-        this.pedidosTransporte.remove(aux);
-        
+        this.pedidosTransporte.removeIf(a->a.getKey().equals(codEnc));
+    }
+    
+    public void encomendaParaSerEntregueT(String codEnc,String transp){
+        this.encomendas.quemTransportou(codEnc,transp);
+        Pair<String,String> p = new Pair(codEnc, transp);
+        this.pedidosTransporte.add(p);
     }
     
     public Map<String,List<AbstractMap.SimpleEntry <String, Double>>> getTranspOptions(String user){
@@ -140,24 +166,120 @@ public class Estado implements Serializable {
             this.transportadoras.addConta(t.clone());
         }   
     }
-
-
+    
+    // Voluntario
+    
+    public void alteraDispV(String code,boolean i) {
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(code);
+        v.setDisponibilidade(i);
+        this.voluntarios.addConta(v);
+    }        
+    
+    public Duration entregaEnc (String enc) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        Utilizador u = (Utilizador)this.utilizadores.getContaByCode(e.getCodUtil());
+        u.addToEncTransp();
+        this.utilizadores.addConta(u.clone());
+        e.setFoiEntregue(true);
+        this.encomendas.addEnc(e);
+        LocalDateTime d = e.getData();
+        return Duration.between(d, LocalDateTime.now()); // d.until(LocalDateTime.now(), ChronoUnit.HOURS);
+    }
+    /* Teste*/
+    public double dist(String enc, String vol) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        String l = e.getCodLoja();
+        Loja loja = (Loja) this.lojas.getContaByCode(l);
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
+        return Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy());
+    }
+    
+    public boolean podeTranportar(String enc, String vol) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        String l = e.getCodLoja();
+        Loja loja = (Loja) this.lojas.getContaByCode(l);
+        Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
+        if (Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < 5000 && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())) return true;
+        return false;
+    }
+    
+    public Map<String,Double> transpInfo(Voluntario v) {
+        Map<String,Double> res = new HashMap<>();
+        for (Encomenda e: this.encomendas.getEnc()) {
+             String l = e.getCodLoja();
+             String u = e.getCodUtil();
+             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
+             Loja loja = (Loja) this.lojas.getContaByCode(l);
+            if (Point.distance(loja.getGPSx(),loja.getGPSy(), util.getGPSx(),util.getGPSy()) < v.getRaio() 
+                && Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < v.getRaio() 
+                && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos()) && encFoiSolicitada(e.getCodEnc())) {
+                    res.put(e.getCodEnc(),Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()));
+            }
+        }
+        return res;
+    }
+    
+    // Transportadora
+    
+    public void alteraDispT(String code,int i) {
+        Transportadora v = (Transportadora) this.transportadoras.getContaByCode(code);
+        if (i == 1) v.setDisponibilidade(true);
+        if (i == 2) v.setDisponibilidade(false);
+        this.transportadoras.addConta(v);
+    }     
+    
+    public Pair<Duration,Double> entregaEnc (Transportadora t , String enc) {
+        Encomenda e = this.encomendas.getEncomendaByCod(enc);
+        Utilizador u = (Utilizador)this.utilizadores.getContaByCode(e.getCodUtil());
+        u.addToEncTransp();
+        this.utilizadores.addConta(u.clone());
+        e.setFoiEntregue(true);
+        this.encomendas.addEnc(e);
+        LocalDateTime d = e.getData();
+        Double custo = t.getKmPercorridos()* t.getPrecoPorKm();
+        Duration data = Duration.between(d, LocalDateTime.now());
+        Pair<Duration,Double> p = new Pair(data,custo);
+        return p; 
+    }
+    
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.voluntarios.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.transportadoras.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         conta = this.lojas.getContaByEmail(email);
-        if (conta != null && conta.checkPassword(password)) return conta.clone();
+        if (conta != null && conta.checkPassword(password)) return conta;
 
         return null;
     }
-
+    
+    public Map<String,List<Double>> transpInfoT(Transportadora v) {
+        Map<String,List<Double>> res = new HashMap<>();
+        for (Encomenda e: this.encomendas.getEnc()) {
+             String l = e.getCodLoja();
+             String u = e.getCodUtil();
+             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
+             Loja loja = (Loja) this.lojas.getContaByCode(l);
+            if (Point.distance(loja.getGPSx(),loja.getGPSy(), util.getGPSx(),util.getGPSy()) < v.getRaio() 
+                && Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy()) < v.getRaio() 
+                && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos()) && encFoiSolicitada(e.getCodEnc())) {
+                    List<Double> list = new ArrayList<>();
+                    Double d = Point.distance(loja.getGPSx(),loja.getGPSy(), v.getGPSx(),v.getGPSy());
+                    list.add(d);
+                    list.add(d* v.getPrecoPorKm());
+                    res.put(e.getCodEnc(),list);
+            }
+        }
+        return res;
+    }
+    
+    
+    
     public void addConta(Conta conta) {
         if(conta instanceof Utilizador) this.utilizadores.addConta(conta);
         else if(conta instanceof Voluntario) this.voluntarios.addConta(conta);
@@ -184,6 +306,8 @@ public class Estado implements Serializable {
          this.voluntarios = e.voluntarios;
          this.lojas = e.lojas;
          this.transportadoras = e.transportadoras;
+         this.encomendas = e.encomendas;
+         this.pedidosTransporte = e.pedidosTransporte;
       }
       
     public Estado loadAux(String file) throws FileNotFoundException, IOException, ClassNotFoundException {
@@ -238,7 +362,7 @@ public class Estado implements Serializable {
                     listaAceite.add(linhaPartida[1]);
                      break;
                 default:
-                    System.out.println("Linha inv�lida.");
+                    System.out.println("Linha invalida.");
                     break;
               }
             }
