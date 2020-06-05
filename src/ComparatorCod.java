@@ -1,9 +1,9 @@
 
 /**
- * Escreva a descricao da classe ComparatorCod aqui.
+ * Escreva a descrição da classe ComparatorCod aqui.
  * 
  * @author (seu nome) 
- * @version (numero de versao ou data)
+ * @version (número de versão ou data)
  */
 import java.util.Comparator;
 public class ComparatorCod implements Comparator<String> {

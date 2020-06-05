@@ -14,7 +14,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     //Encomendas que aceitou
     private List <String> encAceites;
     private boolean disponivel;
-    //numero maximo de encomendas que transporta de cada vez
+    //numero máximo de encomendas que transporta de cada vez
     private int maxCapacidade;
     private boolean medicamentos;
     private double kmPercorridos;
@@ -26,7 +26,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.precoKm = preco;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
-        this.maxCapacidade = 1;
+        this.maxCapacidade = Integer.MAX_VALUE;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
         this.kmPercorridos = 0;
@@ -45,13 +45,33 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.kmPercorridos = 0;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass,List<String> lista,int max,List<Integer> list) {
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
+        super(cod,nome,x,y,novoEmail,novaPass);
+        this.raio = raio;
+        this.nif = nif;
+        this.precoKm = preco;
+        this.encAceites = new ArrayList<>();
+        this.disponivel = true;
+        this.maxCapacidade = Integer.MAX_VALUE;
+    }
+
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade) {
+        super(cod,nome,x,y,novoEmail,novaPass);
+        this.raio = raio;
+        this.nif = nif;
+        this.precoKm = preco;
+        this.encAceites = new ArrayList<>();
+        this.disponivel = true;
+        this.maxCapacidade = maxCapacidade;
+    }
+
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass, List<String> list, int max) {
        super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
-        this.encAceites = new ArrayList<>(lista);
-        this.disponivel = lista.isEmpty();
+        this.encAceites = new ArrayList<>(list);
+        this.disponivel = list.isEmpty();
         this.maxCapacidade = max;
         this.classificacao = new ArrayList<>(list);
         this.medicamentos = false;

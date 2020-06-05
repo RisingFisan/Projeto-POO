@@ -1,8 +1,8 @@
 import java.util.*;
 import java.io.*;
-import javafx.util.Pair;
 import java.time.Duration;
- 
+
+
 public class TrazAqui implements Serializable {
     private Conta contaLoggedIn;
     private Estado estado;
@@ -14,22 +14,22 @@ public class TrazAqui implements Serializable {
 
     public boolean login(String email, String password) {
         Conta conta = this.estado.getContaFromCredentials(email, password);
-        if(conta != null) {
+        if (conta != null) {
             this.contaLoggedIn = conta;
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     public void registo(Conta conta) {
-       this.estado.addConta(conta);
-       this.contaLoggedIn = conta.clone();
+        this.estado.addConta(conta);
+        this.contaLoggedIn = conta.clone();
     }
+
     public String getCodLoggedIn() {
         return this.contaLoggedIn.getCodigo();
     }
-    
-    public TipoConta getTipoConta(){
+
+    public TipoConta getTipoConta() {
         if (this.contaLoggedIn instanceof Utilizador) return TipoConta.Utilizador;
         else if (this.contaLoggedIn instanceof Voluntario) return TipoConta.Voluntario;
         else if (this.contaLoggedIn instanceof Transportadora) return TipoConta.Transportadora;
@@ -52,47 +52,46 @@ public class TrazAqui implements Serializable {
     public void encomendaParaSerEntregue(String codEnc,String transportadora){
         ((Utilizador)this.contaLoggedIn).addToEncTransp();
         this.estado.encomendaParaSerEntregue(codEnc,transportadora);
-    }
-    
-    
-    
-    public boolean isValidoLoja(String loja){
+
+
+    public boolean isValidoLoja(String loja) {
         return this.estado.lojaCodeValid(loja);
     }
-    
-    public boolean isValidCodeEnc(String enc){
+
+    public boolean isValidCodeEnc(String enc) {
         return this.estado.encCodeValid(enc);
     }
-    
-    public boolean checkIfEntityWorkedForUser(String code){
-        return this.estado.checkIfEntityWorkedForUser(code,this.contaLoggedIn.getCodigo());
+
+    public boolean checkIfEntityWorkedForUser(String code) {
+        return this.estado.checkIfEntityWorkedForUser(code, this.contaLoggedIn.getCodigo());
     }
-    
-    public void classificaEntidade(int c,String code){
-        this.estado.classifica(c,code);
+
+    public void classificaEntidade(int c, String code) {
+        this.estado.classifica(c, code);
     }
-    
-    public boolean existeEmail(String s){
+
+    public boolean existeEmail(String s) {
         return this.estado.existeEmail(s);
     }
-    
-    public String getNewCode(TipoConta t){
-    return estado.newCode(t);
+
+    public String getNewCode(TipoConta t) {
+        return estado.newCode(t);
     }
-    public String getNewCodeEnc(){
-    return estado.newCodeEnc();
+
+    public String getNewCodeEnc() {
+        return estado.newCodeEnc();
     }
-    
-    public List<Encomenda> getHistoricoUser(){
-       return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
+
+    public List<Encomenda> getHistoricoUser() {
+        return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
     }
-    
-    public Map<String,List<Pair <String, Double>>> getTranspOptions(){
+
+    public Map<String, List<AbstractMap.SimpleEntry<String, Double>>> getTranspOptions() {
         return this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
     }
-    
+
     public void solicitaEnc(String e) {
-       this.estado.solicitaEnc(e);
+        this.estado.solicitaEnc(e);
     }
     
     // Voluntario
@@ -153,7 +152,7 @@ public class TrazAqui implements Serializable {
         return true;
     }
     
-    public Pair<Duration,Double> entregaEnc (String enc) {
+    public AbstractMap.SimpleEntry<Duration,Double> entregaEnc (String enc) {
         boolean b = false;
         Transportadora v  = (Transportadora) this.contaLoggedIn;
         List<String> encs = v.getEncAceites();
@@ -162,16 +161,17 @@ public class TrazAqui implements Serializable {
         if (!b) return null;
         return this.estado.entregaEnc(v,enc);
     }
-    
-    public void carregaLogs(){
+      
+
+    public void carregaLogs() {
         this.estado.loadEstadoLogs();
     }
-    
-    public void salvaEstadoObj() throws FileNotFoundException, IOException{
+
+    public void salvaEstadoObj() throws IOException {
         this.estado.saveEstado();
     }
-    
-    public void carregaEstadoObj() throws FileNotFoundException, IOException, ClassNotFoundException{
+
+    public void carregaEstadoObj() throws IOException, ClassNotFoundException {
         this.estado.loadEstadoObj("Estado.obj");
     }
-  }
+}

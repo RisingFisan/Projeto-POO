@@ -1,22 +1,13 @@
-import java.io.Serializable;
-import java.util.List;
-import java.util.ArrayList;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.StandardCharsets;
-import java.util.Set;
-import java.util.LinkedList;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-import java.util.Map;
 import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
-import javafx.util.Pair;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.Duration;
+import java.util.stream.Collectors;
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -24,7 +15,7 @@ public class Estado implements Serializable {
     private Contas transportadoras;
     private Contas lojas;
     private Encomendas encomendas;
-    private Set<Pair<String,String>> pedidosTransporte; // -> (codEnc, transp)
+    private Set<AbstractMap.SimpleEntry<String,String>> pedidosTransporte; // -> (codEnc, transp)
     
     public Estado() {
         this.utilizadores = new Contas();
@@ -59,8 +50,8 @@ public class Estado implements Serializable {
                          .limit(10)
                          .collect(Collectors.toList());
     }
-    
-    public Set<Pair<String,String>> getPedidos(){
+
+    public Set<AbstractMap.SimpleEntry<String,String>> getPedidos(){
         return new TreeSet<>(this.pedidosTransporte);
     }
     
@@ -138,10 +129,10 @@ public class Estado implements Serializable {
         this.pedidosTransporte.add(p);
     }
     
-    public Map<String,List<Pair <String, Double>>> getTranspOptions(String user){
-        Map<String,List<Pair <String, Double>>> res = new HashMap<>();
+    public Map<String,List<AbstractMap.SimpleEntry <String, Double>>> getTranspOptions(String user){
+        Map<String,List<AbstractMap.SimpleEntry <String, Double>>> res = new HashMap<>();
         
-        for (Pair<String,String> a : this.pedidosTransporte){
+        for (AbstractMap.SimpleEntry<String,String> a : this.pedidosTransporte){
             Encomenda e = this.encomendas. getEncomendaByCod(a.getValue());
             if (e.getCodUtil().equals(user)){
                 Conta util = (Utilizador)this.utilizadores.getContaByCode(user);
@@ -150,9 +141,9 @@ public class Estado implements Serializable {
                 Point2D p = new Point2D.Double(util.getGPSx(),util.getGPSy());
                 Point2D p1 = new Point2D.Double(transp.getGPSx(),transp.getGPSy());
                 double jessica = transp.totalPreco(p.distance(loja.getGPSx(),loja.getGPSy())+ p1.distance(loja.getGPSx(),loja.getGPSy()));
-                Pair <String, Double> ans = new Pair <String, Double> (a.getValue(),jessica); 
+                AbstractMap.SimpleEntry <String, Double> ans = new AbstractMap.SimpleEntry <String, Double> (a.getValue(),jessica); 
                 if (!res.containsKey(a.getKey())){
-                    List<Pair<String,Double>> l = new ArrayList<>();
+                    List<AbstractMap.SimpleEntry<String,Double>> l = new ArrayList<>();
                     res.put(a.getKey(),l);
               }
               res.get(a.getKey()).add(ans);
@@ -300,11 +291,6 @@ public class Estado implements Serializable {
         return new Estado(this);
     }
 
-    public void loadEstadoLogs() {
-        parse();
-
-    }
-
     public void saveEstado() throws FileNotFoundException, IOException  {
              ObjectOutputStream oos = new ObjectOutputStream (new FileOutputStream("Estado.obj"));
              oos.writeObject(this);
@@ -336,7 +322,7 @@ public class Estado implements Serializable {
     //ler do ficheiro log
    
     
-    public void parse() {
+    public void loadEstadoLogs() {
         
         List<String> linhas = lerFicheiro("logs.csv");
         List<Conta> listaVol = new ArrayList<>();
@@ -398,7 +384,7 @@ public class Estado implements Serializable {
 
     }
     
-  //Meio estranha.A ideia � que fa�a com que algumas transportadoras transportem mais que uma encomenda
+  //Meio estranha.A ideia é que faça com que algumas transportadoras transportem mais que uma encomenda
     public void distributeEncAceites(List<Encomenda>encomendas,List<String> encAceites,List<Conta> t,List<Conta> v,List<Conta> l){
         int found=1;
         for (String s : encAceites){

@@ -11,11 +11,11 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
     private boolean disponivel;
     private List<Integer> classificacao;
     private boolean medicamentos;
-    
+
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
         this.raio = raio;
-        this.encAceite = "";
+        this.encAceite = null;
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
@@ -30,7 +30,7 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         this.medicamentos = false;
     }
 
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite,List<Integer>list) {
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite, List<Integer>list) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
