@@ -12,8 +12,6 @@ public class Voluntario extends Conta implements Serializable {
     private String encAceite;
     private boolean disponivel;
     private List<Integer> classificacao;
-    
-    
 
    
     public Voluntario(String cod, String nome, double x, double y, double raio) {
@@ -31,13 +29,6 @@ public class Voluntario extends Conta implements Serializable {
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
         
-    }
-
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
-        super(cod,nome,x,y,novoEmail,novaPassword);
-        this.raio = raio;
-        this.encAceite = null;
-        this.disponivel = false;
     }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite, List<Integer>list) {

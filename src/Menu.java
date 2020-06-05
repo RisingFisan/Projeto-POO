@@ -3,7 +3,7 @@ import java.util.Scanner;
 import java.util.Map;
 import java.util.List;
 import java.time.LocalDateTime;
-import javafx.util.Pair; 
+
 public class Menu {
     public static int MenuInicial() {
         StringBuilder sb = new StringBuilder("----------MENU INICIAL-----------\n\n");
@@ -43,9 +43,9 @@ public class Menu {
     
     public static String userMenuData(int i){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
-        if (i==1)sb.append("Digite um código da entidade:\n ");
+        if (i==1)sb.append("Digite um cï¿½digo da entidade:\n ");
         else if (i==2) sb.append("Digite a sua avaliacao(1-10):\n ");
-        else if (i==3) sb.append("Digite o código de uma loja:\n ");
+        else if (i==3) sb.append("Digite o cï¿½digo de uma loja:\n ");
         else if (i==4) sb.append("Digite o numero de linhas de encomenda:\n ");
         else if (i==5) sb.append("Digite o codigo de produto:\n ");
         else if (i==6) sb.append("Digite a descricao:\n ");
@@ -58,11 +58,11 @@ public class Menu {
         return scanner.nextLine();
      }
      
-     public static int apresentaPedidosTransportes(Map<String,List<Pair <String, Double>>> transp){
+     public static int apresentaPedidosTransportes(Map<String,List<AbstractMap.SimpleEntry <String, Double>>> transp){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
-        for (Map.Entry<String,List<Pair <String, Double>>> a : transp.entrySet()){
+        for (Map.Entry<String,List<AbstractMap.SimpleEntry <String, Double>>> a : transp.entrySet()){
             sb.append("* ").append("Encomenda: ").append(a.getKey()).append("\n ");
-            for (Pair <String, Double> p : a.getValue()){
+            for (AbstractMap.SimpleEntry <String, Double> p : a.getValue()){
                 sb.append("Transportadora: ").append(p.getKey()).append ("---->").append("Custo: ").append(p.getValue()).append("\n");
                 
             }
@@ -104,7 +104,7 @@ public class Menu {
 
     
     public static String getEmail (boolean b){
-        if (b) System.out.println("O email digitado já existe.Tente novamente. "); 
+        if (b) System.out.println("O email digitado jï¿½ existe.Tente novamente. "); 
         System.out.print("Digite um e-mail de registo: ");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -119,7 +119,7 @@ public class Menu {
         return scanner.nextLine();
     }
     public static String getSpecificContaInfo(int i){
-        if (i==1) System.out.print("Raio de Ação: ");
+        if (i==1) System.out.print("Raio de Aï¿½ï¿½o: ");
         else if (i==2) System.out.print("Numero maximo de encomendas a transportar: ");
         else if (i==3) System.out.print("NIF da transportadora: ");
         else if (i==4) System.out.print("Preco por KM: ");
@@ -155,10 +155,10 @@ public class Menu {
 
     public static AbstractMap.SimpleEntry<String,String> menuLogin(boolean errorMessage) {
         StringBuilder sb = new StringBuilder();
-        sb.append("------------INICIAR SESSÃO---------").append("\n\n");
+        sb.append("------------INICIAR SESSï¿½O---------").append("\n\n");
         if(errorMessage) sb.append("Erro - Dados invalidos! Tente novamente!\n\n");
         sb.append("Introduza os seus dados.\n\n");
-        sb.append("Endereço de e-mail: ");
+        sb.append("Endereï¿½o de e-mail: ");
 
         System.out.print(sb.toString());
 
@@ -174,11 +174,11 @@ public class Menu {
     public static void errors(int i){
          StringBuilder sb = new StringBuilder();
         if (i==1) sb.append("****Ficheiro nao encontrado***").append("\n");
-        else if (i==2) sb.append("****Não foi possível guardar o Estado***").append("\n");
+        else if (i==2) sb.append("****Nï¿½o foi possï¿½vel guardar o Estado***").append("\n");
         else if (i==3) sb.append("****Erro ao ler para as estruturas de dados***").append("\n");
-        else if (i==4) sb.append("****Codigo inválido***").append("\n");
-        else if (i==5) sb.append("****Datas inválidas***").append("\n");
-        else if (i==6) sb.append("****Não foi possível carregar o Estado***").append("\n");
+        else if (i==4) sb.append("****Codigo invï¿½lido***").append("\n");
+        else if (i==5) sb.append("****Datas invï¿½lidas***").append("\n");
+        else if (i==6) sb.append("****Nï¿½o foi possï¿½vel carregar o Estado***").append("\n");
         System.out.print(sb.toString());
     }
     

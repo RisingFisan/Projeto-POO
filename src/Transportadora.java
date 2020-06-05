@@ -59,15 +59,15 @@ public class Transportadora extends Conta implements Serializable {
         this.maxCapacidade = maxCapacidade;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass, List<String> lista, int max) {
+    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass, List<String> list, int max) {
        super(cod,nome,x,y,novoEmail,novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
-        this.encAceites = new ArrayList<>(lista);
-        this.disponivel = lista.isEmpty();
+        this.encAceites = new ArrayList<>(list);
+        this.disponivel = list.isEmpty();
         this.maxCapacidade = max;
-        this.classificacao = new ArrayList<>(list);
+        this.classificacao = new ArrayList<>();
     }
 
 
