@@ -128,7 +128,6 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
     }
     
     public double getAverageClassif(){
-        double average = this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
-        return average;
+        return this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
     }
 }

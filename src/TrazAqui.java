@@ -49,10 +49,10 @@ public class TrazAqui implements Serializable {
         this.estado.addToEncomendas(e.clone());
     }
     
-    public void encomendaParaSerEntregue(String codEnc,String transportadora){
-        ((Utilizador)this.contaLoggedIn).addToEncTransp();
-        this.estado.encomendaParaSerEntregue(codEnc,transportadora);
-
+    public void encomendaParaSerEntregue(String codEnc,String transportadora) {
+        ((Utilizador) this.contaLoggedIn).addToEncTransp();
+        this.estado.encomendaParaSerEntregue(codEnc, transportadora);
+    }
 
     public boolean isValidoLoja(String loja) {
         return this.estado.lojaCodeValid(loja);
@@ -152,13 +152,10 @@ public class TrazAqui implements Serializable {
         return true;
     }
     
-    public AbstractMap.SimpleEntry<Duration,Double> entregaEnc (String enc) {
-        boolean b = false;
+    public Map.Entry<Duration,Double> entregaEnc (String enc) {
         Transportadora v  = (Transportadora) this.contaLoggedIn;
-        List<String> encs = v.getEncAceites();
-        for (String e: encs)
-            if (e.equals(enc)) b = true;
-        if (!b) return null;
+        boolean b = v.getEncAceites().contains(enc);
+        if(!b) return null;
         return this.estado.entregaEnc(v,enc);
     }
       

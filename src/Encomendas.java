@@ -35,13 +35,12 @@ public class Encomendas implements Serializable
         this.encomendas.add(e);
     }
     
-    public Encomenda getEncomendaByCod(String code){
-        return this.encomendas.stream().filter(e->e.getCodEnc().equals(code)).findFirst().orElse(null).clone();
-        
+    public Encomenda getEncomendaByCod(String code) {
+        return this.encomendas.stream().reduce(null, (acc, e) -> e.getCodEnc().equals(code) ? e.clone() : acc);
     }
     
     public List<Encomenda> getListaEncomenda(List<String>lista){
-        return lista.stream().map(a->getEncomendaByCod(a)).collect(Collectors.toList());
+        return lista.stream().map(this::getEncomendaByCod).collect(Collectors.toList());
     }
     
     public Encomendas clone() {
@@ -49,7 +48,7 @@ public class Encomendas implements Serializable
     }
     
     public boolean equals (Encomendas e){
-        return this.encomendas.equals(e);
+        return this.encomendas.equals(e.encomendas);
     }
     
     public void solicitaEnc(String e){
@@ -68,8 +67,8 @@ public class Encomendas implements Serializable
     
     public String getLastCode(){
         if (this.encomendas.isEmpty()) return "";
-        TreeSet t = (TreeSet)(this.encomendas);
-        Encomenda e = (Encomenda) t.last();
+        TreeSet<Encomenda> t = new TreeSet<>(this.encomendas);
+        Encomenda e = t.last();
         return e.getCodEnc();
     }
     

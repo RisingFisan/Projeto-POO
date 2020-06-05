@@ -11,15 +11,6 @@ public class Conta implements Comparable,Serializable {
     private String email;
     private String password;
     
-    
-    public Conta() {
-        this.codigo = null;
-        this.nome = null;
-        this.gps = null;
-        this.email = null;
-        this.password = null;
-    }
-    
 
     public Conta(String cod, String nome, double x, double y) {
         this.codigo = cod;

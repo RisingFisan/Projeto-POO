@@ -1,3 +1,4 @@
+import java.time.Duration;
 import java.util.*;
 import java.io.*;
 
@@ -24,7 +25,7 @@ public class Controller {
                     errorMessage = false;
                     Menu.clearWindow();
                     TipoConta tc = trazAqui.getTipoConta();
-                    if (tc.equals(TipoConta.Utilizador)) runLoggedAccountUser(trazAqui);
+                    if (tc.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
                     if (tc.equals(TipoConta.Voluntario)) runLoggedAccountVoluntario(trazAqui);
                     
                     break;
@@ -42,8 +43,8 @@ public class Controller {
 
                     trazAqui.registo(conta);
 
-                    if (tipoConta.equals(TipoConta.Utilizador))
-                        break;
+                    if (tipoConta.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
+                    break;
                     
                 case 3:
                     trazAqui.carregaLogs();
@@ -128,7 +129,6 @@ public class Controller {
         boolean exit = false;
         while(!exit){
             int opcao = -1;
-            String s;
             boolean disp = trazAqui.getDisp();
             while(opcao < 0 || opcao > 2) {
                 opcao = Menu.menuTransportadora(disp);
@@ -156,7 +156,7 @@ public class Controller {
                     if (disp) {
                         String codEnc = Menu.transportadoraMenuData(2);
                         if (trazAqui.isValidCodeEnc(codEnc)) {                            
-                            Pair<Duration,Double> p = trazAqui.entregaEnc(codEnc);
+                            Map.Entry<Duration,Double> p = trazAqui.entregaEnc(codEnc);
                             if (p != null) Menu.transportadoraMenuResult(3, String.valueOf(p));
                             else Menu.errors(9);
                         }

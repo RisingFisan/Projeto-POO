@@ -1,8 +1,6 @@
 import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
 import java.io.*;
 
 public class Transportadora extends Conta implements Serializable, TranspVolunt {
@@ -10,17 +8,17 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     private double raio;
     private double precoKm;
     private List<Integer> classificacao;
-    
+
     //Encomendas que aceitou
-    private List <String> encAceites;
+    private List<String> encAceites;
     private boolean disponivel;
     //numero máximo de encomendas que transporta de cada vez
     private int maxCapacidade;
     private boolean medicamentos;
     private double kmPercorridos;
-    
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco) {
-        super(cod,nome,x,y);
+
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco) {
+        super(cod, nome, x, y);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
@@ -31,9 +29,9 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.medicamentos = false;
         this.kmPercorridos = 0;
     }
-    
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco,int max) {
-        super(cod,nome,x,y);
+
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, int max) {
+        super(cod, nome, x, y);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
@@ -45,8 +43,8 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.kmPercorridos = 0;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
-        super(cod,nome,x,y,novoEmail,novaPass);
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
+        super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
@@ -55,8 +53,8 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = Integer.MAX_VALUE;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade) {
-        super(cod,nome,x,y,novoEmail,novaPass);
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade) {
+        super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
@@ -65,21 +63,21 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         this.maxCapacidade = maxCapacidade;
     }
 
-    public Transportadora (String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail,String novaPass, List<String> list, int max) {
-       super(cod,nome,x,y,novoEmail,novaPass);
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, List<String> list, int max) {
+        super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
         this.encAceites = new ArrayList<>(list);
         this.disponivel = list.isEmpty();
         this.maxCapacidade = max;
-        this.classificacao = new ArrayList<>(list);
+        this.classificacao = new ArrayList<>();
         this.medicamentos = false;
         this.kmPercorridos = 0;
     }
 
 
-    public Transportadora (Transportadora t) {
+    public Transportadora(Transportadora t) {
         super(t);
         this.nif = t.nif;
         this.raio = t.raio;
@@ -104,31 +102,31 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     public double getPrecoPorKm() {
         return this.precoKm;
     }
-    
-    public boolean getDisponibilidade(){
+
+    public boolean getDisponibilidade() {
         return this.disponivel;
     }
-    
-    public List<String> getEncAceites(){
-        return new ArrayList(this.encAceites);
+
+    public List<String> getEncAceites() {
+        return new ArrayList<>(this.encAceites);
     }
-    
-    public int getMaxCapacidade(){
+
+    public int getMaxCapacidade() {
         return this.maxCapacidade;
     }
-    
-    public List<Integer> getClassif(){
-        return new ArrayList(this.classificacao);
+
+    public List<Integer> getClassif() {
+        return new ArrayList<>(this.classificacao);
     }
-    
+
     public boolean aceitoTransporteMedicamentos() {
         return this.medicamentos;
     }
-    
+
     public double getKmPercorridos() {
         return this.kmPercorridos;
     }
-    
+
     //SETTERS
     public void setNIF(String nif) {
         this.nif = nif;
@@ -141,36 +139,36 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     public void setPrecoPorKm(double preco) {
         this.precoKm = preco;
     }
-    
-    public void setDisponibilidade(boolean b){
-        this.disponivel=b;
+
+    public void setDisponibilidade(boolean b) {
+        this.disponivel = b;
     }
-    
-    public void setEncAceites(List<String> e){
-        this.encAceites = new ArrayList(e);
+
+    public void setEncAceites(List<String> e) {
+        this.encAceites = new ArrayList<>(e);
     }
-    
-    public void setMaxCapacidade(int max){
+
+    public void setMaxCapacidade(int max) {
         this.maxCapacidade = max;
     }
-    
-    public void setClassif(List<Integer> e){
-        this.classificacao = new ArrayList(e);
+
+    public void setClassif(List<Integer> e) {
+        this.classificacao = new ArrayList<>(e);
     }
-    
+
     public void aceitaMedicamentos(boolean state) {
         this.medicamentos = state;
     }
-    
+
     public void setKmPercorridos(double km) {
         this.kmPercorridos = km;
     }
-    
+
     //CLONE
     public Transportadora clone() {
         return new Transportadora(this);
     }
-    
+
     //toSTRING
     public String toString() {
         StringBuilder sb = new StringBuilder("Transportadora\n");
@@ -182,8 +180,8 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
         sb.append("Classificacoes: ").append(this.classificacao);
         return sb.toString();
     }
-    
-    public void addClassif(int i){
+
+    public void addClassif(int i) {
         this.classificacao.add(i);
     }
 
@@ -200,21 +198,20 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt 
     public int hashCode() {
         return Objects.hash(super.hashCode(), nif, raio, precoKm);
     }
-    
-    public void addEncomenda (String cod){
-        if (this.encAceites.contains(cod) || this.encAceites.size()==this.maxCapacidade)return;
-        else if (this.encAceites.isEmpty()) this.disponivel=true;
+
+    public void addEncomenda(String cod) {
+        if (this.encAceites.contains(cod) || this.encAceites.size() == this.maxCapacidade) return;
+        else if (this.encAceites.isEmpty()) this.disponivel = true;
         this.encAceites.add(cod);
-        if (this.encAceites.size()==this.maxCapacidade) this.disponivel = false;
+        if (this.encAceites.size() == this.maxCapacidade) this.disponivel = false;
     }
-    
-    public double getAverageClassif(){
-        double average = this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
-        return average;
+
+    public double getAverageClassif() {
+        return this.classificacao.stream().mapToInt(val -> val).average().orElse(0.0);
     }
-    
-    public double totalPreco (double dist){
-        return this.precoKm*dist;
+
+    public double totalPreco(double dist) {
+        return this.precoKm * dist;
     }
 }
 
