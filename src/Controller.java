@@ -26,8 +26,10 @@ public class Controller {
                     Menu.clearWindow();
                     TipoConta tc = trazAqui.getTipoConta();
                     if (tc.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
-                    if (tc.equals(TipoConta.Voluntario)) runLoggedAccountVoluntario(trazAqui);
-                    
+                    else if (tc.equals(TipoConta.Voluntario)) ControllerVoluntario.run(trazAqui);
+                    else if (tc.equals(TipoConta.Transportadora)) ControllerTransportadora.run(trazAqui);
+                    else ControllerLoja.run(trazAqui);
+
                     break;
                     
                 case 2:
@@ -44,6 +46,10 @@ public class Controller {
                     trazAqui.registo(conta);
 
                     if (tipoConta.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
+                    else if (tipoConta.equals(TipoConta.Voluntario)) ControllerVoluntario.run(trazAqui);
+                    else if (tipoConta.equals(TipoConta.Transportadora)) ControllerTransportadora.run(trazAqui);
+                    else ControllerLoja.run(trazAqui);
+
                     break;
                     
                 case 3:
@@ -76,104 +82,6 @@ public class Controller {
             }
         }
     }
-
-    public static void runLoggedAccountVoluntario(TrazAqui trazAqui){
-        boolean errorMessage = false;
-        boolean exit = false;
-        while(!exit){
-            int opcao = -1;
-            String s;
-            boolean disp = trazAqui.getDisp();
-            while(opcao < 0 || opcao > 2) {
-                opcao = Menu.menuVoluntario(disp);
-            }
-            switch(opcao) {
-                case 1:
-                    if (!disp) Menu.errors(7);
-                    else {
-                        int op2 = -1;
-                        while(op2 != 1 && op2 != 0)
-                            op2 = Menu.volEncInfo(trazAqui.transpInfo());
-                        if (op2 == 1) {    
-                            String codEnc = Menu.voluntarioMenuData(2);
-                            if (trazAqui.isValidCodeEnc(codEnc)) {                            
-                                boolean res = trazAqui.pedirTranspVol(codEnc);
-                                if (res) Menu.voluntarioMenuResult(2, codEnc);
-                                else Menu.errors(9);
-                            }
-                            else 
-                                Menu.errors(4);
-                        }
-                    }
-                    break;
-                case 2:
-                    if (disp) { 
-                        Duration time = trazAqui.entregaEnc();
-                        if (time == null) Menu.errors(8);
-                        else Menu.voluntarioMenuResult(3, String.valueOf(time));
-                    }
-                    else {
-                        Menu.errors(7);
-                    }
-                    break;
-                case 0:
-                    exit=true;
-                    Menu.clearWindow();
-                    break;
-            }
-        }
-    }
-
-    public static void runLoggedAccountTransportadora(TrazAqui trazAqui){
-        boolean errorMessage = false;
-        boolean exit = false;
-        while(!exit){
-            int opcao = -1;
-            boolean disp = trazAqui.getDisp();
-            while(opcao < 0 || opcao > 2) {
-                opcao = Menu.menuTransportadora(disp);
-            }
-            switch(opcao) {
-                case 1:
-                    if (!disp) Menu.errors(7);
-                    else {
-                        int op2 = -1;
-                        while(op2 != 1 && op2 != 0)
-                            op2 = Menu.transpEncInfo(trazAqui.transpInfoT());
-                        if (op2 == 1) {    
-                            String codEnc = Menu.transportadoraMenuData(2);
-                            if (trazAqui.isValidCodeEnc(codEnc)) {                            
-                                boolean res = trazAqui.pedirTranspT(codEnc);
-                                if (res) Menu.transportadoraMenuResult(2, codEnc);
-                                else Menu.errors(9);
-                            }
-                            else 
-                                Menu.errors(4);
-                        }
-                    }
-                    break;
-                case 2:
-                    if (disp) {
-                        String codEnc = Menu.transportadoraMenuData(2);
-                        if (trazAqui.isValidCodeEnc(codEnc)) {                            
-                            Map.Entry<Duration,Double> p = trazAqui.entregaEnc(codEnc);
-                            if (p != null) Menu.transportadoraMenuResult(3, String.valueOf(p));
-                            else Menu.errors(9);
-                        }
-                        else 
-                            Menu.errors(4);
-                    }
-                    else {
-                        Menu.errors(7);
-                    }
-                    break;
-                case 0:
-                    exit=true;
-                    Menu.clearWindow();
-                    break;
-            }
-        }
-    }    
 
 /*
     public static void runLoggedAccountUser(TrazAqui trazAqui){

@@ -199,7 +199,19 @@ public class Menu {
         
         
     }
-  
+
+    public static int menuLoja(){
+        StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
+        sb.append("1) Colocar encomenda como pronta a ser entregue.\n");
+        sb.append("2) Ver lista de encomendas.\n");
+        sb.append("3) Adicionar encomenda.\n");
+        sb.append("0) Logout.\n\n");
+        sb.append("Selecione a opcao pretendida: ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
 
     
     public static String getEmail (boolean b){
@@ -411,5 +423,16 @@ public class Menu {
         if(capacidadeMax == 0) capacidadeMax = Integer.MAX_VALUE;
 
         return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax);
+    }
+
+    public static void encomendasListMenu(List<Encomenda> encomendas) {
+        for(Encomenda e : encomendas) {
+            System.out.println("Encomenda " + e.getCodEnc());
+            System.out.println("Utilizador: " + e.getCodUtil());
+            System.out.println("Conteúdo da encomenda:");
+            for(LinhaEncomenda le : e.getProdutos().values()) {
+                System.out.println(le);
+            }
+        }
     }
 }

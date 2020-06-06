@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.*;
 import java.time.Duration;
+import java.util.stream.Collectors;
 
 
 public class TrazAqui implements Serializable {
@@ -97,7 +98,7 @@ public class TrazAqui implements Serializable {
     // Voluntario
     
     public boolean getDisp() {
-        Voluntario v  = (Voluntario) this.contaLoggedIn;
+        TranspVolunt v  = (TranspVolunt) this.contaLoggedIn;
         return v.getDisponibilidade();
     }
     
@@ -158,7 +159,17 @@ public class TrazAqui implements Serializable {
         if(!b) return null;
         return this.estado.entregaEnc(v,enc);
     }
-      
+
+
+    // Loja
+
+    public List<Encomenda> listaEncsLoja() {
+        if(contaLoggedIn instanceof Loja) {
+            Loja l = (Loja) contaLoggedIn;
+            return new ArrayList<>(l.getFilaEspera());
+        }
+        else return null;
+    }
 
     public void carregaLogs() {
         this.estado.loadEstadoLogs();
