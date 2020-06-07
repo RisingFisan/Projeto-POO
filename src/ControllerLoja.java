@@ -2,7 +2,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class ControllerLoja {
-    public static void run(TrazAqui trazAqui){
+    public static void run(TrazAqui trazAqui) {
         boolean errorMessage = false;
         boolean exit = false;
         while(!exit){
@@ -12,8 +12,6 @@ public class ControllerLoja {
             }
             switch(opcao) {
                 case 1:
-                    break;
-                case 2:
                     List<Encomenda> encomendas = trazAqui.listaEncsLoja();
                     Menu.encomendasListMenu(encomendas);
                     break;

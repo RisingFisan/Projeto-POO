@@ -202,9 +202,7 @@ public class Menu {
 
     public static int menuLoja(){
         StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
-        sb.append("1) Colocar encomenda como pronta a ser entregue.\n");
-        sb.append("2) Ver lista de encomendas.\n");
-        sb.append("3) Adicionar encomenda.\n");
+        sb.append("1) Ver lista de encomendas.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -431,7 +429,7 @@ public class Menu {
             System.out.println("Utilizador: " + e.getCodUtil());
             System.out.println("Conteúdo da encomenda:");
             for(LinhaEncomenda le : e.getProdutos().values()) {
-                System.out.println(le);
+                System.out.println("\n" + le);
             }
         }
     }

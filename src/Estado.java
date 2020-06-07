@@ -319,7 +319,7 @@ public class Estado implements Serializable {
 
     public void loadEstadoLogs() {
 
-        List<String> linhas = lerFicheiro("logs.csv");
+        List<String> linhas = lerFicheiro("db/logs.csv");
         List<Voluntario> listaVol = new ArrayList<>();
         List<Transportadora> listaTransportadora = new ArrayList<>();
         List<Loja> listaLoja = new ArrayList<>();

@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import java.io.*;
 public class Encomendas implements Serializable
 {
-     private Set<Encomenda> encomendas;
+    private Set<Encomenda> encomendas;
 
     public Encomendas() {
         this.encomendas = new TreeSet<>();
