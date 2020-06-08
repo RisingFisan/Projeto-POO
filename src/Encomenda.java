@@ -16,6 +16,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     private boolean foiEntregue;
     private String quemTransportou;
     private boolean encMedica;
+    private double distPercorrida;
 
     public Encomenda(String codEnc, String codUtil, String codLoja, double peso) {
         this.codEnc = codEnc;
@@ -28,6 +29,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiEntregue = false;
         this.quemTransportou = "";
         this.encMedica = false;
+        this.distPercorrida = 0;
     }
     
     public Encomenda(String codEnc, String codUtil, String codLoja, double peso,boolean em) {
@@ -41,6 +43,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiEntregue = false;
         this.quemTransportou = "";
         this.encMedica = em;
+        this.distPercorrida = 0;
     }
     
 
@@ -55,7 +58,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiEntregue = fe;
         this.quemTransportou = qt;
         this.encMedica = em;
-        
+        this.distPercorrida = 0;
     }
     
      public Encomenda (Encomenda e){
@@ -69,6 +72,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         this.foiEntregue = e.foiEntregue;
         this.quemTransportou = e.quemTransportou;
         this.encMedica = e.aceitoTransporteMedicamentos();
+        this.distPercorrida = e.distPercorrida;
     }
     
     
@@ -103,6 +107,10 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         return this.encMedica;
     }
     
+    public double getDistPercorrida() {
+        return this.distPercorrida;
+    }
+    
     public void setCodEnc(String newCod) {this.codEnc = newCod;}
     
     public void setCodUtil(String newCod) {this.codUtil = newCod;}
@@ -132,10 +140,13 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
        setData(LocalDateTime.now());
     }
     
-     public void aceitaMedicamentos(boolean state) {
-        this.encMedica = state;
+    public void aceitaMedicamentos(boolean state) {
+       this.encMedica = state;
     }
     
+    public void setDistPercorrida(double dist) {
+        this.distPercorrida = dist;
+    }
     
     public void addProduto(LinhaEncomenda le) {
         this.produtos.put(le.getCodProduto(), le.clone());
@@ -154,7 +165,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         sb.append("Peso: ").append(this.peso).append("\n");
         sb.append("Produtos: ").append(this.produtos.toString()).append("\n");
         sb.append("Data: ").append(this.data.toString()).append("\n");
-         sb.append("Quem Transportou: ").append(this.data.toString()).append("\n");
+        sb.append("Quem Transportou: ").append(this.data.toString()).append("\n");
         sb.append("Foi solicitada entrega pelo utilizador?: ").append(this.foiSolicitada).append("\n");
 
         return sb.toString();

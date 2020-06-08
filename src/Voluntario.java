@@ -5,12 +5,13 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Voluntario extends Conta implements Serializable, TranspVolunt {
+public class Voluntario extends Conta implements Serializable, TranspVolunt ,Random{
     private double raio;
     private String encAceite; //Encomenda que aceitou
     private boolean disponivel;
     private List<Integer> classificacao;
     private boolean medicamentos;
+    private double velocidade;
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
@@ -19,6 +20,7 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
+        this.velocidade = calculaVelocidadeVol();
     }
     
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword) {
@@ -28,6 +30,7 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
+        this.velocidade = calculaVelocidadeVol();
     }
 
     public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword,String aceite, List<Integer>list) {
@@ -37,8 +40,19 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         this.disponivel = true;
         this.classificacao = new ArrayList<>(list);
         this.medicamentos = false;
+        this.velocidade = calculaVelocidadeVol();
     }
-
+    
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword, double vel) {
+        super(cod,nome,x,y,novoEmail,novaPassword);
+        this.raio = raio;
+        this.encAceite = "";
+        this.disponivel = true;
+        this.classificacao = new ArrayList<>();
+        this.medicamentos = false;
+        this.velocidade = vel;
+    }
+    
     public Voluntario(Voluntario outro) {
         super(outro);
         this.raio = outro.raio;
@@ -46,6 +60,7 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         this.disponivel = outro.disponivel;
         this.classificacao = outro.getClassif();
         this.medicamentos = outro.aceitoTransporteMedicamentos();
+        this.velocidade = outro.velocidade;
     }
 
     // GETTERS
@@ -69,7 +84,9 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
         return this.medicamentos;
     }
     
-
+    public double getVelocidade() {
+        return this.velocidade;
+    } 
     //SETTERS
     public void setRaio(double raio) {
         this.raio = raio;
@@ -89,6 +106,10 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt {
     
     public void aceitaMedicamentos(boolean state) {
         this.medicamentos = state;
+    }
+    
+    public void setVelocidade(double vel) {
+        this.velocidade = vel;
     }
     
     //CLONE

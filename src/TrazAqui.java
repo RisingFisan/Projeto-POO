@@ -125,8 +125,9 @@ public class TrazAqui implements Serializable {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
         String enc = v.getEncAceite();
         if (enc.equals("")) return null;
-        return this.estado.entregaEnc(enc);
+        return this.estado.entregaEnc(v,enc);
     }
+    
     
     public Map<String,Double> transpInfo () {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
@@ -160,7 +161,10 @@ public class TrazAqui implements Serializable {
         return this.estado.entregaEnc(v,enc);
     }
 
-
+    public Map.Entry<Duration, Double> entregaEncs() {
+        return this.estado.entregaEncs((Transportadora)this.contaLoggedIn);
+    }
+    
     // Loja
 
     public List<Encomenda> listaEncsLoja() {

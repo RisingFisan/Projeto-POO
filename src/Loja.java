@@ -3,7 +3,7 @@ import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
-public class Loja extends Conta implements Serializable {
+public class Loja extends Conta implements Serializable, Random {
 
     private Queue<Encomenda> filaEspera;
 
@@ -45,8 +45,20 @@ public class Loja extends Conta implements Serializable {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
     
+    public Double tempoEspera(String enc) {
+        int count = 0;
+        for (Encomenda e: filaEspera) {
+            if (e.getCodEnc().equals(enc))
+                break;
+            count++;
+        }
+        if (count == 0) return 0.0;
+        double time = calculaTempo(count);
+        return time;
+    }
     
-
+    
+    
     //CLONE
     public Loja clone() {
         return new Loja(this);

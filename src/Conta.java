@@ -54,7 +54,9 @@ public class Conta implements Comparable,Serializable {
         return this.email;
     }
     
-    
+    public double calcDist(double x, double y){
+        return Point.distance(this.gps.getX(), this.gps.getY(), x, y);
+    }
 
     //SETTERS
     

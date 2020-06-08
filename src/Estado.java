@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import java.time.LocalDateTime;
 import java.time.Duration;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 public class Estado implements Serializable {
     private Contas utilizadores;
@@ -15,7 +16,8 @@ public class Estado implements Serializable {
     private Contas lojas;
     private Encomendas encomendas;
     private Set<AbstractMap.SimpleEntry<String, String>> pedidosTransporte; // -> (codEnc, transp)
-
+    
+    
     public Estado() {
         this.utilizadores = new Contas();
         this.voluntarios = new Contas();
@@ -172,15 +174,25 @@ public class Estado implements Serializable {
         this.voluntarios.addConta(v);
     }
 
-    public Duration entregaEnc(String enc) {
+    public Duration entregaEnc(Voluntario v,String enc) {
+        double x,y;
+        double dist;
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
         Utilizador u = (Utilizador) this.utilizadores.getContaByCode(e.getCodUtil());
         u.addToEncTransp();
         this.utilizadores.addConta(u.clone());
+        x = u.getGPSx();
+        y = u.getGPSy();
+        dist = Point.distance(x, y, v.getGPSx(), v.getGPSy());
+        v.setGPS(x,y);
+        v.setEncAceite("");
+        u.addToEncTransp();
+        this.voluntarios.addConta(v.clone());
         e.setFoiEntregue(true);
+        e.setDistPercorrida(dist);
         this.encomendas.addEnc(e);
         LocalDateTime d = e.getData();
-        return Duration.between(d, LocalDateTime.now()); // d.until(LocalDateTime.now(), ChronoUnit.HOURS);
+        return Duration.between(d, LocalDateTime.now());
     }
 
     /* Teste*/
@@ -197,7 +209,7 @@ public class Estado implements Serializable {
         String l = e.getCodLoja();
         Loja loja = (Loja) this.lojas.getContaByCode(l);
         Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
-        return Point.distance(loja.getGPSx(), loja.getGPSy(), v.getGPSx(), v.getGPSy()) < 5000 && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos());
+        return Point.distance(loja.getGPSx(), loja.getGPSy(), v.getGPSx(), v.getGPSy()) < v.getRaio() && (v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos());
     }
 
     public Map<String, Double> transpInfo(Voluntario v) {
@@ -226,6 +238,8 @@ public class Estado implements Serializable {
     }
 
     public Map.Entry<Duration, Double> entregaEnc(Transportadora t, String enc) {
+        double x,y;
+        double dist;
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
         Utilizador u = (Utilizador) this.utilizadores.getContaByCode(e.getCodUtil());
         u.addToEncTransp();
@@ -233,11 +247,39 @@ public class Estado implements Serializable {
         e.setFoiEntregue(true);
         this.encomendas.addEnc(e);
         LocalDateTime d = e.getData();
-        Double custo = t.getKmPercorridos() * t.getPrecoPorKm();
+        Double custo = e.getDistPercorrida() * t.getPrecoPorKm();
         Duration data = Duration.between(d, LocalDateTime.now());
         return new AbstractMap.SimpleEntry<>(data, custo);
     }
-
+    
+    public Map.Entry<Duration, Double> entregaEncs(Transportadora t) {
+        List<String> l = t.getEncAceites();
+        double[] distancias = new double[l.size()];
+        List<Encomenda> le = new ArrayList<>();
+        for (String e : l) {
+            Encomenda enc = this.encomendas.getEncomendaByCod(e);
+            le.add(enc);
+        }
+        Comparator<Encomenda> compareByDist = (Encomenda o1, Encomenda o2) -> Double.compare(this.lojas.getContaByCode(o1.getCodLoja()).calcDist(t.getGPSx(),t.getGPSy()),this.lojas.getContaByCode(o2.getCodLoja()).calcDist(t.getGPSx(),t.getGPSy()));
+        Collections.sort(le, compareByDist);
+        for(Encomenda e: le) {
+            Loja loja = (Loja) this.lojas.getContaByCode(e.getCodLoja());
+            double dist = loja.calcDist(t.getGPSx(),t.getGPSy());
+            t.setGPS(loja.getGPSx(),loja.getGPSy());
+            distancias[le.indexOf(e)] = dist;
+        }
+        Comparator<Encomenda> compareByDistU = (Encomenda o1, Encomenda o2) -> Double.compare(this.utilizadores.getContaByCode(o1.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()),this.utilizadores.getContaByCode(o2.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()));
+        Collections.sort(le, compareByDistU);
+        for(Encomenda e: le) {
+            Utilizador util = (Utilizador) this.lojas.getContaByCode(e.getCodUtil());
+            double dist = util.calcDist(t.getGPSx(),t.getGPSy());
+            t.setGPS(util.getGPSx(),util.getGPSy());
+            distancias[le.indexOf(e)] += dist;
+        }
+        
+        return null;
+    }
+    
     public Conta getContaFromCredentials(String email, String password) {
         Conta conta = this.utilizadores.getContaByEmail(email);
         if (conta != null && conta.checkPassword(password)) return conta;

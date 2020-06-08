@@ -64,6 +64,7 @@ public class Menu {
         else if (i==9) sb.append("Digite o peso:\n ");
         else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==11) sb.append("Encomenda medica?(S/N):\n ");
+        else if (i==12) sb.append("Digite a velocidade media:\n");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -354,8 +355,11 @@ public class Menu {
 
         System.out.print("Raio de entrega: ");
         Double raio = scanner.nextDouble();
-
-        return new Voluntario(codigo, nome, x , y, raio, email, password);
+        
+        System.out.print("Velocidade media: ");
+        Double vel = scanner.nextDouble();
+        
+        return new Voluntario(codigo, nome, x , y, raio, email, password, vel);
     }
 
     public static Loja menuRegistoLoja() {
@@ -380,6 +384,7 @@ public class Menu {
         System.out.print("Coordenadas (separadas por um espaço, em formato decimal): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
+        
 
         return new Loja(codigo, nome, x , y, email, password);
     }
@@ -419,8 +424,11 @@ public class Menu {
         System.out.print("Capacidade máxima de entrega (0 equivale a capacidade ilimitada): ");
         int capacidadeMax = scanner.nextInt();
         if(capacidadeMax == 0) capacidadeMax = Integer.MAX_VALUE;
-
-        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax);
+        
+        System.out.print("Velocidade media: ");
+        Double vel = scanner.nextDouble();
+        
+        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax, vel);
     }
 
     public static void encomendasListMenu(List<Encomenda> encomendas) {
