@@ -237,7 +237,7 @@ public class Estado implements Serializable {
         this.transportadoras.addConta(v);
     }
 
-    public Map.Entry<Duration, Double> entregaEnc(Transportadora t, String enc) {
+    /*public Map.Entry<Duration, Double> entregaEnc(Transportadora t, String enc) {
         double x,y;
         double dist;
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
@@ -250,12 +250,14 @@ public class Estado implements Serializable {
         Double custo = e.getDistPercorrida() * t.getPrecoPorKm();
         Duration data = Duration.between(d, LocalDateTime.now());
         return new AbstractMap.SimpleEntry<>(data, custo);
-    }
+    }*/
     
-    public Map.Entry<Duration, Double> entregaEncs(Transportadora t) {
+    //Transportadora realiza a rota e devolve uma map com a encomenda,o tempo que demorou e o custo do transporte
+    public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs(Transportadora t) {
         List<String> l = t.getEncAceites();
         double[] distancias = new double[l.size()];
         List<Encomenda> le = new ArrayList<>();
+        Map<String,AbstractMap.SimpleEntry<Double, Double>> map = new HashMap<>();
         for (String e : l) {
             Encomenda enc = this.encomendas.getEncomendaByCod(e);
             le.add(enc);
@@ -272,12 +274,29 @@ public class Estado implements Serializable {
         Collections.sort(le, compareByDistU);
         for(Encomenda e: le) {
             Utilizador util = (Utilizador) this.lojas.getContaByCode(e.getCodUtil());
+            //adiciona uma encomenda transportada
+            util.addToEncTransp();
+            this.utilizadores.addConta(util.clone());
             double dist = util.calcDist(t.getGPSx(),t.getGPSy());
             t.setGPS(util.getGPSx(),util.getGPSy());
             distancias[le.indexOf(e)] += dist;
         }
+        int i = 0;
+        double custo = t.getPrecoPorKm();
+        double vel = t.getVelocidade();
+        for (Encomenda e : le){
+            e.setFoiEntregue(true);
+            this.encomendas.addEnc(e);
+            double distanc = distancias[i++];
+            //v=d/t == t =d/v
+            AbstractMap.SimpleEntry<Double, Double> me = new AbstractMap.SimpleEntry<Double, Double>(distanc/vel,distanc*custo);
+            map.put(e.getCodEnc(),me);
+            
+        }
+        //apagar todas as encomendas da transportadora
+        t.setEncAceites(new ArrayList<>());
         
-        return null;
+        return map;
     }
     
     public Conta getContaFromCredentials(String email, String password) {

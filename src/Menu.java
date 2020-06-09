@@ -150,6 +150,19 @@ public class Menu {
         clearWindow();
     }
     
+    public static void mostrarTabelaTransportadora(Map<String,AbstractMap.SimpleEntry<Double, Double>> map){
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+       sb.append("Cod Encomenda------Duracao Tranporte------Custo Transporte\n\n");
+        for (Map.Entry<String,AbstractMap.SimpleEntry<Double, Double>> me :map.entrySet()){
+            sb.append("   "+me.getKey()+"|       "+me.getValue().getKey()+"|       "+me.getValue().getValue());
+        }
+        sb.append("Pressione enter para continuar...");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        clearWindow();
+    }
+    
     public static int transpEncInfo(Map<String,List<Double>> encInfo) {
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
@@ -292,6 +305,7 @@ public class Menu {
         else if (i==7) sb.append("****Voluntario indisponivel****").append("\n");
         else if (i==8) sb.append("****Nao existe encomenda a transportar****").append("\n");
         else if (i==9) sb.append("****A encomenda nao foi solicitada****").append("\n");
+        else if (i==10) sb.append("****Nao existem encomendas a entregar pela transportadora em questao ****").append("\n");
         sb.append("\nPressione enter para continuar...");
         System.out.print(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -333,7 +347,7 @@ public class Menu {
     public static Voluntario menuRegistoVoluntario() {
         Scanner scanner = new Scanner(System.in);
 
-        StringBuilder sb = new StringBuilder("------------REGISTAR VOLUNTÁRIO---------\n\n");
+        StringBuilder sb = new StringBuilder("------------REGISTAR VOLUNTARIO---------\n\n");
         sb.append("Introduza os dados a seguir pedidos.\n\n");
         sb.append("Nome: ");
 

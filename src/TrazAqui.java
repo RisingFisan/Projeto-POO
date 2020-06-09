@@ -154,14 +154,14 @@ public class TrazAqui implements Serializable {
         return true;
     }
     
-    public Map.Entry<Duration,Double> entregaEnc (String enc) {
+    /*public Map.Entry<Duration,Double> entregaEnc (String enc) {
         Transportadora v  = (Transportadora) this.contaLoggedIn;
         boolean b = v.getEncAceites().contains(enc);
         if(!b) return null;
         return this.estado.entregaEnc(v,enc);
-    }
+    }*/
 
-    public Map.Entry<Duration, Double> entregaEncs() {
+    public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs() {
         return this.estado.entregaEncs((Transportadora)this.contaLoggedIn);
     }
     
