@@ -129,22 +129,29 @@ public class Estado implements Serializable {
         AbstractMap.SimpleEntry<String, String> p = new AbstractMap.SimpleEntry<>(codEnc, transp);
         this.pedidosTransporte.add(p);
     }
-
-    public Map<String, List<AbstractMap.SimpleEntry<String, Double>>> getTranspOptions(String user) {
-        Map<String, List<AbstractMap.SimpleEntry<String, Double>>> res = new HashMap<>();
+    
+    // devolve encomenda do utilizador associada a uma lista de "pares" em que cada par contem
+    //a transportadora que quer transportar, o custo e o tempo de transporte
+    public Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> getTranspOptions(String user) {
+        Map<String,List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> res = new HashMap<>();
 
         for (AbstractMap.SimpleEntry<String, String> a : this.pedidosTransporte) {
             Encomenda e = this.encomendas.getEncomendaByCod(a.getValue());
             if (e.getCodUtil().equals(user)) {
                 Conta util = this.utilizadores.getContaByCode(user);
                 Transportadora transp = (Transportadora) this.transportadoras.getContaByCode(a.getValue());
-                Conta loja = this.lojas.getContaByCode(e.getCodLoja());
+                Loja loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
                 Point2D p = new Point2D.Double(util.getGPSx(), util.getGPSy());
                 Point2D p1 = new Point2D.Double(transp.getGPSx(), transp.getGPSy());
-                double jessica = transp.totalPreco(p.distance(loja.getGPSx(), loja.getGPSy()) + p1.distance(loja.getGPSx(), loja.getGPSy()));
-                AbstractMap.SimpleEntry<String, Double> ans = new AbstractMap.SimpleEntry<>(a.getValue(), jessica);
+                double distancia = p.distance(loja.getGPSx(), loja.getGPSy()) + p1.distance(loja.getGPSx(), loja.getGPSy());
+                double custo = transp.totalPreco(distancia);
+                double tempo = distancia/transp.getVelocidade()+ loja.tempoEspera(e.getCodUtil());
+                ArrayList <Double> arr = new ArrayList<>();
+                arr.add(custo);
+                arr.add(tempo);
+                AbstractMap.SimpleEntry<String, ArrayList<Double>> ans = new AbstractMap.SimpleEntry<>(a.getValue(), arr);
                 if (!res.containsKey(a.getKey())) {
-                    List<AbstractMap.SimpleEntry<String, Double>> l = new ArrayList<>();
+                    List<AbstractMap.SimpleEntry<String, ArrayList <Double>>> l = new ArrayList<>();
                     res.put(a.getKey(), l);
                 }
                 res.get(a.getKey()).add(ans);
@@ -252,6 +259,8 @@ public class Estado implements Serializable {
         return new AbstractMap.SimpleEntry<>(data, custo);
     }*/
     
+    
+    
     //Transportadora realiza a rota e devolve uma map com a encomenda,o tempo que demorou e o custo do transporte
     public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs(Transportadora t) {
         List<String> l = t.getEncAceites();
@@ -288,6 +297,7 @@ public class Estado implements Serializable {
             e.setFoiEntregue(true);
             this.encomendas.addEnc(e);
             double distanc = distancias[i++];
+            double tempo = (distanc/vel)+ ((Loja)this.lojas.getContaByCode(e.getCodLoja())).tempoEspera(e.getCodEnc());
             //v=d/t == t =d/v
             AbstractMap.SimpleEntry<Double, Double> me = new AbstractMap.SimpleEntry<Double, Double>(distanc/vel,distanc*custo);
             map.put(e.getCodEnc(),me);

@@ -2,6 +2,7 @@ import java.time.LocalDateTime;
 import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -52,7 +53,7 @@ public class ControllerUtilizador {
                     break;
 
                 case 3:
-                    Map<String, List<AbstractMap.SimpleEntry<String, Double>>> res = trazAqui.getTranspOptions();
+                    Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> res = trazAqui.getTranspOptions();
                     int op = -1;
                     while (op < 0 || op > 1) op = Menu.apresentaPedidosTransportes(res);
 

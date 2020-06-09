@@ -87,7 +87,7 @@ public class TrazAqui implements Serializable {
         return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
     }
 
-    public Map<String, List<AbstractMap.SimpleEntry<String, Double>>> getTranspOptions() {
+    public Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> getTranspOptions() {
         return this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
     }
 

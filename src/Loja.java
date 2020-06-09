@@ -58,6 +58,17 @@ public class Loja extends Conta implements Serializable, Random {
     }
     
     
+    public int quantosNaFrente(String cod){
+         int count = 0;
+        for (Encomenda e: filaEspera) {
+            if (e.getCodEnc().equals(cod))
+                break;
+            count++;
+        }
+        return count;
+    }
+    
+    
     
     //CLONE
     public Loja clone() {
