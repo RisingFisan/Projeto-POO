@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.*;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 
@@ -37,11 +38,32 @@ public class TrazAqui implements Serializable {
         else return TipoConta.Loja;
     }
     
-    public List<String> utilMaisFreq() {
+    public int getEncTransp(){
+        return ((Utilizador)this.contaLoggedIn).getEncTransportadas();
+    }
+    
+    public boolean getIsEmptyEncsT(){
+        return ((Transportadora)this.contaLoggedIn).getEncAceites().isEmpty();
+    }
+    
+    public double getAverageClassi(){
+        if (this.contaLoggedIn instanceof Voluntario) return ((Voluntario)this.contaLoggedIn).getAverageClassif();
+        else return ((Transportadora)this.contaLoggedIn).getAverageClassif();
+    }
+    
+    public void addToPedidosTransp(String enc){
+        this.estado.addToPedidosTransp(this.contaLoggedIn.getCodigo(),enc);
+    }
+    
+    public double faturamentoEntreDatas(LocalDateTime inicio,LocalDateTime fim){
+        return this.estado.faturamentoEntreDatas(this.contaLoggedIn,inicio,fim);
+    }
+    
+    public List<AbstractMap.SimpleEntry<String, Integer>> utilMaisFreq() {
         return this.estado.utilMaisFreq();
     }
     
-    public List<String> transpMaisFreq() {
+    public List<AbstractMap.SimpleEntry<String, Double>> transpMaisFreq() {
         return this.estado.transpMaisFreq();
     }
     
@@ -53,6 +75,7 @@ public class TrazAqui implements Serializable {
     public void encomendaParaSerEntregue(String codEnc,String transportadora) {
         ((Utilizador) this.contaLoggedIn).addToEncTransp();
         this.estado.encomendaParaSerEntregue(codEnc, transportadora);
+        this.estado.addToTransp(codEnc,transportadora);
     }
 
     public boolean isValidoLoja(String loja) {
@@ -95,7 +118,13 @@ public class TrazAqui implements Serializable {
         this.estado.solicitaEnc(e);
     }
     
+    public Set<String> encsOfUserToTransport(){
+        return this.estado.encsOfUserToTransport(this.contaLoggedIn.getCodigo());
+    }
+    
+    
     // Voluntario
+    
     
     public boolean getDisp() {
         TranspVolunt v  = (TranspVolunt) this.contaLoggedIn;
@@ -103,28 +132,25 @@ public class TrazAqui implements Serializable {
     }
     
     public void alteraDispV(boolean i) {
-        Voluntario v  = (Voluntario) this.contaLoggedIn;
-        v.setDisponibilidade(i); 
-        this.estado.alteraDispV(this.contaLoggedIn.getCodigo(), i);
+        Voluntario v  = (Voluntario) this.contaLoggedIn;         
+        this.estado.alteraDispV(v, i);
     }
-    /* Teste */
-    public double dist (String enc) {
-        return this.estado.dist(enc, this.contaLoggedIn.getCodigo());
-    }
+ 
+    
     
     public boolean pedirTranspVol(String enc) {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
         if (!this.estado.encFoiSolicitada(enc) || !v.getEncAceite().equals("") || !this.estado.podeTranportar(enc, this.contaLoggedIn.getCodigo())) return false;
         this.estado.encomendaParaSerEntregue(enc, this.contaLoggedIn.getCodigo());
         v.setEncAceite(enc);
-        this.contaLoggedIn = v.clone();
+        alteraDispV(false);
         return true;
     }
     
-    public Duration entregaEnc () {
+    public double entregaEnc() {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
         String enc = v.getEncAceite();
-        if (enc.equals("")) return null;
+        if (enc.equals("")) return -1;
         return this.estado.entregaEnc(v,enc);
     }
     
@@ -136,6 +162,20 @@ public class TrazAqui implements Serializable {
     
     // Transportadora
     
+    public Set<String> encsPossibleToTransp(){
+        return this.estado.encsPossibleToTransp(this.contaLoggedIn);
+    }
+    
+    public boolean podeTransportarT(String enc) {
+        Transportadora t = (Transportadora)  this.contaLoggedIn;
+        return this.estado.podeTransportarT(enc, t.getCodigo());
+    }
+    
+    public double precoTransporte(String enc) {
+        Transportadora t = (Transportadora)  this.contaLoggedIn;
+        return this.estado.precoTransporte(enc, t);
+    }
+    
     public void alteraDispT(int i) {
         this.estado.alteraDispT(this.contaLoggedIn.getCodigo(), i);
     }
@@ -145,22 +185,6 @@ public class TrazAqui implements Serializable {
         return this.estado.transpInfoT(t); 
     } 
     
-    public boolean pedirTranspT(String enc) {
-        Transportadora v  = (Transportadora) this.contaLoggedIn;
-        if (!this.estado.encFoiSolicitada(enc) || v.getEncAceites().size() >= v.getMaxCapacidade() || !this.estado.podeTranportar(enc, this.contaLoggedIn.getCodigo())) return false;
-        this.estado.encomendaParaSerEntregueT(enc, this.contaLoggedIn.getCodigo());
-        v.addEncomenda(enc);
-        this.contaLoggedIn = v.clone();
-        return true;
-    }
-    
-    /*public Map.Entry<Duration,Double> entregaEnc (String enc) {
-        Transportadora v  = (Transportadora) this.contaLoggedIn;
-        boolean b = v.getEncAceites().contains(enc);
-        if(!b) return null;
-        return this.estado.entregaEnc(v,enc);
-    }*/
-
     public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs() {
         return this.estado.entregaEncs((Transportadora)this.contaLoggedIn);
     }

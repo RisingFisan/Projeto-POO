@@ -16,20 +16,16 @@ public class Controller {
             switch(opcao) {
                 
                 case 1:
-                    while(true) {
                         AbstractMap.SimpleEntry<String, String> dados = Menu.menuLogin(errorMessage);
-                        if(trazAqui.login(dados.getKey(), dados.getValue())) break;
-                        else errorMessage = true;
-                    }
-                    
-                    errorMessage = false;
+                        if(!trazAqui.login(dados.getKey(), dados.getValue())) Menu.errors(16);
+                    else{ 
                     Menu.clearWindow();
                     TipoConta tc = trazAqui.getTipoConta();
                     if (tc.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
                     else if (tc.equals(TipoConta.Voluntario)) ControllerVoluntario.run(trazAqui);
                     else if (tc.equals(TipoConta.Transportadora)) ControllerTransportadora.run(trazAqui);
                     else ControllerLoja.run(trazAqui);
-
+                }
                     break;
                     
                 case 2:
@@ -38,10 +34,10 @@ public class Controller {
 
                     Conta conta;
 
-                    if (tipoConta.equals(TipoConta.Utilizador)) conta = Menu.menuRegistoUtilizador();
-                    else if (tipoConta.equals(TipoConta.Voluntario)) conta = Menu.menuRegistoVoluntario();
-                    else if (tipoConta.equals(TipoConta.Loja)) conta = Menu.menuRegistoLoja();
-                    else conta = Menu.menuRegistoTransportadora();
+                    if (tipoConta.equals(TipoConta.Utilizador)) conta = Menu.menuRegistoUtilizador(trazAqui.getNewCode(TipoConta.Utilizador));
+                    else if (tipoConta.equals(TipoConta.Voluntario)) conta = Menu.menuRegistoVoluntario(trazAqui.getNewCode(TipoConta.Voluntario));
+                    else if (tipoConta.equals(TipoConta.Loja)) conta = Menu.menuRegistoLoja(trazAqui.getNewCode(TipoConta.Loja));
+                    else conta = Menu.menuRegistoTransportadora(trazAqui.getNewCode(TipoConta.Transportadora));
 
                     trazAqui.registo(conta);
 
@@ -54,12 +50,14 @@ public class Controller {
                     
                 case 3:
                     trazAqui.carregaLogs();
+                    Menu.pressEnter();
                     break;
                     
                 case 4:
                     try{trazAqui.salvaEstadoObj();System.out.println("Ficheiros salvos com sucesso!!!\n");}
                     catch (FileNotFoundException e) {Menu.errors(1);}
                     catch (IOException e) {Menu.errors(2);}
+                    Menu.pressEnter();
                     break;
                     
                 case 5:
@@ -67,18 +65,22 @@ public class Controller {
                     catch (FileNotFoundException e) {Menu.errors(1);}
                     catch (IOException e) {Menu.errors(6);}
                     catch (ClassNotFoundException e) {Menu.errors(3);}
+                    Menu.pressEnter();
                     break;
                 case 6:
-                    List<String> l  = trazAqui.utilMaisFreq();
-                    Menu.maisFreq(l, "Utilizadores");
+                    List<AbstractMap.SimpleEntry<String, Integer>> l  = trazAqui.utilMaisFreq();
+                    Menu.maisFreqU(l);
+                    Menu.pressEnter();
                     break;
                 case 7:
-                    List<String> l1  = trazAqui.transpMaisFreq();
-                    Menu.maisFreq(l1, "Transportadoras");
+                    List<AbstractMap.SimpleEntry<String, Double>> l1  = trazAqui.transpMaisFreq();
+                    Menu.maisFreqT(l1);
+                    Menu.pressEnter();
                     break;    
                 case 0:
                     System.exit(0);
                     break;
+                    
             }
         }
     }

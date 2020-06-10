@@ -5,13 +5,13 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.io.*;
 
-public class Voluntario extends Conta implements Serializable, TranspVolunt ,Random{
+public class Voluntario extends Conta implements Serializable, TranspVolunt ,Randoms{
     private double raio;
     private String encAceite; //Encomenda que aceitou
     private boolean disponivel;
     private List<Integer> classificacao;
     private boolean medicamentos;
-    private double velocidade;
+    private double velocidade; 
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
@@ -37,19 +37,20 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt ,Ran
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = aceite;
-        this.disponivel = true;
+        this.disponivel = aceite.equals("");
         this.classificacao = new ArrayList<>(list);
         this.medicamentos = false;
         this.velocidade = calculaVelocidadeVol();
     }
     
-    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword, double vel) {
+    
+    public Voluntario(String cod, String nome, double x, double y, double raio, String novoEmail, String novaPassword, double vel,boolean med) {
         super(cod,nome,x,y,novoEmail,novaPassword);
         this.raio = raio;
         this.encAceite = "";
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
-        this.medicamentos = false;
+        this.medicamentos = med;
         this.velocidade = vel;
     }
     

@@ -3,6 +3,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.List;
 import java.util.TreeSet;
 import java.io.*;
 
@@ -41,6 +42,7 @@ public class Contas implements Serializable {
         return sb.toString();
     }
     
+    
     public Contas clone(){
         return new Contas(this);
     }
@@ -62,13 +64,18 @@ public class Contas implements Serializable {
         return this.mapContas.entrySet().stream().anyMatch(a->s.equals(a.getValue().getEmail()));
     }
     
-    public String lastCode(){
-        TreeSet<String> set = this.mapContas.keySet().stream()
-                                  .collect(Collectors.toCollection(() -> new TreeSet<>(new ComparatorCod())));
-        
-        return set.last();
-        
-    }
+       
+    public int newCodeNumber(){
+        List<Integer> l = this.mapContas.keySet().stream()
+                                                 .map(a->Integer.valueOf(a.substring(1)))
+                                                 .sorted()
+                                                 .collect(Collectors.toList());
+        if (l.isEmpty()) return 1;                                         
+        Integer i = l.get(0);
+        int aux = i+1;
+        while (l.contains(aux)) aux++;
+        return aux;
+     }
     
     
 }

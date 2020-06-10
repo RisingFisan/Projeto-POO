@@ -58,6 +58,10 @@ public class Encomendas implements Serializable
     public void quemTransportou(String e,String t){
         this.encomendas.stream().filter(a->a.getCodEnc().equals(e)).forEach(a->a.setQuemTransportou(t));
     }
+    
+    public void removeOld(String cod){
+        this.encomendas.removeIf(a->a.getCodEnc().equals(cod));
+    }
 
     public String toString() {
         final StringBuffer sb = new StringBuffer();
@@ -65,12 +69,18 @@ public class Encomendas implements Serializable
         return sb.toString();
     }
     
-    public String getLastCode(){
-        if (this.encomendas.isEmpty()) return "";
-        TreeSet<Encomenda> t = new TreeSet<>(this.encomendas);
-        Encomenda e = t.last();
-        return e.getCodEnc();
-    }
+    public int newCodeNumber(){
+        List<Integer> l = this.encomendas.stream()
+                                         .map(Encomenda::getCodEnc)
+                                         .map(a->Integer.valueOf(a.substring(1)))
+                                         .sorted()
+                                         .collect(Collectors.toList());
+        if(l.isEmpty()) return 1;                                 
+        Integer i = l.get(0);
+        int aux = i+1;
+        while (l.contains(aux)) aux++;
+        return aux;
+     }
     
     
 }
