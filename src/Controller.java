@@ -74,7 +74,7 @@ public class Controller {
                     break;
                 case 7:
                     List<AbstractMap.SimpleEntry<String, Double>> l1  = trazAqui.transpMaisFreq();
-                    Menu.maisFreq(l1);
+                    Menu.maisFreqT(l1);
                     Menu.pressEnter();
                     break;    
                 case 0:
