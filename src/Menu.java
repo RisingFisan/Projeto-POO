@@ -2,6 +2,7 @@ import java.util.AbstractMap;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class Menu {
@@ -64,6 +65,7 @@ public class Menu {
         else if (i==9) sb.append("Digite o peso:\n ");
         else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==11) sb.append("Encomenda medica?(S/N):\n ");
+        else if (i==12) sb.append("Digite a velocidade media:\n");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
@@ -149,6 +151,19 @@ public class Menu {
         clearWindow();
     }
     
+    public static void mostrarTabelaTransportadora(Map<String,AbstractMap.SimpleEntry<Double, Double>> map){
+        StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+       sb.append("Cod Encomenda------Duracao Tranporte------Custo Transporte\n\n");
+        for (Map.Entry<String,AbstractMap.SimpleEntry<Double, Double>> me :map.entrySet()){
+            sb.append("   "+me.getKey()+"|       "+me.getValue().getKey()+"|       "+me.getValue().getValue());
+        }
+        sb.append("Pressione enter para continuar...");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        clearWindow();
+    }
+    
     public static int transpEncInfo(Map<String,List<Double>> encInfo) {
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
@@ -159,15 +174,15 @@ public class Menu {
         return scanner.nextInt();
     }
      
-     public static int apresentaPedidosTransportes(Map<String,List<AbstractMap.SimpleEntry <String, Double>>> transp){
+    // devolve encomenda do utilizador associada a uma lista de "pares" em que cada par contem
+    //a transportadora que quer transportar, o custo e o tempo de transporte
+     public static int apresentaPedidosTransportes(Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> transp){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
-        for (Map.Entry<String,List<AbstractMap.SimpleEntry <String, Double>>> a : transp.entrySet()){
-            sb.append("* ").append("Encomenda: ").append(a.getKey()).append("\n ");
-            for (AbstractMap.SimpleEntry <String, Double> p : a.getValue()){
-                sb.append("Transportadora: ").append(p.getKey()).append ("---->").append("Custo: ").append(p.getValue()).append("\n");
-                
-            }
-            
+        sb.append("Cod Encomenda------Transportadora------Custo Transporte--------Tempo de Transporte\n");
+        for (Map.Entry<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> me : transp.entrySet()){
+            for (AbstractMap.SimpleEntry<String, ArrayList <Double>> a : me.getValue()){
+            sb.append("   "+me.getKey()+"|       "+a.getKey()+"|       "+a.getValue().indexOf(0)+"|      "+a.getValue().indexOf(1));
+        }
             
         }
         sb.append("1) Escolher uma das opcoes:\n ");
@@ -175,6 +190,7 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
+        
     }
      
     public static int dataInfo(int i,boolean b){
@@ -291,6 +307,7 @@ public class Menu {
         else if (i==7) sb.append("****Voluntario indisponivel****").append("\n");
         else if (i==8) sb.append("****Nao existe encomenda a transportar****").append("\n");
         else if (i==9) sb.append("****A encomenda nao foi solicitada****").append("\n");
+        else if (i==10) sb.append("****Nao existem encomendas a entregar pela transportadora em questao ****").append("\n");
         sb.append("\nPressione enter para continuar...");
         System.out.print(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -332,7 +349,7 @@ public class Menu {
     public static Voluntario menuRegistoVoluntario() {
         Scanner scanner = new Scanner(System.in);
 
-        StringBuilder sb = new StringBuilder("------------REGISTAR VOLUNTÁRIO---------\n\n");
+        StringBuilder sb = new StringBuilder("------------REGISTAR VOLUNTARIO---------\n\n");
         sb.append("Introduza os dados a seguir pedidos.\n\n");
         sb.append("Nome: ");
 
@@ -354,8 +371,11 @@ public class Menu {
 
         System.out.print("Raio de entrega: ");
         Double raio = scanner.nextDouble();
-
-        return new Voluntario(codigo, nome, x , y, raio, email, password);
+        
+        System.out.print("Velocidade media: ");
+        Double vel = scanner.nextDouble();
+        
+        return new Voluntario(codigo, nome, x , y, raio, email, password, vel);
     }
 
     public static Loja menuRegistoLoja() {
@@ -380,6 +400,7 @@ public class Menu {
         System.out.print("Coordenadas (separadas por um espaço, em formato decimal): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
+        
 
         return new Loja(codigo, nome, x , y, email, password);
     }
@@ -419,8 +440,11 @@ public class Menu {
         System.out.print("Capacidade máxima de entrega (0 equivale a capacidade ilimitada): ");
         int capacidadeMax = scanner.nextInt();
         if(capacidadeMax == 0) capacidadeMax = Integer.MAX_VALUE;
-
-        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax);
+        
+        System.out.print("Velocidade media: ");
+        Double vel = scanner.nextDouble();
+        
+        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax, vel);
     }
 
     public static void encomendasListMenu(List<Encomenda> encomendas) {

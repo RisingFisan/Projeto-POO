@@ -87,7 +87,7 @@ public class TrazAqui implements Serializable {
         return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
     }
 
-    public Map<String, List<AbstractMap.SimpleEntry<String, Double>>> getTranspOptions() {
+    public Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> getTranspOptions() {
         return this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
     }
 
@@ -125,8 +125,9 @@ public class TrazAqui implements Serializable {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
         String enc = v.getEncAceite();
         if (enc.equals("")) return null;
-        return this.estado.entregaEnc(enc);
+        return this.estado.entregaEnc(v,enc);
     }
+    
     
     public Map<String,Double> transpInfo () {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
@@ -153,14 +154,17 @@ public class TrazAqui implements Serializable {
         return true;
     }
     
-    public Map.Entry<Duration,Double> entregaEnc (String enc) {
+    /*public Map.Entry<Duration,Double> entregaEnc (String enc) {
         Transportadora v  = (Transportadora) this.contaLoggedIn;
         boolean b = v.getEncAceites().contains(enc);
         if(!b) return null;
         return this.estado.entregaEnc(v,enc);
+    }*/
+
+    public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs() {
+        return this.estado.entregaEncs((Transportadora)this.contaLoggedIn);
     }
-
-
+    
     // Loja
 
     public List<Encomenda> listaEncsLoja() {

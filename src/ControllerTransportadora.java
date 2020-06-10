@@ -1,5 +1,6 @@
 import java.time.Duration;
 import java.util.Map;
+import java.util.AbstractMap;
 
 public class ControllerTransportadora {
     public static void run(TrazAqui trazAqui){
@@ -32,14 +33,10 @@ public class ControllerTransportadora {
                     break;
                 case 2:
                     if (disp) {
-                        String codEnc = Menu.transportadoraMenuData(2);
-                        if (trazAqui.isValidCodeEnc(codEnc)) {
-                            Map.Entry<Duration,Double> p = trazAqui.entregaEnc(codEnc);
-                            if (p != null) Menu.transportadoraMenuResult(3, String.valueOf(p));
-                            else Menu.errors(9);
-                        }
-                        else
-                            Menu.errors(4);
+                            Map<String,AbstractMap.SimpleEntry<Double, Double>> p = trazAqui.entregaEncs();
+                            if (p != null) Menu.mostrarTabelaTransportadora(p);
+                            else Menu.errors(10);
+                        
                     }
                     else {
                         Menu.errors(7);
