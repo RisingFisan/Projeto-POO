@@ -3,11 +3,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.io.*;
 
-public class Transportadora extends Conta implements Serializable, TranspVolunt,Random {
+public class Transportadora extends Conta implements Serializable, TranspVolunt,Randoms {
     private String nif;
     private double raio;
     private double precoKm;
     private List<Integer> classificacao;
+    
     
     //Encomendas que aceitou
     private List<String> encAceites;
@@ -53,35 +54,30 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.precoKm = preco;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
+        this.classificacao = new ArrayList<>();
         this.maxCapacidade = Integer.MAX_VALUE;
         this.velocidade = calculaVelocidadeVol();
+        this.medicamentos=false;
+        this.kmPercorridos = 0;
     }
     
     
-
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade) {
+    
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade, double vel,boolean med) {
         super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
-        this.maxCapacidade = maxCapacidade;
-        this.velocidade = calculaVelocidadeVol();
-    }
-    
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade, double vel) {
-        super(cod, nome, x, y, novoEmail, novaPass);
-        this.raio = raio;
-        this.nif = nif;
-        this.precoKm = preco;
-        this.encAceites = new ArrayList<>();
-        this.disponivel = true;
+        this.classificacao = new ArrayList<>();
         this.maxCapacidade = maxCapacidade;
         this.velocidade = vel;
+        this.medicamentos = med;
+        this.kmPercorridos = 0;
     }
     
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, List<String> list, int max) {
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, List<String> list, int max,int km) {
         super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
@@ -93,7 +89,9 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.medicamentos = false;
         this.kmPercorridos = 0;
         this.velocidade = calculaVelocidadeVol();
+        this.kmPercorridos = km;
     }
+    
 
 
     public Transportadora(Transportadora t) {
@@ -240,6 +238,10 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
 
     public double totalPreco(double dist) {
         return this.precoKm * dist;
+    }
+    
+    public void addToKmPercorridos(double km) {
+        this.kmPercorridos += km;
     }
 }
 

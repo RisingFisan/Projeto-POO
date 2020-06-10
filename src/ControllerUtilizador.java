@@ -4,6 +4,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ControllerUtilizador {
@@ -12,7 +13,7 @@ public class ControllerUtilizador {
         boolean exit = false;
         while (!exit) {
             int opcao = -1;
-            while (opcao < 0 || opcao > 5) {
+            while (opcao < 0 || opcao > 6) {
                 opcao = Menu.menuUtilizador();
             }
 
@@ -26,7 +27,10 @@ public class ControllerUtilizador {
                     String codEnc = trazAqui.getNewCodeEnc();
                     double peso = Double.parseDouble(Menu.userMenuData(9));
                     String codUt = trazAqui.getCodLoggedIn();
-                    Encomenda e = new Encomenda(codEnc, codUt, loja, peso);
+                    String med = "";
+                    while (!med.equals("S") && !med.equals("s") && !med.equals("n") && !med.equals("N")) med = Menu.userMenuData(11);
+                    boolean b = (med.equals("s")||med.equals("S"));
+                    Encomenda e = new Encomenda(codEnc, codUt, loja,peso, b);
                     int numLinhas = -1;
                     while (numLinhas < 0) numLinhas = Integer.parseInt(Menu.userMenuData(4));
                     while (numLinhas > 0) {
@@ -36,24 +40,34 @@ public class ControllerUtilizador {
                         double preco = Double.parseDouble(Menu.userMenuData(8));
                         numLinhas--;
                         LinhaEncomenda l = new LinhaEncomenda(codP, desc, quant, preco);
-                        e.addProduto(l);
+                        e.addProduto(l.clone());
                     }
                     trazAqui.addEncToEstado(e);
                     Menu.clearWindow();
                     break;
 
                 case 2:
-                    String codEnc1 = Menu.userMenuData(10);
-                    if (trazAqui.isValidCodeEnc(codEnc1)) {
-                        trazAqui.solicitaEnc(codEnc1);
-                    } else {
-                        Menu.errors(4);
+                    Set<String> s = trazAqui.encsOfUserToTransport();
+                    if (s.isEmpty()) Menu.errors(11);
+                    else {
+                        Menu.userMenuResult(2,s.toString());
+                        String codEnc1 = Menu.userMenuData(10);
+                        if (trazAqui.isValidCodeEnc(codEnc1)) {
+                            trazAqui.solicitaEnc(codEnc1);
+                            Menu.userMenuResult(1,codEnc1);
+                        
+                        } else {
+                            Menu.errors(4);
+                        }
                     }
+                    
                     Menu.clearWindow();
                     break;
 
                 case 3:
                     Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> res = trazAqui.getTranspOptions();
+                    if (res.isEmpty()) Menu.errors(15);
+                    else{
                     int op = -1;
                     while (op < 0 || op > 1) op = Menu.apresentaPedidosTransportes(res);
 
@@ -62,8 +76,12 @@ public class ControllerUtilizador {
                         String codT = Menu.userMenuData(1);
                         if (res.containsKey(codE) && res.get(codE).stream().anyMatch(a -> a.getKey().equals(codT)))
                             trazAqui.encomendaParaSerEntregue(codE, codT);
-                        else Menu.errors(4);
+                        else {
+                            Menu.errors(4);
+                            Menu.extraNotes(3);
+                        }
                     }
+                }
                     Menu.clearWindow();
                     break;
 
@@ -107,8 +125,17 @@ public class ControllerUtilizador {
                             classi = Integer.parseInt(Menu.userMenuData(2));
                         }
                         trazAqui.classificaEntidade(classi, code);
-                    } else Menu.errors(4);
+                    } else {
+                        Menu.extraNotes(2);
+                        Menu.errors(4);
+                    }
                     break;
+                    
+                case 6:
+                int i = trazAqui.getEncTransp();
+                Menu.userMenuResult(3, String.valueOf(i));
+                Menu.clearWindow();
+                break;
 
                 case 0:
                     exit = true;

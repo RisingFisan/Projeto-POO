@@ -96,6 +96,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         return this.foiSolicitada;
     }
     
+    
     public boolean getFoiEntregue(){
         return this.foiEntregue;
     }
@@ -175,11 +176,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Encomenda encomenda = (Encomenda) o;
-        return Double.compare(encomenda.peso, peso) == 0 &&
-                Objects.equals(codEnc, encomenda.codEnc) &&
-                Objects.equals(codUtil, encomenda.codUtil) &&
-                Objects.equals(codLoja, encomenda.codLoja) &&
-                Objects.equals(produtos, encomenda.produtos);
+        return Objects.equals(codEnc, encomenda.codEnc);
     }
 
     public int hashCode() {
