@@ -1,0 +1,27 @@
+\babel@toc {portuguese}{}
+\contentsline {chapter}{\numberline {1}Introdução e principais desafios}{4}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Classes}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Main}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}TrazAqui}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Estado}{5}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Controller}{6}{section.2.4}%
+\contentsline {section}{\numberline {2.5}ControllerUtilizador}{6}{section.2.5}%
+\contentsline {section}{\numberline {2.6}ControllerVoluntario}{6}{section.2.6}%
+\contentsline {section}{\numberline {2.7}ControllerLoja}{7}{section.2.7}%
+\contentsline {section}{\numberline {2.8}ControllerTransportadora}{7}{section.2.8}%
+\contentsline {section}{\numberline {2.9}Conta}{7}{section.2.9}%
+\contentsline {section}{\numberline {2.10}Contas}{8}{section.2.10}%
+\contentsline {section}{\numberline {2.11}Encomenda}{8}{section.2.11}%
+\contentsline {section}{\numberline {2.12}LinhaEncomenda}{8}{section.2.12}%
+\contentsline {section}{\numberline {2.13}Utilizador}{9}{section.2.13}%
+\contentsline {section}{\numberline {2.14}Voluntario}{9}{section.2.14}%
+\contentsline {section}{\numberline {2.15}Loja}{9}{section.2.15}%
+\contentsline {section}{\numberline {2.16}Transportadora}{10}{section.2.16}%
+\contentsline {section}{\numberline {2.17}Menu}{10}{section.2.17}%
+\contentsline {section}{\numberline {2.18}Interface Randoms}{10}{section.2.18}%
+\contentsline {section}{\numberline {2.19}Interface TranspVolunt}{11}{section.2.19}%
+\contentsline {section}{\numberline {2.20}TipoConta}{11}{section.2.20}%
+\contentsline {section}{\numberline {2.21}Point}{11}{section.2.21}%
+\contentsline {chapter}{\numberline {3}Estrutura do projeto}{12}{chapter.3}%
+\contentsline {chapter}{\numberline {4}Conclusão}{13}{chapter.4}%
+\contentsline {chapter}{\numberline {A}Diagrama de Classes}{14}{appendix.A}%

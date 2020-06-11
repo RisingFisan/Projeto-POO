@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.stream.Collectors;
 import java.util.Set;
 import java.util.TreeSet;
@@ -7,35 +10,43 @@ public class Loja extends Conta implements Serializable, Randoms {
 
     private Queue<Encomenda> filaEspera;
     private double tempoEsperaIndividual;
+    private List<Encomenda> encProntas;
 
     public Loja(String cod, String nome, double x, double y) {
         super(cod, nome, x, y);
         this.filaEspera = new ArrayDeque<>();
-        this.tempoEsperaIndividual=0;
+        this.tempoEsperaIndividual=1;
+        this.encProntas= new ArrayList<>();
     }
     
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.filaEspera = new ArrayDeque<>();
-        this.tempoEsperaIndividual=0; 
+        this.tempoEsperaIndividual=1; 
+        this.encProntas = new ArrayList<>();
     }
     
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword,double te) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.filaEspera = new ArrayDeque<>();
         this.tempoEsperaIndividual=te;
+        this.encProntas = new ArrayList<>();
     }
+    
 
-    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l,double te) {
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l,double te,List<Encomenda> le) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.setFilaEspera(l);
         this.tempoEsperaIndividual=te;
+        this.setEncProntas(l);
+        
     }
 
     public Loja(Loja outro) {
         super(outro);
         this.filaEspera = outro.getFilaEspera();
         this.tempoEsperaIndividual=outro.tempoEsperaIndividual;
+        this.encProntas = outro.getEncProntas();
         
     }
     
@@ -45,6 +56,19 @@ public class Loja extends Conta implements Serializable, Randoms {
         this.filaEspera.add(e.clone());
     }
     
+    public void despacharEnc(String s){
+        Encomenda remov = null;
+        for (Encomenda e : this.filaEspera)
+        if (e.getCodEnc().equals(s)){
+        remov = e;
+        this.filaEspera.remove(s);
+        break;
+    }
+        this.encProntas.add(remov);
+       
+    
+}
+    
     public double getTempoEsperaIndividual(){return this.tempoEsperaIndividual;}
     public void serTempoEsperaIndividual(double d){this.tempoEsperaIndividual=d;}
 
@@ -53,6 +77,12 @@ public class Loja extends Conta implements Serializable, Randoms {
                 .map(Encomenda::clone)
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
+    
+    public void setEncProntas(List<Encomenda> l) {
+        this.encProntas = l.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toList());
+    }
 
     public Queue<Encomenda> getFilaEspera() {
         return this.filaEspera.stream()
@@ -60,32 +90,32 @@ public class Loja extends Conta implements Serializable, Randoms {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
     
-    //Quanto tempo ate estar despachada
+    public List<Encomenda> getEncProntas() {
+        return this.encProntas.stream()
+                .map(Encomenda::clone)
+                .collect(Collectors.toList());
+    }
+    
+    public boolean checkIfEncPronta(String cod){
+        if (this.encProntas.isEmpty()) return false;
+        return this.encProntas.stream().anyMatch(a->a.getCodEnc().equals(cod));
+    }
+    //Quanto tempo ate ser atendida
     public Double tempoEsperaTeorico(String enc) {
-        int count = 0;
-        for (Encomenda e: filaEspera) {
-            if (e.getCodEnc().equals(enc))
-                break;
-            count++;
-        }
-        return (count*this.tempoEsperaIndividual);
+        return (quantosNaFrente(enc)*this.tempoEsperaIndividual);
     }
     
     public Double tempoEspera(String enc) {
-        int count = 0;
-        for (Encomenda e: filaEspera) {
-            if (e.getCodEnc().equals(enc))
-                break;
-            count++;
-        }
-        if (count == 0) return 0.0;;
+        int count = 1;
+        if (checkIfEncPronta(enc)) return 0.0;
+        count = quantosNaFrente(enc);
         return (calculaTempo(count*this.tempoEsperaIndividual));
     }
     
     
     
     public int quantosNaFrente(String cod){
-         int count = 0;
+         int count = 1;
         for (Encomenda e: filaEspera) {
             if (e.getCodEnc().equals(cod))
                 break;
@@ -94,9 +124,31 @@ public class Loja extends Conta implements Serializable, Randoms {
         return count;
     }
     
+    
     public void remove(String cod){
-        if (!filaEspera.isEmpty()) filaEspera.remove(cod);
-    }
+        boolean p = false;
+        if (!filaEspera.isEmpty() && !encProntas.isEmpty()) {
+            for (Encomenda e: this.filaEspera){
+                if (e.getCodEnc().equals(cod)) {
+                filaEspera.remove(e);
+                p=true;
+                break;
+            }
+            }
+            if (!p){
+            for (Encomenda e: this.encProntas){
+                if (e.getCodEnc().equals(cod)) {
+                encProntas.remove(e);
+                break;
+                    }
+                }
+            }
+                
+                
+        }
+        }
+    
+    
     
     
     

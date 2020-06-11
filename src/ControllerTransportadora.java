@@ -64,6 +64,7 @@ public class ControllerTransportadora {
                        double fat = trazAqui.faturamentoEntreDatas(inicio,fim);
                        Menu.transportadoraMenuResult(4, String.valueOf(fat));
                     }
+                    break;
                         
                         
                 case 4:

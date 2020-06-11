@@ -41,177 +41,259 @@
 	
 	\chapter{Introdução e principais desafios}
 %	
-	Este projeto consistiu no desenvolvimento de um Sistema de Gestão de Vendas (SGV) na linguagem de programação Java, sendo a continuação de um projeto anterior realizado em C. Tal como o projeto desenvolvido previamente, este é um projeto de programação em larga escala, e como foi necessário recorrer a princípios mais avançados de programação, como o uso de estruturas de dados eficientes para armazenar e consultar grandes quantidades de informação, garantindo sempre o encapsulamento dos dados. Para este projeto usámos apenas estruturas de bibliotecas standard do Java, como TreeSet ou HashMap.
+	Este projeto consistiu no desenvolvimento de uma aplicação de entrega de encomendas na linguagem de programação Java, de forma a pôr em prática os conhecimentos adquiridos ao longo do semestre. 
 	
-	Neste projeto, em comparação ao anterior, foi mais fácil desenvolver formas eficazes de armazenar os dados, visto que esta linguagem de programação já nos disponibiliza bastantes estruturas de dados com vantagens diferentes, e não temos que nos preocupar com a alocação e libertação manual de memória. Para mostrar grandes quantidades de informação ao utilizador usámos o método que usámos no projeto em C, percorremos uma lista por páginas, sendo que o tamanho de cada página depende do tamanho de cada elemento, para termos algo mais consistente.
+	Consideramos que o maior desafio tenha sido gerir várias encomendas de diferentes naturezas, e várias entidades em simultâneo, tendo em conta fatores aleatórios, tais como atrasos nas filas de espera das lojas, ou atrasos nos deslocamentos das entidades Voluntários e Transportadoras.
 	
-	\chapter{Classes, interfaces e estruturas de dados}
-	\section{Catálogo (Catalog)}
-	Como os catálogos de clientes e de produtos são muito parecidos, apenas muda o tipo de dados que armazenam, criámos uma interface Catalog que as classes dos catálogos de clientes e produtos implementam. Desta forma podemos dizer às classes que implementam esta interface que métodos devem implementar.
+	\chapter{Classes}
+	\section{Main}
+	Classe responsável por arrancar com o programa. Para isto o método \textit{main} inicia a execução do Controller;
 	
-	\section{Clients}
-	Para armazenar a informação de todos os clientes criámos a classe Clients que utiliza um TreeSet para armazenar instâncias da classe Client. A API desta classe permite realizar operações de inserção e procura.
-	
-	\section{Products}
-	Tal como a classe dos clientes, a classe Products usa um TreeSet para armazenar instâncias da classe Product. Esta classe permite realizar operações de inserção e procura.
-	
-	\section{CatalogItem}
-	Como usámos a interface Catalog, precisamos também de uma interface CatalogItem que as classes Client e Product implementam.
-	
-	\section{Client}
-	Esta classe armazena informação relativa a um cliente, que no caso do nosso projeto se resume ao seu código, mas que num projeto de mais larga escala podia ser usada para armazenar outro tipo de dados, como o nome do cliente, idade, etc. A API desta classe permite validar um código de cliente e obter o código de cliente de uma instância.
-	
-	\section{Product}
-	Tal como a classe Client, esta classe, para além de ter uma API semelhante, também armazena informação relativa a um produto, que mais uma vez inclui apenas o código de produto, mas também poderia conter mais informação, caso tal fosse relevante ou necessário.
-
-	\section{Faturas (Bills) e Fatura (Bill)}
-	Para armazenar as faturas usámos um HashMap, que associa um código de produto a uma classe à qual chamámos Bill (Fatura). Uma fatura permite armazenar, para um dado produto, o seu código, o lucro total obtido com a venda desse produto, o número total de vezes que esse produto foi vendido (registos de venda) e a quantidade total vendida. O lucro total, a quantidade total de vendas e a quantidade total vendida de um produto estão separadas por filial, mês e modo (isto é, se o produto foi comprado em promoção ou não). Temos assim a nossa definição de uma fatura:
+	\section{TrazAqui}
 	\begin{lstlisting}[language=Java]
-public class Bill {
-    private String productID;
-    private double[][][] totalProfit;
-    private int[][][] totalSales;
-    private int[][][] totalQuantitySold;
-}
+	private Conta contaLoggedIn;
+	private Estado estado;
 	\end{lstlisting}
-	A API da classe Bill permite obter informação relativa a essa fatura, e da classe Bills permite inserir faturas e obter dados relativos a todas as faturas.
-
-	\section{Filial (Branch)}
-	Para armazenar as relações entre clientes e produtos por filial usámos uma estrutura de dados constituída por dois HashMaps, um que faz corresponder cada cliente aos produtos que este comprou, e outro que faz corresponder cada produto aos clientes que o compraram. Na classe GestVendas é usada uma lista de três elementos, onde cada elemento é uma instância desta classe, para podermos ter uma instância por cada filial.\\
-	\indent
-	O primeiro Map (clientsWhoBought) associa cada produto (chave) aos clientes que o compraram (valor). Esta lista de clientes é outro HashMap, que a cada cliente (chave) faz corresponder a informação relativa à compra do produto inicial por esse cliente (valor), nomeadamente a quantidade desse produto comprada, o número de registos de venda e o dinheiro gasto nesse produto, todos divididos por mês.\\
-	\indent
-	O segundo Map (productsBoughtBy) associa cada cliente (chave) aos produtos que este comprou (valor). Tal como no outro Map, neste a lista de produtos é também um HashMap, que a cada produto (chave) faz corresponder a informação relativa à compra desse produto pelo cliente inicial (valor). Esta informação inclui a quantidade desse produto comprada, o dinheiro gasto nesse produto e o número de registos de venda associados ao cliente dado, todos divididos por mês.\\
-	\indent
-	A informação dos clientes e dos produtos mencionada acima é armazenada em instâncias da classe CliProdInfo.
-	\indent
-	Estes dois HashMaps acabam por conter na sua maioria a mesma informação, mas esta duplicação de informação resulta numa enorme eficiência na execução das queries. Se apenas tivéssemos o Map que associa cada produto aos clientes que o compraram, por exemplo, e quiséssemos uma lista de todos os produtos comprados por um dado cliente, teríamos que percorrer o Map todo, visto que o cliente pode ter comprado qualquer produto, enquanto que usando dois Maps podemos simplesmente consultar uma vez o HashMap que associa cada cliente aos produtos que comprou e teríamos imediatamente a nossa resposta. Passamos assim de milhares de consultas a poucas dezenas (a complexidade passa de O(N) para O(log N), e como temos milhares de clientes e de produtos, a diferença é significativa).\\
-	\indent
-	Esta classe permite realizar operações de inserção, pesquisa e obtenção de dados.
-	
-	\section{Informação dos ficheiros (FileInfo)}
-	Esta classe armazena informação relativa aos ficheiros lidos aquando do carregamento do GestVendas, nomeadamente os caminhos dos ficheiros, o número total de linhas e o número de linhas válidas. Em relação às vendas, são guardados também a faturação total, o número de vendas de custo 0 e o número de clientes que fizeram compras, para responder à primeira consulta estatística. Esta classe permite realizar operações de consulta e alteração de dados.
-	
-	\section{StructuresInfo}
-	Esta classe armazena a informação necessária para responder à segunda consulta estatística, mais nomeadamente o número total de compras por mês, a faturação total por mês e filial, tal como o valor global, e o número de distintos clientes por mês e por filial.
-
-	\section{GestVendas}
-	O nosso Sistema de Gestão de Vendas é composto pelas seis estruturas principais mencionadas acima. A classe GestVendas permite preencher as suas variáveis de instância a partir de ficheiros e responde a todas as queries.
-	Podemos então definir a nossa classe GestVendas da seguinte forma:
+	TrazAqui é uma das várias classes controladoras do sistema;
+	A classe TrazAqui é a classe que associa a conta com que se fez login a todo o estado atual do programa. Decidimos que a relação entre esta classe e Estado seria de agregação, pois ao partilhar o apontador da conta, caso esta seja alterada no Estado, o atributo contaLoggedIn será automaticamente alterado.
+	\section{Estado}
 	\begin{lstlisting}[language=Java]
-public class GestVendas {
-    private Clients clients;
-    private Products products;
-    private Bills bills;
-    private ArrayList<Branch> branches;
-    private FileInfo fileInfo;
-    private StructuresInfo structuresInfo;
-}
+	private Contas utilizadores;
+	private Contas voluntarios;
+	private Contas transportadoras;
+	private Contas lojas;
+	private Encomendas encomendas;
+	private Set<AbstractMap.SimpleEntry<String, String>> pedidosTransporte;
+								 // -> (codEnc, Codt)
 	\end{lstlisting}
-	Esta classe também permite que armazenemos o seu estado atual através de ObjectStreams, e permite carregar um estado armazenado em disco.
 	
-	\section{Venda (Sale)}
-	Definimos uma classe auxiliar que nos permite armazenar uma venda, tal como consta no ficheiro das vendas. Esta classe permite-nos aceder à informação de cada venda de forma mais eficiente, aquando do preenchimento dos módulos das faturas e das filiais. Esta classe apenas inclui operações de criação, consulta de dados e validação de uma venda, visto que é uma classe temporária, que apenas é usada para auxiliar o carregamento de dados dos ficheiros na GestVendas.
+	Estado é uma das várias classes controladoras do sistema.
+	A classe Estado é a classe responsável por gerir toda a informação do sistema.Como podemos ver, esta possui a informação de todas as contas registadas no sistema e todas as encomendas registadas na aplicação. O atributo pedidosDeTransporte consiste num Set em que cada elemento é um "par" constituido pelo código da Transportadora e pelo código da Encomenda que aquela deseja transportar. Este pedido é retirado do Set se o pedido for aprovado ou outra entidade tenha ficado responsável pelo transporte da encomenda. A única relacão de agregação entre classes em todo o programa é entre o Estado e a TrazAqui(falaremos disso novamente).
+	
+	\section{Controller}
+	Classe, que juntamente com outras, gere o fluxo da aplicação. Esta é a classe responsável por gerir o menu inicial, disponível para todas as entidades, além de interagir com outras classes controladoras que gerem os menus de cada entidade em particular (\textit{login});
+	O método run de cada controller das entidades recebe um objecto de TrazAqui, de forma a que tenham acesso à informação que necessitam que se encontra, por exemplo, no estado.
+
+
+    \section{ControllerUtilizador}
+    Umas das várias classes controladoras do sistema. Esta em particular é a que gere o menu do utilizador; 
+    
+      Neste menu temos as seguintes opções:
+      
+      \textit{1-Efetuar uma compra}: Esta será adicionada à fila de espera da Loja.
+      
+      \textit{2-Solicitar Encomeda}: Só após selecionar esta opção e escolher a encomenda que quer solicitar é que essa encomenda estará disponível para ser escolhida pelas entidades de transporte.
+      
+      \textit{3-Verificar ofertas da Transportadora}: Caso alguma transportadora tenha desejado transportar uma das encomendas do  utilizador, este terá acesso ao código da transportadora, ao tempo que (em teoria) demorará o transporte e ao custo (que poderá variar dependendo da rota do transportador). Com isto o utilizador pode aceitar ou recusar o pedido.
+      
+      \textit{4-Histórico}: Devolve o histórico das encomendas transportadas entre duas datas.
+      
+      \textit{5-Classificar Entidade}: Permite que o utilizador classifique uma entidade, mas com a condição de que esta tenha já transportado algo para o dito utilizador. 
+      
+      \textit{6-Número de encomendas Transportadas}:Devolve o número de encomendas transportadas ao utilizador.
+    
+	\section{ControllerVoluntario}
+	   Umas das várias classes controladoras do sistema. Esta em particular é a que gere o menu do voluntário;
+	   
+	   Neste menu temos as seguintes opções:
+	   
+	   \textit{1-Selecionar encomenda para transportar}: Caso o voluntário esteja disponivel (ou seja, não tenha mais nenhuma encomenda na sua posse), aparecerão todas as encomendas solicitadas e dentro dos seus limites de escolha (ex. raio). Este pode aceitar ou não.
+	   
+	   \textit{2-Fazer Entrega}: O voluntário incrementa o número de encomendas transportadas do utilizador e é mostrado o tempo que efetivamente demorou, contando com atrasos e filas de espera.
+	   
+	   \textit{3-Verificar classificação}: Devolve a média de todas as classificações atribuidas.
+	   
+	   \textit{4-Histórico}: Devolve o histórico das encomendas transportadas entre duas datas.
+	   
+
+	\section{ControllerLoja}
+	 Umas das várias classes controladoras do sistema. Esta em particular é a que gere o menu da Loja;
+	 
+	 Neste menu temos as seguintes opções:
+	 
+	 \textit{1-Ver lista de encomenda}: Mostra todas as encomendas na fila de espera.
+	 \textit{2-Despachar Encomenda}: Encomenda deixa de estar na fila de espera e passa para a lista de encomendas despachadas;
+	 
+	 \textit{3-Quanto falta até encomenda estar disponível}: Caso a encomenda se encontre na loja, devolve o tempo teórico que demorará até ficar despachada (relembrando que poderá haver atrasos ou a encomenda pode-se despachar mais rápido);
+	
+	\section{ControllerTransportadora}
+	 Umas das várias classes controladoras do sistema. Esta em particular é a que gere o menu da Transportadora;
+	 
+	 Neste menu temos as seguintes opções:
+	 
+	 \textit{1-Preço de transporte de uma encomenda}: Caso a transportadora possa transportar a encomenda, é devolvido o preço do transporte, tendo em conta a distância e o peso da mesma.
+	 
+	  \textit{2-Fazer Entrega}: A transportadora define uma rota e vai distribuindo as encomendas guardando as distâcias parciais percorridas (ela primeiro vai a todas as lojas e depois a todos os utilizadores).
+	  
+	  \textit{3-Total faturado num período}: Dado que as encomendas guardam quem as transportou, a distância para a ir buscar e entregar e a data, foi apenas necessário buscar as encomendas que satisfazem os requisitos e somar o custo de cada uma.
+	 
+	 \textit{4-Selecionar encomenda para transportar}: Caso a transportadora esteja disponivel (ou seja, o número de encomendas é inferior ao máximo suportado), aparecerão todas as encomendas solicitadas e dentro dos seus limites de escolha (ex. raio). Este pode aceitar ou não. Caso aceite tem de aguardar aprovação do utilizador.
+	 
+	\textit{5-Verificar classificação}: Devolve a média de todas as classificações atribuidas.
+	 
+	 \textit{6-Histórico}: Devolve o histórico das encomendas transportadas entre duas datas.
+	
+	\section{Conta}
+	\begin{lstlisting}[language=Java]
+	private String codigo;
+	private String nome;
+	private Point2D gps;
+	private String email;
+	private String password;
+	\end{lstlisting}
+	Esta classe faz parte do Modelo da aplicação. Conta é superclasse de todas as outras classes que representam as entidades do sistema. Os seus atributos são aqueles comuns a essas mesmas entidades.
+	
+	\section{Contas}
+	\begin{lstlisting}[language=Java]
+	private Map<String,Conta> mapContas;
+	\end{lstlisting}
+	Esta classe faz parte do Modelo da aplicação. A classe Contas é responsável por armazenar todas as contas do Sistema. Para tal escolhemos uma estrutura Map, na qual cada conta fica associada ao seu código;
+	
+	
+	
+	\section{Encomenda}
+	\begin{lstlisting}[language=Java]
+	private String codEnc;
+	private String codUtil;
+	private String codLoja;
+	private double peso;
+	private Map<String, LinhaEncomenda> produtos;
+	private LocalDateTime data;
+	private boolean foiSolicitada;
+	private boolean foiEntregue;
+	private String quemTransportou;
+	private boolean encMedica;
+	private double distPercorrida;
+};
+   
+	\end{lstlisting}
+	A classe Encomenda possui todos os atributos mínimos exigidos pelos docentes, no entanto tomámos a liberdade de adicionar 6 novos atributos:
+	
+	  \textit{LocalDateTime data} - data do transporte da encomenda;
+	  	
+	  \textit{boolean foiSolicitada} -Indica se a encomenda foi solicitada pelo utilizador;
+	  
+	  \textit{boolean foiEntregue}  - Indica se a encomenda chegou a ser entregue;
+	  
+	  \textit{String quemTransportou} - código de quem a transportou;
+	  
+	  \textit{boolean encMedica} - Indica se a encomenda é médica ou não;
+	  
+	  \textit{distPercorrida} - distância percorrida pela entidade de transporte para entregar essa encomenda.
+	  
+	
+		\section{LinhaEncomenda}
+	\begin{lstlisting}[language=Java]
+	private String codProduto;
+	private String descricao;
+	private double quantidade;
+	private double valorUnitario;
+	};
+	
+	\end{lstlisting}
+		Os atributos desta classe são em tudo semelhante aos atributos mínimos exigidos.
 		
-	\section{UI/QueriesUI}
-	As classe UI e QueriesUI, tal como os nomes indicam, tratam da parte visual do programa, como mostrar ao utilizador os resultados das queries, os menus do programa, e os \textit{input prompts}. Através da classe Formatting, foi possivel imprimir texto colorido no terminal. A classe UI trata da User Interface geral do programa, enquanto que a classe QueriesUI é específica das queries, tornando assim o código mais organizado.
+	\section{Utilizador}
+	Uma das subclasses da classe Conta, e que faz parte do Modelo do Sistema.	
 	
-	\section{Queries}
-	A classe Queries é a responsável pelo fluxo das queries, ou seja, é a que trata de receber \textit{input} do utilizador, chamar a função da query correspondente, fornecendo-lhe o \textit{input} necessário, e enviar o \textit{output} para a classe QueriesUI, para poder ser apresentado ao utilizador.
+	Cada utilizador,além de possuir os atributos da classe conta, possui também o atributo:
+	\begin{lstlisting}[language=Java]
+	private int encTransportadas;
+	\end{lstlisting}
+	que indica quantas encomendas foram transportadas para o utilizador(cada vez que um voluntário ou transportadora efetua o transporte um método incrementa o valor de encTransportadas);
 	
-	\section{Controlador (Controller)}
-	Por último, a classe Controlador é a classe principal, ou seja, é esta que controla o fluxo de todo o programa. Esta classe controla que query será executada, ou que ficheiros serão carregados no programa. A classe GestVendasAppMVC, a que contém o método main, é apenas responsável por correr o método run da classe Controller, a partir daí o Controller trata de correr o programa.
 	
+	\section{Voluntario}
+	Uma das subclasses da classe Conta, e que faz parte do Modelo do Sistema;
+	
+	Cada voluntario, além de possuir os atributos da classe Conta, possui também os atributos:
+	\begin{lstlisting}[language=Java]
+	private double raio;
+	private String encAceite; //Encomenda que aceitou
+	private boolean disponivel;
+	private List<Integer> classificacao;
+	private boolean medicamentos;
+	private double velocidade; 
+	\end{lstlisting}
+	Destes, aqueles que foram acrescentades por decisão do grupo foram as seguintes:
+ 	
+\textit{String encAceite} - indica qual a encomenda na posse do voluntário para entregar;
+
+\textit{boolean disponivel}  - indica se o voluntário pode receber uam nova encomenda (se já tiver aceitado uma encomenda, então não está disponível);
+
+\textit{List<Integer> classificacao} - todas as classificações atribuidas ao voluntário;
+
+\textit{boolean medicamentos} - indica se o voluntario pode transportar encomendas médicas;
+
+\textit{double velocidade} - velocidade média a que o voluntário de desloca;
+	
+	\section{Loja}
+	Uma das subclasses da classe Conta, e que faz parte do Modelo do Sistema;
+	
+	Cada loja, além de possuir os atributos da classe Conta, possui também os atributos:
+	\begin{lstlisting}[language=Java]
+	private Queue<Encomenda> filaEspera;
+	private double tempoEsperaIndividual;
+	private List<Encomenda> encProntas;
+	\end{lstlisting}
+	\textit{Queue<Encomenda> filaEspera} - fila com os códigos de encomendas à espera para serem despachados; 
+	
+	\textit{List<Encomenda> encProntas} - fila com todas as encomendas despachadas pela loja. Não há tempo de espera neste caso;
+	
+	\textit{double tempoEsperaIndividual} - tempo médio de espera, por pessoa, na fila da loja, sendo que este tempo pode ser superior caso haja atrasos. Falaremos disso daqui a pouco.
+	
+	
+	\section{Transportadora}
+	Uma das subclasses da classe Conta, e que faz parte do Modelo do Sistema;
+	
+	Cada transportadora, além de possuir os atributos da classe Conta, possui também os atributos:
+	\begin{lstlisting}[language=Java]
+	private String nif;
+	private double raio;
+	private double precoKm;
+	private double precoKg;
+	private List<Integer> classificacao;
+	\end{lstlisting}
+	\textit{List<Integer> classificacao} - Todas as classificações atribuidas à transportadora.
+	
+	\section{Menu}
+	O Menu é a Vista do programa. Comunica apenas com o Controller e os Controllers das entidades.
+	Possui vários métodos, nomeadamente para receber algum tipo de informação da entidade que usa a app, para mostrar algum tipo de informação ou mostrar mensagens de erro.
+	
+	\section{Interface Randoms}
+	De forma a tentar resolver o problema da gestão de tempos de fila de espera e os atrasos no deslocamento das entidades de transporte, criamos a inteface Random, apenas com métodos default, que se baseiam essencialmente em probabilidades.
+	De forma resumida acontece o seguinte:
+	 - Quando a entidade de transporte chega à loja para recolher a encomenda, a sua entrega pode ser despachada mais rapidamente, logo o tempo na fila de espera será menor do que o inicialmente pensado, ou a sua entrega pode ser atrasada e assim o tempo na fila de espera será maior.
+	 
+	 - Quando a entidade de transporte está a realizar a entrega existe a probabilidade de haver um atraso. Caso isto se verifique, implementamos ainda a ideia de que há 3 tipos de atraso: um pequeno atraso, um atraso médio, ou um grande atraso.
+	 
+	 Em ambos os casos os tempos são gerados aleatoriamente. 
+	 
+	  \section{Interface TranspVolunt}
+	 Inteface com métodos comuns a ambos os voluntários e transportadoras.
+	 
+	 \section{TipoConta}
+	 A classe Enum TipoConta permite que os vários tipos de contas sejam encarados como "constantes" e foi-nos útil para situações que, dependendo da conta, obrigaria à realização de uma condição diferente. Por exemplo, ao fazer login, será devolvido um TipoConta, sendo que dependendo deste será invocado o método run numa das classes controladoras das entidades.
+	 
+	\section{Point}
+	Classe com métodos que transforma as latitudes e longitudes em distâncias em Km.
 	\chapter{Estrutura do projeto}
 	
 	O nosso projeto segue a estrutura \textit{Model View Controller} (MVC), estando por isso organizado em três camadas:
 	\begin{itemize}
-		\item A camada de dados (o modelo) é composta pela classe GestVendas, que por sua vez é constituído pelas classes referidas no capítulo anterior, Clients, Products, Bills, Branch, FileInfo e StructuresInfo. Para além destas, temos ainda a classe auxiliar Venda, e as subclasses Client, Product e Bill.
-		\item A camada de interação com o utilizador (a vista, ou apresentação) é composta pelas classes UI e QueriesUI.
-		\item A camada de controlo do fluxo do programa (o controlador) é composta pelas classes Controller e Queries. É esta camada que gere o funcionamento do programa, interagindo com as outras duas camadas para que este possa funcionar da forma pretendida. As outras duas camadas nunca interagem diretamente uma com a outra.
+		\item A camada de dados (o modelo) é composta pelas Classes da Entidades e pelas classes Main, Conta, Contas, Encomendas, Encomenda, LinhaEncomendae e pelas interfaces.
+		\item A camada de interação com o utilizador (a vista, ou apresentação) é composta unicamente pela classe Menu.
+		\item A camada de controlo do fluxo do programa (o controlador) é composta pela classe Controller, pelos Controllers das Entidades,e pelas classes Estado e TrazAqui, sendo que destas apenas a Controller e Controllers das Entidades acedem à vista diretamente.
 	\end{itemize}
-	Nesta estrutura, o controlador é responsável por enviar pedidos ao modelo, como por exemplo responder a uma query. O modelo calcula essa resposta e envia-a ao controlador, que irá pedir à vista para a apresentar ao utilizador. Temos assim três camadas distintas que funcionam juntas para formar o nosso programa.
+      Como foi referido anteriormente, todo o projeto baseia-se na ideia de encapsulamento, à exceção das classes Estado e TrazAqui, cuja relação é de agregação. Escolhemos esta relação para estas duas classes especificamente pelo simples motivo de que ao partilhar o apontador da conta com que se fez login, se este for mudado no Estado, a contaLoggedIn em TrazAqui é mudada automaticamente, algo que seria mais trabalhoso caso a relação fosse de composição.
+      
 
-	\chapter{Complexidade das estruturas}
 	
-	Decidimos usar TreeSets nos catálogos de clientes e de produtos para podermos aceder aos dados dos catálogos de forma ordenada. Podíamos ter usado HashSets, por exemplo, mas nesse caso teríamos que ordenar os dados sempre que fôssemos aceder a instâncias dessas classes, o que iria ter um grande impacto na performance, e implicaria mudar a primeira query para passar a ordenar a lista que devolve.
 	
-	Para os dados das faturas, usámos HashMaps em vez de TreeMaps puramente por escolha nossa. Comparando os tempos médios de execução das queries 5 a 9, em segundos, usando ambas as estruturas vemos que a diferença é tão pequena que não terá um impacto significante no desempenho do nosso programa, e podemos assim usar qualquer uma das duas estruturas.
-	\begin{center}
-		\begin{tabular}[pos]{| c | c | c |}
-			\hline
-			Query & HashMap & TreeMap \\ \hline
-			5 & 0.0022 & 0.0020 \\ \hline
-			6 & 0.6347 & 0.6733 \\ \hline
-			7 & 0.4939 & 0.4849 \\ \hline
-			8 & 0.3838 & 0.3511 \\ \hline
-			9 & 0.0003 & 0.0004 \\ \hline
-		\end{tabular}
-	\end{center}
-	
-	Para os dados das filiais usámos HashMaps porque a performance com HashMaps é melhor, em geral, em comparação com TreeMaps, apesar da diferença não ser muito significativa. A única query que sofre bastante com esta troca é a query 10, cujo tempo de execução quase que duplica. Nesta tabela é possível ver o tempo médio de execução das queries 5 a 9 usando HashMaps e TreeMaps, em segundos (o ficheiro de vendas usado é o de 1 milhão de vendas):\\
-	\begin{center}
-	\begin{tabular}[pos]{| c | c | c |}
-		\hline
-		Query & HashMap & TreeMap \\ \hline
-		5 & 0.0022 & 0.0015 \\ \hline
-		6 & 0.6347 & 0.6509 \\ \hline
-		7 & 0.4939 & 0.6376 \\ \hline
-		8 & 0.3838 & 0.4450 \\ \hline
-		9 & 0.0003 & 0.0003 \\ \hline
-	\end{tabular}
-	\end{center}
-	
-	No caso das estruturas relativas aos resultados das queries, foi utilizada a mais adequada para cada situação, como Maps ou Lists.
-
-	\chapter{Testes de desempenho}
-	
-	Para medir o desempenho do programa usámos duas classes, a classe Benchmark para medir o tempo médio de execução das queries, e a classe PerformanceTests, para medir o tempo de leitura dos ficheiros de vendas, com ou sem parsing e validação. Estas classes podem ser corridas em separado do resto do programa, permitindo-nos realizar estes testes sem interferir com o programa principal. Estas classes usam a classe Crono para medir os tempos de execução.
-	
-	A seguinte tabela permite-nos visualizar os tempos médios de execução de cada query, em segundos, para cada um dos três ficheiros de vendas (o tempo médio é a média do tempo de execução de 5 medições):
-	\begin{center}
-	\begin{tabular}[pos]{| c | c | c | c |}
-		\hline
-		Query & 1M Vendas & 3M Vendas & 5M Vendas \\ \hline
-		1 & 0.0437 & 0.0559 & 0.0471\\ \hline
-		2 & 0.4937 & 1.0281 & 1.1121\\ \hline
-		3 & 0.0023 & 0.0006 & 0.0044\\ \hline
-		4 & 0.0010 & 0.0003 & 0.0013\\ \hline
-		5 & 0.0022 & 0.0010 & 0.0027\\ \hline
-		6 & 0.6347 & 0.9005 & 0.9428\\ \hline
-		7 & 0.4939 & 1.5213 & 1.6373\\ \hline
-		8 & 0.3838 & 1.9895 & 3.8710\\ \hline
-		9 & 0.0003 & 0.0001 & 0.0005\\ \hline
-		10 & 2.6814 & 12.523 & 23.925\\ \hline
-	\end{tabular}
-	\end{center}
-
-	Pela análise da tabela, podemos concluir o seguinte:
-	\begin{itemize}
-
-		\item para a maioria das queries, o tempo de execução não sofre uma alteração muito grande com o aumento do número de vendas.
-
-		\item as queries cujo tempo de execução é afetado pela quantidade de vendas são as queries 2, 6, 7, 8 e 10, com a query 10 sendo a mais afetada.
-		
-	\end{itemize}
-
-	Para além dos testes de tempo de execução, realizámos também testes de performance da leitura dos ficheiros de vendas, cujos resultados podem ser consultados na seguinte tabela:
-	\begin{center}
-	\begin{tabular}[pos]{| c | c | c | c |}
-		\hline
-		Tipo de teste & 1M Vendas & 3M Vendas & 5M Vendas \\ \hline
-		Leitura & 0.5403 & 1.2304 & 2.0249\\ \hline
-		Leitura + parsing & 2.2272 & 6.1081 & 10.028\\ \hline
-		Leitura + parsing + validação & 3.1269 & 9.1028 & 16.245\\ \hline
-	\end{tabular}
-	\end{center}
-	Esta tabela mostra-nos aquilo que já seria de esperar. Quantas mais vendas contiver o ficheiro que estamos a ler, maiores vão ser os tempos de leitura, parsing e validação. Vemos também que o que mais afeta o tempo de execução é o parsing de cada linha, mais do que a validação e mais do que o número de vendas.
 
 	\chapter{Conclusão}
 
-	Tal como o projeto em C, sentimos que o nosso projeto está bem conseguido. O nosso programa é capaz de responder a todas as queries e mostrar os resultados de forma intuitiva, e fá-lo com tempos aceitáveis.
-	
-	Tentámos melhorar a estrutura do projeto quando passámos de C para Java, o que tínhamos feito em C estava um pouco confuso e complexo, e acreditamos que neste projeto conseguimos simplificar algumas coisas, tornando o código mais simples de ser entendido por alguém que o veja.
+	A nível geral, e tendo em conta o que foi explicado nos capítulos anteriores, podemos afirmar que temos um projeto bem conseguido. Acreditamos que respondemos de forma correta ao problema da gestão de factores de aleatoriedade, que era a principal dificuldade do trabalho, além de termos implementado as regras de encapsulamento (tirando a exceção já referida) e a possibilidade do nosso projeto crescer de forma controlada.
 	
 	\appendix
 	

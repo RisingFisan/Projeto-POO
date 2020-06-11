@@ -177,6 +177,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Encomenda encomenda = (Encomenda) o;
         return Objects.equals(codEnc, encomenda.codEnc);
+               
     }
 
     public int hashCode() {

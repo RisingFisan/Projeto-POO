@@ -1,4 +1,11 @@
-import java.util.*;
+import java.util.List;
+import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.AbstractMap;
 import java.io.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -25,15 +32,41 @@ public class TrazAqui implements Serializable {
     public String getCod(){
         return this.contaLoggedIn.getCodigo();
     }
+    public boolean freeEmail(String email){
+        return this.estado.freeEmail(email);
+    }
     
     public boolean checkEncInStore(String enc){
         Loja l = (Loja)this.contaLoggedIn;
-        return l.getFilaEspera().contains(enc);
+        boolean b1 = l.getFilaEspera().stream().anyMatch(a->a.getCodEnc().equals(enc));
+        return b1;
         
+    }
+    
+    public List<String> getFilaEspera(){
+        Loja l = (Loja)this.contaLoggedIn;
+        return l.getFilaEspera().stream().map(Encomenda::getCodEnc).collect(Collectors.toList());
+    }
+    
+    public List<String> getEncP(){
+        Loja l = (Loja)this.contaLoggedIn;
+        return l.getEncProntas().stream().map(Encomenda::getCodEnc).collect(Collectors.toList());
+    }
+    
+    public boolean checkEncInStoreDesp(String enc){
+        Loja l = (Loja)this.contaLoggedIn;
+        boolean b2 = l.getEncProntas().stream().anyMatch(a->a.getCodEnc().equals(enc));
+        return b2;
+        
+    }
+    
+    public void despacharEnc(String cod){
+        Loja l = (Loja)this.contaLoggedIn;
+        this.estado.despacharEnc(l,cod);
     }
     public double getTempoEspera(String enc){
         Loja l = (Loja)this.contaLoggedIn;
-        return l.tempoEsperaTeorico(enc);
+        return (l.tempoEsperaTeorico(enc))*(l.quantosNaFrente(enc));
         
     }
 
@@ -110,6 +143,11 @@ public class TrazAqui implements Serializable {
 
     public boolean checkIfEntityWorkedForUser(String code) {
         return this.estado.checkIfEntityWorkedForUser(code, this.contaLoggedIn.getCodigo());
+    }
+    
+    public List<String> entityWorkedForUser(){
+        List<String> s = this.estado.entityWorkedForUser(this.contaLoggedIn.getCodigo());
+        return new ArrayList<>(s);
     }
 
     public void classificaEntidade(int c, String code) {
@@ -218,12 +256,9 @@ public class TrazAqui implements Serializable {
     
     // Loja
 
-    public List<Encomenda> listaEncsLoja() {
-        if(contaLoggedIn instanceof Loja) {
+    public List<String> listaEncsLoja() {
             Loja l = (Loja) contaLoggedIn;
-            return l.getFilaEspera().stream().map(Encomenda::clone).collect(Collectors.toList());
-        }
-        else return null;
+            return l.getFilaEspera().stream().map(Encomenda::getCodEnc).collect(Collectors.toList());
     }
 
     public void carregaLogs() {

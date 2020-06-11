@@ -70,6 +70,8 @@ public class Estado implements Serializable,Randoms {
                  .limit(10)
                  .collect(Collectors.toList());
     }
+    
+    
 
     public Set<AbstractMap.SimpleEntry<String, String>> getPedidos() {
         return this.pedidosTransporte;
@@ -89,6 +91,14 @@ public class Estado implements Serializable,Randoms {
         else return ("t"+this.transportadoras.newCodeNumber());
         
 
+    }
+    
+    public boolean freeEmail(String email){
+        if (this.utilizadores.getContaByEmail(email)!=null 
+            || this.transportadoras.getContaByEmail(email)!=null 
+            || this.lojas.getContaByEmail(email)!=null 
+            || this.voluntarios.getContaByEmail(email)!=null ) return false;
+        return true;    
     }
 
     public String newCodeEnc() {
@@ -150,6 +160,13 @@ public class Estado implements Serializable,Randoms {
     public boolean checkIfEntityWorkedForUser(String code, String user) {
         return this.encomendas.getEnc().stream().anyMatch(a -> (a.getCodUtil().equals(user) && a.getQuemTransportou().equals(code)));
     }
+    
+    public List<String> entityWorkedForUser(String user) {
+        return this.encomendas.getEnc().stream()
+                                       .filter(a -> (a.getCodUtil().equals(user) && a.getFoiSolicitada()))
+                                       .map(Encomenda::getQuemTransportou)
+                                       .collect(Collectors.toList());
+    }
 
     public boolean encFoiSolicitada(String enc) {
         return this.encomendas.getEncomendaByCod(enc)!= null;
@@ -166,6 +183,11 @@ public class Estado implements Serializable,Randoms {
     }
 
     public void encomendaParaSerEntregue(String codEnc, String cod) {
+        // mudar a data para a data de transporte
+        Encomenda e = this.encomendas.getEncomendaByCod(codEnc);
+        e.setData(LocalDateTime.now());
+        this.encomendas.removeOld(codEnc);
+        this.encomendas.addEnc(e);
         this.encomendas.quemTransportou(codEnc, cod);
         this.pedidosTransporte.removeIf(a -> a.getKey().equals(codEnc));
     }
@@ -185,7 +207,7 @@ public class Estado implements Serializable,Randoms {
                 Loja loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
                 Double distancia = Point.distance(loja.getGPSx(), loja.getGPSy(), transp.getGPSx(), transp.getGPSy())+ Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy());
                 Double custo = transp.totalPreco(distancia)+e.getPeso()*transp.getPrecoPeso();
-                //Nao se consegue saber qual o tempo na fila que a entidade vai estar até chegar lá, logo nao adiciono tempos de fila de espera
+                //Nao se consegue saber qual o tempo na fila que a entidade vai estar atï¿½ chegar lï¿½, logo nao adiciono tempos de fila de espera
                 Double tempo = distancia/transp.getVelocidade();
                 ArrayList <Double> arr = new ArrayList<>();
                 arr.add(custo);
@@ -227,7 +249,6 @@ public class Estado implements Serializable,Randoms {
         Encomenda e = this.encomendas.getEncomendaByCod(enc);
         Utilizador u = (Utilizador) this.utilizadores.getContaByCode(e.getCodUtil());
         Loja loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
-        loja.remove(enc);
         u.addToEncTransp();
         this.utilizadores.addConta(u);
         x = u.getGPSx();
@@ -237,12 +258,13 @@ public class Estado implements Serializable,Randoms {
         v.setEncAceite("");
         v.setDisponibilidade(true);
         this.voluntarios.addConta(v);
-        this.lojas.addConta(loja.clone());
         e.setFoiEntregue(true);
         e.setDistPercorrida(dist);
         this.encomendas.removeOld(e.getCodEnc());
         this.encomendas.addEnc(e.clone());
         double tempo = (dist/v.getVelocidade())+ ((Loja)this.lojas.getContaByCode(e.getCodLoja())).tempoEspera(e.getCodEnc())+atraso();
+        loja.remove(enc);
+        this.lojas.addConta(loja.clone());
         return tempo;
     }
 
@@ -257,7 +279,7 @@ public class Estado implements Serializable,Randoms {
         Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
         return (Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy()) < v.getRaio()
                     && Point.distance(loja.getGPSx(), loja.getGPSy(), v.getGPSx(), v.getGPSy()) < v.getRaio()
-                    && ((v.aceitoTransporteMedicamentos() && e.aceitoTransporteMedicamentos())||v.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos()) 
+                    && ((v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())||v.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos()) 
                     && e.getFoiSolicitada() && !e.getFoiEntregue()
                     && e.getQuemTransportou().equals(""));
     }
@@ -287,8 +309,8 @@ public class Estado implements Serializable,Randoms {
         Loja loja = (Loja) this.lojas.getContaByCode(l);
         Transportadora t = (Transportadora) this.transportadoras.getContaByCode(transp);
         return ((Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy()) < t.getRaio() 
-                && Point.distance(loja.getGPSx(), loja.getGPSy(), t.getGPSx(), t.getGPSy()) < t.getRaio() &&
-                ((t.aceitoTransporteMedicamentos() && e.aceitoTransporteMedicamentos())||t.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos())
+                && Point.distance(loja.getGPSx(), loja.getGPSy(), t.getGPSx(), t.getGPSy()) < t.getRaio() 
+                && ((t.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())||t.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos())
                 && e.getQuemTransportou().equals(""))
                  && !e.getFoiEntregue()
                  && e.getFoiSolicitada());
@@ -301,7 +323,7 @@ public class Estado implements Serializable,Randoms {
         Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
         Loja loja = (Loja) this.lojas.getContaByCode(l);
         double dist = Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy()) + Point.distance(loja.getGPSx(), loja.getGPSy(), t.getGPSx(), t.getGPSy());
-        return dist * t.getPrecoPorKm();
+        return dist * t.getPrecoPorKm()*(t.getPrecoPeso()*e.getPeso());
     }
     
     public void alteraDispT(String code, int i) {
@@ -351,9 +373,6 @@ public class Estado implements Serializable,Randoms {
             double dist = loja.calcDist(t.getGPSx(),t.getGPSy());
             t.setGPS(loja.getGPSx(),loja.getGPSy());
             distancias[le.indexOf(e)] = dist;
-            loja.remove(e.getCodEnc());
-            //este metodo já faz clone
-            this.lojas.addConta(loja);
             
         }
         Comparator<Encomenda> compareByDistU = (Encomenda o1, Encomenda o2) -> Double.compare(this.utilizadores.getContaByCode(o1.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()),this.utilizadores.getContaByCode(o2.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()));
@@ -381,6 +400,9 @@ public class Estado implements Serializable,Randoms {
             double tempo = (distanc/vel)+ ((Loja)this.lojas.getContaByCode(e.getCodLoja())).tempoEspera(e.getCodEnc())+atraso();
             AbstractMap.SimpleEntry<Double, Double> me = new AbstractMap.SimpleEntry<Double, Double>(distanc/vel,distanc*custo+(e.getPeso()*custo1));
             map.put(e.getCodEnc(),me);
+            Loja loja = (Loja) this.lojas.getContaByCode(e.getCodLoja());
+            loja.remove(e.getCodEnc());
+            this.lojas.addConta(loja);
             
         }
         //apagar todas as encomendas da transportadora
@@ -425,6 +447,12 @@ public class Estado implements Serializable,Randoms {
             }
         }
         return res;
+    }
+    
+    public void despacharEnc(Loja l,String cod){
+        Encomenda e =this.encomendas.getEncomendaByCod(cod);
+        l.despacharEnc(e.getCodEnc());
+        l.remove(e.getCodEnc());
     }
 
 

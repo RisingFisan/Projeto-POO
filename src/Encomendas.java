@@ -32,7 +32,7 @@ public class Encomendas implements Serializable
     }
     
     public void addEnc (Encomenda e) {
-        this.encomendas.add(e);
+        this.encomendas.add(e.clone());
     }
     
     public Encomenda getEncomendaByCod(String code) {

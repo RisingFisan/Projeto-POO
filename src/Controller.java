@@ -38,13 +38,16 @@ public class Controller {
                     else if (tipoConta.equals(TipoConta.Voluntario)) conta = Menu.menuRegistoVoluntario(trazAqui.getNewCode(TipoConta.Voluntario));
                     else if (tipoConta.equals(TipoConta.Loja)) conta = Menu.menuRegistoLoja(trazAqui.getNewCode(TipoConta.Loja));
                     else conta = Menu.menuRegistoTransportadora(trazAqui.getNewCode(TipoConta.Transportadora));
-
+                     
+                    if (!trazAqui.freeEmail(conta.getEmail())) Menu.errors(18);
+                    else{
                     trazAqui.registo(conta);
 
                     if (tipoConta.equals(TipoConta.Utilizador)) ControllerUtilizador.run(trazAqui);
                     else if (tipoConta.equals(TipoConta.Voluntario)) ControllerVoluntario.run(trazAqui);
                     else if (tipoConta.equals(TipoConta.Transportadora)) ControllerTransportadora.run(trazAqui);
                     else ControllerLoja.run(trazAqui);
+                }
 
                     break;
                     
