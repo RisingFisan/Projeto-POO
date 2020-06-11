@@ -233,7 +233,7 @@ public class Menu {
         sb.append("Cod Encomenda------Duração Transporte------Custo Transporte\n\n");
         for (Map.Entry<String,AbstractMap.SimpleEntry<Double, Double>> me :map.entrySet()){
             String result = String.format("%.2f", me.getValue().getValue());
-            sb.append("   "+me.getKey()+"        "+time(me.getValue().getKey())+"            "+result+"\n");
+            sb.append("   "+me.getKey()+"                 "+time(me.getValue().getKey())+"            "+result+"\n");
         }
         sb.append("Pressione enter para continuar...");
         System.out.println(sb.toString());

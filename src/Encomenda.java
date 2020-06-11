@@ -157,7 +157,7 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         return new Encomenda(this);
     }
     
-    
+    //To string , para mostrar o historico de forma a caber todas as encoemndas, mostramos aquilo que consideramos mais importante
     public String toString() {
         StringBuilder sb = new StringBuilder(" ");
         sb.append("Codigo da Encomenda: ").append(this.codEnc).append("\n");
@@ -167,18 +167,28 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
         sb.append("Produtos: ").append(this.produtos.values().toString()).append("\n");
         sb.append("Data: ").append(this.data.toString()).append("\n");
         sb.append("Quem Transportou: ").append(this.quemTransportou).append("\n");
-        
-
+        sb.append("Enc Medica?:").append(this.encMedica).append("\n");
+        sb.append("Distancia percorrida:").append(this.distPercorrida).append("\n");
         return sb.toString();
     }
-
+    
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Encomenda encomenda = (Encomenda) o;
-        return Objects.equals(codEnc, encomenda.codEnc);
+        return Objects.equals(codEnc, encomenda.codEnc) &&
+               encomenda.codUtil.equals(this.codUtil) &&
+               encomenda.codLoja.equals(this.codLoja) &&
+               Double.compare(encomenda.peso, peso) == 0 &&
+               encomenda.data.equals(data) &&
+               encomenda.encMedica==encMedica &&
+               encomenda.quemTransportou.equals(quemTransportou) &&
+               encomenda.foiEntregue==foiEntregue &&
+               encomenda.foiSolicitada==foiSolicitada &&
+               Double.compare(encomenda.distPercorrida,distPercorrida) == 0 &&
+               encomenda.produtos.equals(produtos);
                
-    }
+       }
 
     public int hashCode() {
         return Objects.hash(codEnc, codUtil, codLoja, peso, produtos);
