@@ -271,7 +271,7 @@ public class Estado implements Serializable,Randoms {
         Voluntario v = (Voluntario) this.voluntarios.getContaByCode(vol);
         return (Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy()) < v.getRaio()
                     && Point.distance(loja.getGPSx(), loja.getGPSy(), v.getGPSx(), v.getGPSy()) < v.getRaio()
-                    && ((v.aceitoTransporteMedicamentos() && e.aceitoTransporteMedicamentos())||v.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos()) 
+                    && ((v.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())||v.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos()) 
                     && e.getFoiSolicitada() && !e.getFoiEntregue()
                     && e.getQuemTransportou().equals(""));
     }
@@ -301,8 +301,8 @@ public class Estado implements Serializable,Randoms {
         Loja loja = (Loja) this.lojas.getContaByCode(l);
         Transportadora t = (Transportadora) this.transportadoras.getContaByCode(transp);
         return ((Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy()) < t.getRaio() 
-                && Point.distance(loja.getGPSx(), loja.getGPSy(), t.getGPSx(), t.getGPSy()) < t.getRaio() &&
-                ((t.aceitoTransporteMedicamentos() && e.aceitoTransporteMedicamentos())||t.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos())
+                && Point.distance(loja.getGPSx(), loja.getGPSy(), t.getGPSx(), t.getGPSy()) < t.getRaio() 
+                && ((t.aceitoTransporteMedicamentos() == e.aceitoTransporteMedicamentos())||t.aceitoTransporteMedicamentos() && !e.aceitoTransporteMedicamentos())
                 && e.getQuemTransportou().equals(""))
                  && !e.getFoiEntregue()
                  && e.getFoiSolicitada());

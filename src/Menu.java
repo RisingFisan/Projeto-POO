@@ -311,7 +311,7 @@ public class Menu {
         StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
         sb.append("1) Ver lista de encomendas.\n");
         sb.append("2) Ver quanto falta para a sua encomenda ficar disponivel.\n");
-        sb.append("3)Despachar encomenda.\n");
+        sb.append("3) Despachar encomenda.\n");
         sb.append("0) Logout.\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());

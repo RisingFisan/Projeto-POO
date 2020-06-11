@@ -100,7 +100,7 @@ public class Loja extends Conta implements Serializable, Randoms {
         if (this.encProntas.isEmpty()) return false;
         return this.encProntas.stream().anyMatch(a->a.getCodEnc().equals(cod));
     }
-    //Quanto tempo ate estar despachada
+    //Quanto tempo ate ser atendida
     public Double tempoEsperaTeorico(String enc) {
         return (quantosNaFrente(enc)*this.tempoEsperaIndividual);
     }
