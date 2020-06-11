@@ -7,6 +7,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
     private String nif;
     private double raio;
     private double precoKm;
+    private double precoKg;
     private List<Integer> classificacao;
     
     
@@ -30,14 +31,16 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.classificacao = new ArrayList<>();
         this.medicamentos = false;
         this.kmPercorridos = 0;
+        this.precoKg = 0;
         this.velocidade = calculaVelocidadeVol();
     }
 
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, int max) {
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, int max,double precoPeso) {
         super(cod, nome, x, y);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.precoKg = precoPeso;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
         this.maxCapacidade = max;
@@ -47,11 +50,12 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.velocidade = calculaVelocidadeVol();
     }
 
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass) {
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass,double precoPeso) {
         super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.precoKg = precoPeso;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
@@ -63,11 +67,12 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
     
     
     
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade, double vel,boolean med) {
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, int maxCapacidade, double vel,boolean med,double precoPeso) {
         super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.precoKg = precoPeso;
         this.encAceites = new ArrayList<>();
         this.disponivel = true;
         this.classificacao = new ArrayList<>();
@@ -77,11 +82,12 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.kmPercorridos = 0;
     }
     
-    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, List<String> list, int max,int km) {
+    public Transportadora(String cod, String nome, double x, double y, String nif, double raio, double preco, String novoEmail, String novaPass, List<String> list, int max,int km,double precoPeso) {
         super(cod, nome, x, y, novoEmail, novaPass);
         this.raio = raio;
         this.nif = nif;
         this.precoKm = preco;
+        this.precoKg = precoPeso;
         this.encAceites = new ArrayList<>(list);
         this.disponivel = list.isEmpty();
         this.maxCapacidade = max;
@@ -99,6 +105,7 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         this.nif = t.nif;
         this.raio = t.raio;
         this.precoKm = t.precoKm;
+        this.precoKg = t.precoKg;
         this.encAceites = t.getEncAceites();
         this.disponivel = t.disponivel;
         this.maxCapacidade = t.maxCapacidade;
@@ -109,6 +116,10 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
     }
 
     //GETTERS
+    public double getPrecoPeso(){
+        return this.precoKg;
+    }
+    
     public String getNIF() {
         return this.nif;
     }
@@ -150,6 +161,10 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
     } 
     
     //SETTERS
+    
+    public void setPrecoPeso(double preco){
+        this.precoKg=preco;
+    }
     public void setNIF(String nif) {
         this.nif = nif;
     }

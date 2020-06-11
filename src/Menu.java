@@ -83,7 +83,7 @@ public class Menu {
         else if (i==6) sb.append("Digite a descricao:\n ");
         else if (i==7) sb.append("Digite a quantidade:\n ");
         else if (i==8) sb.append("Digite o preco:\n ");
-        else if (i==9) sb.append("Digite o peso:\n ");
+        //else if (i==9) sb.append("Digite o peso:\n ");
         else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==11) sb.append("Encomenda medica?(S/N):\n ");
         else if (i==12) sb.append("Digite a velocidade media:\n");
@@ -111,6 +111,7 @@ public class Menu {
         sb.append("1) Selecionar encomenda a transportar.\n");
         sb.append("2) Registar entrega de uma encomenda.\n");
         sb.append("3) Verificar classificacao atual.\n");
+        sb.append("4) Historico de encomendas entregues.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -163,6 +164,7 @@ public class Menu {
         sb.append("3) Total faturado num determinado perÌodo de tempo.\n");
         sb.append("4) Pedir para efetuar transporte de encomenda.\n");
         sb.append("5) Verificar a sua classificacao atual.\n");
+        sb.append("6) Historico de encomendas transportadas.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -181,6 +183,20 @@ public class Menu {
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
+    }
+    
+    public static String LojaMenuData(int i){
+        StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
+        if (i==1 ) sb.append("Digite um codigo de encomenda:  ");
+        System.out.println(sb.toString());
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
+    }
+    
+    public static void LojaMenuRes(int i,String res){
+        StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
+        if (i==1 ) sb.append("Tempo de espera na fila sera, em principio: "+i);
+        System.out.println(sb.toString());
     }
     
     public static void transportadoraMenuResult(int i, String res) {
@@ -210,6 +226,7 @@ public class Menu {
     
     public static void mostrarTabelaTransportadora(Map<String,AbstractMap.SimpleEntry<Double, Double>> map){
         StringBuilder sb = new StringBuilder("-----------MENU TRANSPORTADORA-----------\n\n");
+        sb.append("\n*****Encomendas Entregues!!*****\n");
         sb.append("Cod Encomenda------Duracao Transporte------Custo Transporte\n\n");
         for (Map.Entry<String,AbstractMap.SimpleEntry<Double, Double>> me :map.entrySet()){
             String result = String.format("%.2f", me.getValue().getValue());
@@ -263,8 +280,8 @@ public class Menu {
      
     public static int dataInfo(int i,boolean b){
        StringBuilder sb = new StringBuilder();
-       if (b) sb.append("*****Data de inicio***** ");
-       else sb.append("*****Data de fim***** ");
+       if (b) sb.append("*****Data de inicio*****\n ");
+       else sb.append("*****Data de fim*****\n ");
         if (i==1) sb.append("Digite o ano: ");
         else if (i==2) sb.append("Digite o mes: ");
         else if (i==3) sb.append("Digite o dia: ");
@@ -276,9 +293,12 @@ public class Menu {
      
     public static void printHistorico(List<Encomenda>me,String entidade,LocalDateTime i,LocalDateTime f) {
         StringBuilder sb = new StringBuilder("-----------Historico de Encomendas-----------\n\n");
-        sb.append("********Entidade "+entidade+"********");
-        sb.append("Encomendas entre "+i.toString()+" e "+f.toString());
-        me.stream().forEach(a->sb.append(a));
+        sb.append("\n********Entidade "+entidade+"********\n");
+        sb.append("\nEncomendas entre "+i.toString()+" e "+f.toString()+"\n");
+        for (Encomenda e : me){
+            sb.append(e.toString());
+            sb.append("\n------//-------\n");
+        }
         System.out.println(sb.toString());
         
         
@@ -287,6 +307,7 @@ public class Menu {
     public static int menuLoja(){
         StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
         sb.append("1) Ver lista de encomendas.\n");
+        sb.append("2) Ver quanto falta para a sua encomenda ficar disponivel.\n");
         sb.append("0) Logout.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -382,6 +403,7 @@ public class Menu {
         else if (i==14) sb.append("****Nao existem encomendas dentro dos requesitos obrigatorios****").append("\n");
         else if (i==15) sb.append("****Nenhuma transportadora pediu para transportar encomendas suas****").append("\n");
         else if (i==16) sb.append("****Credenciais invalidas!****").append("\n");
+        else if (i==17) sb.append("****Encomenda nao se encontra na loja!****").append("\n");
         sb.append("\nPressione enter para continuar...");
         System.out.print(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -512,6 +534,9 @@ public class Menu {
 
         System.out.print("Pre√ßo por Km: ");
         Double precoPorKm = scanner.nextDouble();
+        
+        System.out.print("Pre√ßo por Kg: ");
+        Double precoPorKg = scanner.nextDouble();
 
         System.out.print("Capacidade m√°xima de entrega (0 equivale a capacidade ilimitada): ");
         int capacidadeMax = scanner.nextInt();
@@ -527,7 +552,7 @@ public class Menu {
         
         System.out.print("Codigo atribuido a sua conta: "+codigo+"\n");
         
-        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax, vel,b);
+        return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax, vel,b,precoPorKg);
     }
 
     public static void encomendasListMenu(List<Encomenda> encomendas) {
@@ -546,6 +571,10 @@ public class Menu {
         if (i==1) System.out.println("\n*****O seu pedido de transporte foi adicionado! Aguarde aprovacao*****\n");
         if (i==2) System.out.println("\n****A entidade ainda n„o efetuou nenhuma entrega para si,logo nao pode avalia-la******\n");
         if (i==3) System.out.println("\n*****Combinacao Invalida*****\n");
+    }
+    
+    public static void showExtraInfo(List<String> t,int i){
+        if (i==1) System.out.println("Lojas disponiveis: "+t.toString());
     }
     
     

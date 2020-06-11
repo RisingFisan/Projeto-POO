@@ -19,13 +19,13 @@ public class ControllerUtilizador {
 
             switch (opcao) {
                 case 1:
+                    List<String> l1 = trazAqui.getCodLojas();
+                    Menu.showExtraInfo(l1,1);
                     String loja = Menu.userMenuData(3);
-                    if (!trazAqui.isValidoLoja(loja)) {
-                        Menu.errors(4);
-                        loja = Menu.userMenuData(3);
-                    }
+                    if (!trazAqui.isValidoLoja(loja)) Menu.errors(4);
+                    else{
                     String codEnc = trazAqui.getNewCodeEnc();
-                    double peso = Double.parseDouble(Menu.userMenuData(9));
+                    double peso = 0;
                     String codUt = trazAqui.getCodLoggedIn();
                     String med = "";
                     while (!med.equals("S") && !med.equals("s") && !med.equals("n") && !med.equals("N")) med = Menu.userMenuData(11);
@@ -39,11 +39,15 @@ public class ControllerUtilizador {
                         double quant = Double.parseDouble(Menu.userMenuData(7));
                         double preco = Double.parseDouble(Menu.userMenuData(8));
                         numLinhas--;
+                        peso+=quant;
                         LinhaEncomenda l = new LinhaEncomenda(codP, desc, quant, preco);
+                        e.setPeso(peso);
                         e.addProduto(l.clone());
                     }
-                    trazAqui.addEncToEstado(e);
-                    Menu.clearWindow();
+                    trazAqui.addEncToEstado(e.clone());
+                    
+                }
+                Menu.clearWindow();
                     break;
 
                 case 2:
@@ -107,13 +111,14 @@ public class ControllerUtilizador {
 
                         if (inicio.isAfter(fim)) Menu.errors(4);
                         else {
-                            List<Encomenda> historico = trazAqui.getHistoricoUser().stream()
-                                    .filter(a -> (a.getData().isBefore(fim) && a.getData().isAfter(inicio)))
-                                    .sorted(Comparator.comparing(Encomenda::getData))
+                            List<Encomenda> historico = trazAqui.getHistorico(TipoConta.Utilizador).stream()
+                                    .filter(a -> (a.getData().isBefore(fim) && a.getData().isAfter(inicio)&&a.getQuemTransportou().equals(code1)))
+                                    .sorted(Comparator.comparing(Encomenda::getData).reversed())
                                     .collect(Collectors.toList());
-                            Menu.printHistorico(historico, code1, inicio, fim);
+                            Menu.printHistorico(historico,code1,inicio, fim);
                         }
                     } else Menu.errors(4);
+                    Menu.pressEnter();
                     Menu.clearWindow();
                     break;
 

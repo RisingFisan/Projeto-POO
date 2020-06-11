@@ -21,6 +21,21 @@ public class TrazAqui implements Serializable {
             return true;
         } else return false;
     }
+    
+    public String getCod(){
+        return this.contaLoggedIn.getCodigo();
+    }
+    
+    public boolean checkEncInStore(String enc){
+        Loja l = (Loja)this.contaLoggedIn;
+        return l.getFilaEspera().contains(enc);
+        
+    }
+    public double getTempoEspera(String enc){
+        Loja l = (Loja)this.contaLoggedIn;
+        return l.tempoEsperaTeorico(enc);
+        
+    }
 
     public void registo(Conta conta) {
         this.estado.addConta(conta);
@@ -36,6 +51,11 @@ public class TrazAqui implements Serializable {
         else if (this.contaLoggedIn instanceof Voluntario) return TipoConta.Voluntario;
         else if (this.contaLoggedIn instanceof Transportadora) return TipoConta.Transportadora;
         else return TipoConta.Loja;
+    }
+    
+    public List<String> getCodLojas(){
+        List<String> s =this.estado.getCodLojas();
+        return new ArrayList<>(s);
     }
     
     public int getEncTransp(){
@@ -60,11 +80,13 @@ public class TrazAqui implements Serializable {
     }
     
     public List<AbstractMap.SimpleEntry<String, Integer>> utilMaisFreq() {
-        return this.estado.utilMaisFreq();
+        List<AbstractMap.SimpleEntry<String, Integer>> s =  this.estado.utilMaisFreq();
+        return new ArrayList<>(s);
     }
     
     public List<AbstractMap.SimpleEntry<String, Double>> transpMaisFreq() {
-        return this.estado.transpMaisFreq();
+        List<AbstractMap.SimpleEntry<String, Double>> s =  this.estado.transpMaisFreq();
+        return new ArrayList<>(s);
     }
     
     public void addEncToEstado(Encomenda e){
@@ -106,12 +128,17 @@ public class TrazAqui implements Serializable {
         return estado.newCodeEnc();
     }
 
-    public List<Encomenda> getHistoricoUser() {
+    /*public List<Encomenda> getHistoricoUser() {
         return this.estado.getHistoricoUser(this.contaLoggedIn.getCodigo());
+    }*/
+    
+    public List<Encomenda> getHistorico(TipoConta c) {
+        return this.estado.getHistorico(c,this.contaLoggedIn.getCodigo()).stream().map(Encomenda::clone).collect(Collectors.toList());
     }
 
     public Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> getTranspOptions() {
-        return this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
+        Map<String, List<AbstractMap.SimpleEntry<String, ArrayList <Double>>>> map =this.estado.getTranspOptions(this.contaLoggedIn.getCodigo());
+       return new HashMap<>(map);
     }
 
     public void solicitaEnc(String e) {
@@ -119,7 +146,7 @@ public class TrazAqui implements Serializable {
     }
     
     public Set<String> encsOfUserToTransport(){
-        return this.estado.encsOfUserToTransport(this.contaLoggedIn.getCodigo());
+        return new TreeSet<>(this.estado.encsOfUserToTransport(this.contaLoggedIn.getCodigo()));
     }
     
     
@@ -157,13 +184,13 @@ public class TrazAqui implements Serializable {
     
     public Map<String,Double> transpInfo () {
         Voluntario v  = (Voluntario) this.contaLoggedIn;
-        return this.estado.transpInfo(v);
+        return new HashMap<>(this.estado.transpInfo(v));
     }
     
     // Transportadora
     
     public Set<String> encsPossibleToTransp(){
-        return this.estado.encsPossibleToTransp(this.contaLoggedIn);
+        return new TreeSet<>(this.estado.encsPossibleToTransp(this.contaLoggedIn));
     }
     
     public boolean podeTransportarT(String enc) {
@@ -182,11 +209,11 @@ public class TrazAqui implements Serializable {
     
     public Map<String,List<Double>> transpInfoT () {
         Transportadora t  = (Transportadora) this.contaLoggedIn;
-        return this.estado.transpInfoT(t); 
+        return new HashMap<>(this.estado.transpInfoT(t)); 
     } 
     
     public Map<String,AbstractMap.SimpleEntry<Double, Double>> entregaEncs() {
-        return this.estado.entregaEncs((Transportadora)this.contaLoggedIn);
+        return new HashMap<>(this.estado.entregaEncs((Transportadora)this.contaLoggedIn));
     }
     
     // Loja
@@ -194,7 +221,7 @@ public class TrazAqui implements Serializable {
     public List<Encomenda> listaEncsLoja() {
         if(contaLoggedIn instanceof Loja) {
             Loja l = (Loja) contaLoggedIn;
-            return new ArrayList<>(l.getFilaEspera());
+            return l.getFilaEspera().stream().map(Encomenda::clone).collect(Collectors.toList());
         }
         else return null;
     }
