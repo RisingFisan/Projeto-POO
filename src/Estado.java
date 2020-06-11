@@ -207,7 +207,7 @@ public class Estado implements Serializable,Randoms {
                 Loja loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
                 Double distancia = Point.distance(loja.getGPSx(), loja.getGPSy(), transp.getGPSx(), transp.getGPSy())+ Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy());
                 Double custo = transp.totalPreco(distancia)+e.getPeso()*transp.getPrecoPeso();
-                //Nao se consegue saber qual o tempo na fila que a entidade vai estar até chegar lá, logo nao adiciono tempos de fila de espera
+                //Nao se consegue saber qual o tempo na fila que a entidade vai estar atï¿½ chegar lï¿½, logo nao adiciono tempos de fila de espera
                 Double tempo = distancia/transp.getVelocidade();
                 ArrayList <Double> arr = new ArrayList<>();
                 arr.add(custo);
