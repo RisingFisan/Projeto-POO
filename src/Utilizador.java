@@ -39,6 +39,7 @@ public class Utilizador extends Conta implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Utilizador\n");
         sb.append(super.toString());
+        sb.append("Encomendas transportadas: ").append(this.encTransportadas).append("\n");
         return sb.toString();
     }
     
@@ -48,7 +49,7 @@ public class Utilizador extends Conta implements Serializable {
     }
 
     public boolean equals(Utilizador u) {
-        return super.equals(u);
+        return super.equals(u) && (u.getEncTransportadas()==this.encTransportadas);
     }
     
     

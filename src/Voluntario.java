@@ -124,19 +124,29 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt ,Ran
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Voluntario that = (Voluntario) o;
-        return Double.compare(that.raio, raio) == 0;
+        return Double.compare(that.raio, raio) == 0 
+               && that.encAceite.equals(encAceite)
+               && that.disponivel==disponivel
+               && that.classificacao.containsAll(classificacao)
+               && that.medicamentos==medicamentos
+               && velocidade == velocidade;
     }
 
     public int hashCode() {
         return Objects.hash(super.hashCode(), raio);
     }
 
-    //ToString
+    //ToString 
+    
     public String toString() {
         StringBuilder sb = new StringBuilder("Voluntario\n");
         sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Encomenda Aceite: ").append(this.encAceite);
+        sb.append("velocidade: ").append(this.velocidade).append("\n");
+        sb.append("Aceita en Medicas?: ").append(this.medicamentos).append("\n");
+        sb.append("Classificacoes: ").append(this.classificacao).append("\n");
+        sb.append("Encomenda Aceite: ").append(this.encAceite).append("\n");
+        sb.append("Disponivel?: ").append(this.disponivel).append("\n");
         return sb.toString();
     }
     

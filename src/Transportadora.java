@@ -210,22 +210,28 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         return new Transportadora(this);
     }
 
-    //toSTRING
+    //toSTRING 
     public String toString() {
         StringBuilder sb = new StringBuilder("Transportadora\n");
         sb.append(super.toString());
         sb.append("NIF: '").append(this.nif).append("'\n");
         sb.append("Raio: ").append(this.raio).append("km\n");
         sb.append("Preco por km: ").append(this.precoKm).append("\n");
-        sb.append("Encomendas Aceites: ").append(this.encAceites);
-        sb.append("Classificacoes: ").append(this.classificacao);
+        sb.append("Preco por Kg: ").append(this.precoKg).append("\n");
+        sb.append("Encomendas Aceites: ").append(this.encAceites).append("\n");
+        sb.append("Classificacoes: ").append(this.classificacao).append("\n");
+        sb.append("Maxima capacidade: ").append(this.maxCapacidade).append("\n");
+        sb.append("Transporta enc médicas?:").append(this.medicamentos).append("\n");
+        sb.append("Kms disponivel:").append(this.disponivel).append("\n");
+        sb.append("Kms percorridos:").append(this.kmPercorridos).append("\n");
         return sb.toString();
     }
 
+    
     public void addClassif(int i) {
         this.classificacao.add(i);
     }
-
+    
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -233,7 +239,15 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         Transportadora that = (Transportadora) o;
         return Double.compare(that.raio, raio) == 0 &&
                 Double.compare(that.precoKm, precoKm) == 0 &&
-                nif.equals(that.nif);
+                nif.equals(that.nif) &&
+                Double.compare(that.precoKg, precoKg) == 0 &&
+                that.classificacao.containsAll(classificacao) &&
+                that.encAceites.containsAll(encAceites) &&
+                that.medicamentos==medicamentos &&
+                Double.compare(that.velocidade, velocidade) == 0 &&
+                that.disponivel==disponivel &&
+                that.maxCapacidade==maxCapacidade &&
+                Double.compare(that.kmPercorridos, kmPercorridos) == 0;
     }
 
     public int hashCode() {

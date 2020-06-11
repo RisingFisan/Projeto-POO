@@ -26,13 +26,13 @@ public interface Randoms {
     
     default double calculaVelocidadeVol() {
         double v;
-        v = (double) (Math.random() * (55 - 35)) + 35;
+        v = (double) (Math.random() * (100 - 75)) + 75;
         return v;
     }
     
     default double calculaVelocidadeTransp() {
         double v;
-        v = (double) (Math.random() * (75 - 35)) + 35;
+        v = (double) (Math.random() * (150 - 90)) + 90;
         return v;
     }
     

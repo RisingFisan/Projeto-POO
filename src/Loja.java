@@ -163,6 +163,7 @@ public class Loja extends Conta implements Serializable, Randoms {
         StringBuilder sb = new StringBuilder("Loja\n");
         sb.append(super.toString());
         sb.append("Fila de espera: ").append(this.filaEspera.toString()).append("\n");
+        sb.append("Fila de Despacho: ").append(this.encProntas.toString()).append("\n");
         return sb.toString();
         
     }
@@ -174,6 +175,9 @@ public class Loja extends Conta implements Serializable, Randoms {
         Loja loja = (Loja) o;
         return this.filaEspera.size() == loja.filaEspera.size() &&
                 this.filaEspera.containsAll(loja.filaEspera) &&
-                loja.filaEspera.containsAll(this.filaEspera);
+                loja.filaEspera.containsAll(this.filaEspera) &&
+                this.encProntas.containsAll(loja.encProntas) &&
+                loja.encProntas.containsAll(this.encProntas) ;
+                
     }
 }
