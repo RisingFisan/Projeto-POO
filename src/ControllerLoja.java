@@ -12,8 +12,10 @@ public class ControllerLoja {
             }
             switch(opcao) {
                 case 1:
-                    List<String> encomendas = trazAqui.listaEncsLoja();
+                    List<String> encomendas = trazAqui.getFilaEspera();
+                    List<String> str = trazAqui.getEncP();
                     Menu.showExtraInfo(encomendas,3);
+                    Menu.showExtraInfo(str,4);
                     break;
                 case 2:
                      String enc = Menu.LojaMenuData(1);
@@ -28,8 +30,14 @@ public class ControllerLoja {
                 case 3:
                 List<String> s = trazAqui.getEncP();
                 List<String> s1 =trazAqui.getFilaEspera();
+                if (s1.isEmpty()) {
+                   Menu.extraNotes(6);
+                   Menu.pressEnter();
+                }
+                else{
                 Menu.showExtraInfo(s,4);
                 Menu.showExtraInfo(s1,3);
+               
                 String enc1 = Menu.LojaMenuData(1);
                 Menu.pressEnter();
                   if (!trazAqui.checkEncInStoreDesp(enc1) && !trazAqui.checkEncInStore(enc1)) Menu.errors(17);
@@ -38,6 +46,7 @@ public class ControllerLoja {
                       trazAqui.despacharEnc(enc1);
                       Menu.extraNotes(5);
                     }
+                }
                 break;
                 case 0:
                     exit=true;

@@ -32,6 +32,7 @@ public class Loja extends Conta implements Serializable, Randoms {
         this.tempoEsperaIndividual=te;
         this.encProntas = new ArrayList<>();
     }
+    
 
     public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l,double te,List<Encomenda> le) {
         super(cod, nome, x, y, novoEmail, novaPassword);
@@ -105,21 +106,16 @@ public class Loja extends Conta implements Serializable, Randoms {
     }
     
     public Double tempoEspera(String enc) {
-        int count = 0;
+        int count = 1;
         if (checkIfEncPronta(enc)) return 0.0;
-        for (Encomenda e: filaEspera) {
-            if (e.getCodEnc().equals(enc))
-                break;
-            count++;
-        }
-        if (count == 0) return 0.0;
+        count = quantosNaFrente(enc);
         return (calculaTempo(count*this.tempoEsperaIndividual));
     }
     
     
     
     public int quantosNaFrente(String cod){
-         int count = 0;
+         int count = 1;
         for (Encomenda e: filaEspera) {
             if (e.getCodEnc().equals(cod))
                 break;

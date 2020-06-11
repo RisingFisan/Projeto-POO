@@ -18,6 +18,7 @@ public class ControllerUtilizador {
             }
 
             switch (opcao) {
+                
                 case 1:
                     List<String> l1 = trazAqui.getCodLojas();
                     Menu.showExtraInfo(l1,1);

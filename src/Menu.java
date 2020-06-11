@@ -15,8 +15,8 @@ public class Menu {
         sb.append("3) Carregar logs.\n");
         sb.append("4) Salvar Estado.\n");
         sb.append("5) Carregar Estado.\n");
-        sb.append("6) Utilizadores que mais utilizam o sistema(em número de encomendas transportadas).\n");
-        sb.append("7) Empresas transportadoras que mais utilizam o sistema(em número de kms percorridos).\n");
+        sb.append("6) Utilizadores que mais utilizam o sistema(em numero de encomendas transportadas).\n");
+        sb.append("7) Empresas transportadoras que mais utilizam o sistema(em numero de kms percorridos).\n");
         sb.append("0) Sair.\n\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
@@ -78,14 +78,14 @@ public class Menu {
     
     public static String userMenuData(int i){
         StringBuilder sb = new StringBuilder("----------MENU UTILIZADOR-----------\n\n");
-        if (i==1)sb.append("Digite um código da entidade:\n ");
+        if (i==1)sb.append("Digite um codigo da entidade:\n ");
         else if (i==2) sb.append("Digite a sua avaliacao(1-10):\n ");
-        else if (i==3) sb.append("Digite o código de uma loja:\n ");
+        else if (i==3) sb.append("Digite o codigo de uma loja:\n ");
         else if (i==4) sb.append("Digite o numero de linhas de encomenda:\n ");
         else if (i==5) sb.append("Digite o codigo de produto:\n ");
         else if (i==6) sb.append("Digite a descricao:\n ");
-        else if (i==7) sb.append("Digite a quantidade:\n ");
-        else if (i==8) sb.append("Digite o preco:\n ");
+        else if (i==7) sb.append("Digite a quantidade(se for decimal separe ponto):\n ");
+        else if (i==8) sb.append("Digite o preco(se for decimal separe ponto):\n ");
         //else if (i==9) sb.append("Digite o peso:\n ");
         else if (i==10) sb.append("Digite um codigo de encomenda:\n ");
         else if (i==11) sb.append("Encomenda medica?(S/N):\n ");
@@ -312,7 +312,7 @@ public class Menu {
         sb.append("1) Ver lista de encomendas.\n");
         sb.append("2) Ver quanto falta para a sua encomenda ficar disponivel.\n");
         sb.append("3)Despachar encomenda.\n");
-        sb.append("0) Logout.n");
+        sb.append("0) Logout.\n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -436,7 +436,7 @@ public class Menu {
         System.out.print("Palavra-passe: ");
         String password = scanner.nextLine();
 
-        System.out.print("Coordenadas (separadas por um espaço, em formato decimal): ");
+        System.out.print("Coordenadas (separadas por um espaço, em formato decimal(virgula)): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
         
@@ -461,7 +461,7 @@ public class Menu {
         System.out.print("Palavra-passe: ");
         String password = scanner.nextLine();
 
-        System.out.print("Coordenadas (separadas por um espaco, em formato decimal): ");
+        System.out.print("Coordenadas (separadas por um espaco, em formato decimal(virgula)): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
 
@@ -497,7 +497,7 @@ public class Menu {
         System.out.print("Palavra-passe: ");
         String password = scanner.nextLine();
 
-        System.out.print("Coordenadas (separadas por um espaço, em formato decimal): ");
+        System.out.print("Coordenadas (separadas por um espaço, em formato decimal(virgula)): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
         
@@ -526,7 +526,7 @@ public class Menu {
         System.out.print("Palavra-passe: ");
         String password = scanner.nextLine();
 
-        System.out.print("Coordenadas (separadas por um espaço, em formato decimal): ");
+        System.out.print("Coordenadas (separadas por um espaço, em formato decimal(virgula)): ");
         Double x = scanner.nextDouble();
         Double y = scanner.nextDouble();
 
@@ -568,6 +568,7 @@ public class Menu {
         if (i==3) System.out.println("\n*****Combinacao Invalida*****\n");
         if (i==4) System.out.println("\n*****Encomenda j� despachada*****\n");
         if (i==5) System.out.println("\n*****Encomenda despachada com sucesso!*****\n");
+        if (i==6) System.out.println("\n*****Nada a despachar!*****\n");
     }
     
     public static void showExtraInfo(List<String> t,int i){
@@ -575,6 +576,7 @@ public class Menu {
         if (i==2) System.out.println("Entidades poss�veis de avaliar: \n"+t.toString());
         if (i==3) System.out.println("Encomendas na fila: \n"+t.toString());
         if (i==4) System.out.println("Encomendas despachadas: \n"+t.toString());
+        
     }
     
     
