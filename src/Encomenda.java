@@ -159,15 +159,15 @@ public class Encomenda implements Comparable<Encomenda>,Serializable {
     
     
     public String toString() {
-        StringBuilder sb = new StringBuilder("Encomenda\n");
-        sb.append("Código da Encomenda: ").append(this.codEnc).append("\n");
-        sb.append("Código do Utilizador: ").append(this.codUtil).append("\n");
-        sb.append("Código da Loja: ").append(this.codLoja).append("\n");
+        StringBuilder sb = new StringBuilder(" ");
+        sb.append("Codigo da Encomenda: ").append(this.codEnc).append("\n");
+        sb.append("Codigo do Utilizador: ").append(this.codUtil).append("\n");
+        sb.append("Codigo da Loja: ").append(this.codLoja).append("\n");
         sb.append("Peso: ").append(this.peso).append("\n");
-        sb.append("Produtos: ").append(this.produtos.toString()).append("\n");
+        sb.append("Produtos: ").append(this.produtos.values().toString()).append("\n");
         sb.append("Data: ").append(this.data.toString()).append("\n");
-        sb.append("Quem Transportou: ").append(this.data.toString()).append("\n");
-        sb.append("Foi solicitada entrega pelo utilizador?: ").append(this.foiSolicitada).append("\n");
+        sb.append("Quem Transportou: ").append(this.quemTransportou).append("\n");
+        
 
         return sb.toString();
     }
