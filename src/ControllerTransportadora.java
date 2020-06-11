@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.Map;
 import java.util.AbstractMap;
 import java.time.LocalDateTime;
@@ -9,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class ControllerTransportadora {
     public static void run(TrazAqui trazAqui){
-        boolean errorMessage = false;
         boolean exit = false;
         while(!exit){
             int opcao = -1;

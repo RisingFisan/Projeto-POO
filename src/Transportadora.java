@@ -216,13 +216,13 @@ public class Transportadora extends Conta implements Serializable, TranspVolunt,
         sb.append(super.toString());
         sb.append("NIF: '").append(this.nif).append("'\n");
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("Preco por km: ").append(this.precoKm).append("\n");
-        sb.append("Preco por Kg: ").append(this.precoKg).append("\n");
+        sb.append("Preço por km: ").append(this.precoKm).append("\n");
+        sb.append("Preço por kg: ").append(this.precoKg).append("\n");
         sb.append("Encomendas Aceites: ").append(this.encAceites).append("\n");
-        sb.append("Classificacoes: ").append(this.classificacao).append("\n");
-        sb.append("Maxima capacidade: ").append(this.maxCapacidade).append("\n");
-        sb.append("Transporta enc m�dicas?:").append(this.medicamentos).append("\n");
-        sb.append("Kms disponivel:").append(this.disponivel).append("\n");
+        sb.append("Classificações: ").append(this.classificacao).append("\n");
+        sb.append("Máxima capacidade: ").append(this.maxCapacidade).append("\n");
+        sb.append("Transporta encs. médicas?:").append(this.medicamentos).append("\n");
+        sb.append("Kms disponível:").append(this.disponivel).append("\n");
         sb.append("Kms percorridos:").append(this.kmPercorridos).append("\n");
         return sb.toString();
     }

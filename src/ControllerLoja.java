@@ -1,9 +1,7 @@
-import java.time.Duration;
 import java.util.List;
 
 public class ControllerLoja {
     public static void run(TrazAqui trazAqui) {
-        boolean errorMessage = false;
         boolean exit = false;
         while(!exit){
             int opcao = -1;

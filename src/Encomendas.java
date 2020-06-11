@@ -3,6 +3,7 @@ import java.util.TreeSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.*;
+
 public class Encomendas implements Serializable
 {
     private Set<Encomenda> encomendas;

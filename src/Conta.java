@@ -1,7 +1,5 @@
 import java.awt.geom.Point2D;
 import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 import java.io.*;
 
 public class Conta implements Comparable,Serializable {

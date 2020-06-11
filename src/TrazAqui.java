@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.Queue;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -7,7 +6,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.AbstractMap;
 import java.io.*;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -55,15 +53,14 @@ public class TrazAqui implements Serializable {
     
     public boolean checkEncInStoreDesp(String enc){
         Loja l = (Loja)this.contaLoggedIn;
-        boolean b2 = l.getEncProntas().stream().anyMatch(a->a.getCodEnc().equals(enc));
-        return b2;
-        
+        return l.getEncProntas().stream().anyMatch(a->a.getCodEnc().equals(enc));
     }
     
     public void despacharEnc(String cod){
         Loja l = (Loja)this.contaLoggedIn;
         this.estado.despacharEnc(l,cod);
     }
+
     public double getTempoEspera(String enc){
         Loja l = (Loja)this.contaLoggedIn;
         return (l.tempoEsperaTeorico(enc))*(l.quantosNaFrente(enc));

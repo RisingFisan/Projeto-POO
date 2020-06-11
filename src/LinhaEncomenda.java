@@ -90,10 +90,10 @@ public class LinhaEncomenda implements Serializable {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Codigo de Produto: ").append(this.codProduto).append("\n");
-        sb.append("Descricao: ").append(this.descricao).append("\n");
+        sb.append("Código de Produto: ").append(this.codProduto).append("\n");
+        sb.append("Descrição: ").append(this.descricao).append("\n");
         sb.append("Quantidade encomendada: ").append(this.quantidade).append("\n");
-        sb.append("Valor Unitario: ").append(this.valorUnitario).append("\n");
+        sb.append("Valor Unitário: ").append(this.valorUnitario).append("\n");
         return sb.toString();
     }
 }

@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.stream.Collectors;
-import java.util.Set;
-import java.util.TreeSet;
 import java.io.*;
 public class Loja extends Conta implements Serializable, Randoms {
 
@@ -34,12 +32,11 @@ public class Loja extends Conta implements Serializable, Randoms {
     }
     
 
-    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l,double te,List<Encomenda> le) {
+    public Loja(String cod, String nome, double x, double y, String novoEmail, String novaPassword, List<Encomenda> l, double te) {
         super(cod, nome, x, y, novoEmail, novaPassword);
         this.setFilaEspera(l);
         this.tempoEsperaIndividual=te;
         this.setEncProntas(l);
-        
     }
 
     public Loja(Loja outro) {
@@ -49,25 +46,24 @@ public class Loja extends Conta implements Serializable, Randoms {
         this.encProntas = outro.getEncProntas();
         
     }
-    
-    
-    
+
+
     public void addEncomenda(Encomenda e) {
         this.filaEspera.add(e.clone());
     }
-    
-    public void despacharEnc(String s){
+
+    public void despacharEnc(String s) {
         Encomenda remov = null;
         for (Encomenda e : this.filaEspera)
-        if (e.getCodEnc().equals(s)){
-        remov = e;
-        this.filaEspera.remove(s);
-        break;
-    }
+            if (e.getCodEnc().equals(s)) {
+                remov = e;
+                this.filaEspera.remove(e);
+                break;
+            }
         this.encProntas.add(remov);
-       
-    
-}
+
+
+    }
     
     public double getTempoEsperaIndividual(){return this.tempoEsperaIndividual;}
     public void serTempoEsperaIndividual(double d){this.tempoEsperaIndividual=d;}
@@ -106,7 +102,7 @@ public class Loja extends Conta implements Serializable, Randoms {
     }
     
     public Double tempoEspera(String enc) {
-        int count = 1;
+        int count;
         if (checkIfEncPronta(enc)) return 0.0;
         count = quantosNaFrente(enc);
         return (calculaTempo(count*this.tempoEsperaIndividual));

@@ -4,13 +4,12 @@ import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-import java.time.Duration;
 
 public class Menu {
     public static int MenuInicial() {
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------MENU INICIAL-----------\n\n");
-        sb.append("1) Iniciar sessao.\n");
+        sb.append("1) Iniciar sessão.\n");
         sb.append("2) Registar nova conta.\n");
         sb.append("3) Carregar logs.\n");
         sb.append("4) Salvar Estado.\n");

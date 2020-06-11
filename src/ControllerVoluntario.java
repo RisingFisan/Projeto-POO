@@ -1,4 +1,3 @@
-import java.time.Duration;
 import java.util.Map;
 import java.util.List;
 import java.util.Comparator;
@@ -7,11 +6,9 @@ import java.time.LocalDateTime;
 
 public class ControllerVoluntario {
     public static void run(TrazAqui trazAqui){
-        boolean errorMessage = false;
         boolean exit = false;
         while(!exit){
             int opcao = -1;
-            String s;
             boolean disp = trazAqui.getDisp();
             while(opcao < 0 || opcao > 4) {
                 opcao = Menu.menuVoluntario(disp);
@@ -42,7 +39,7 @@ public class ControllerVoluntario {
                     
                 case 2:
                     if (!disp) {
-                        Double time = trazAqui.entregaEnc();
+                        double time = trazAqui.entregaEnc();
                         if (time == -1) Menu.errors(8);
                         else Menu.voluntarioMenuResult(3, Menu.time(time));
                     }

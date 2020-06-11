@@ -1,8 +1,6 @@
 import java.util.Objects;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
 import java.io.*;
 
 public class Voluntario extends Conta implements Serializable, TranspVolunt ,Randoms{
@@ -11,7 +9,7 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt ,Ran
     private boolean disponivel;
     private List<Integer> classificacao;
     private boolean medicamentos;
-    private double velocidade; 
+    private double velocidade;
 
     public Voluntario(String cod, String nome, double x, double y, double raio) {
         super(cod,nome,x,y);
@@ -139,20 +137,19 @@ public class Voluntario extends Conta implements Serializable, TranspVolunt ,Ran
     //ToString 
     
     public String toString() {
-        StringBuilder sb = new StringBuilder("Voluntario\n");
+        StringBuilder sb = new StringBuilder("Voluntário\n");
         sb.append(super.toString());
         sb.append("Raio: ").append(this.raio).append("km\n");
-        sb.append("velocidade: ").append(this.velocidade).append("\n");
-        sb.append("Aceita en Medicas?: ").append(this.medicamentos).append("\n");
-        sb.append("Classificacoes: ").append(this.classificacao).append("\n");
+        sb.append("Velocidade: ").append(this.velocidade).append("\n");
+        sb.append("Aceita encs. médicas?: ").append(this.medicamentos).append("\n");
+        sb.append("Classificações: ").append(this.classificacao).append("\n");
         sb.append("Encomenda Aceite: ").append(this.encAceite).append("\n");
-        sb.append("Disponivel?: ").append(this.disponivel).append("\n");
+        sb.append("Disponível?: ").append(this.disponivel).append("\n");
         return sb.toString();
     }
     
     public void addEncomenda (String cod){
        if (this.disponivel) {setEncAceite(cod);this.disponivel = false;}
-       else return;
     }
     
     public void addClassif(int i){

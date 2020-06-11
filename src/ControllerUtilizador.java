@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 public class ControllerUtilizador {
     public static void run(TrazAqui trazAqui) {
-        //boolean errorMessage = false;
         boolean exit = false;
         while (!exit) {
             int opcao = -1;

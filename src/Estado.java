@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.*;
 import java.awt.geom.Point2D;
 import java.time.LocalDateTime;
-import java.time.Duration;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class Estado implements Serializable,Randoms {
     }
     
     public void addToPedidosTransp(String t,String enc){
-        AbstractMap.SimpleEntry<String, String> a = new AbstractMap.SimpleEntry<String, String>(enc,t);
+        AbstractMap.SimpleEntry<String, String> a = new AbstractMap.SimpleEntry<>(enc,t);
         this.pedidosTransporte.add(a);
     }
 
@@ -49,7 +48,7 @@ public class Estado implements Serializable,Randoms {
         List<AbstractMap.SimpleEntry<String, Integer>> le = new ArrayList<>();
         for (Conta t : this.utilizadores.getContas().values()){
             Utilizador t1 = (Utilizador) t;
-            AbstractMap.SimpleEntry<String, Integer> a = new AbstractMap.SimpleEntry<String, Integer>(t1.getCodigo(), t1.getEncTransportadas());
+            AbstractMap.SimpleEntry<String, Integer> a = new AbstractMap.SimpleEntry<>(t1.getCodigo(), t1.getEncTransportadas());
             le.add(a);
         }
         return le.stream()
@@ -62,7 +61,7 @@ public class Estado implements Serializable,Randoms {
         List<AbstractMap.SimpleEntry<String, Double>> le = new ArrayList<>();
         for (Conta t : this.transportadoras.getContas().values()){
             Transportadora t1 = (Transportadora) t;
-            AbstractMap.SimpleEntry<String, Double> a = new AbstractMap.SimpleEntry<String, Double>(t1.getCodigo(), t1.getKmPercorridos());
+            AbstractMap.SimpleEntry<String, Double> a = new AbstractMap.SimpleEntry<>(t1.getCodigo(), t1.getKmPercorridos());
             le.add(a);
         }
         return le.stream()
@@ -84,7 +83,6 @@ public class Estado implements Serializable,Randoms {
     }
 
     public String newCode(TipoConta tipoConta) {
-        String cod = "";
         if (tipoConta.equals(TipoConta.Utilizador)) return ("u"+this.utilizadores.newCodeNumber());
         else if (tipoConta.equals(TipoConta.Voluntario)) return ("v"+this.voluntarios.newCodeNumber());
         else if (tipoConta.equals(TipoConta.Loja)) return ("l"+this.lojas.newCodeNumber());
@@ -94,11 +92,10 @@ public class Estado implements Serializable,Randoms {
     }
     
     public boolean freeEmail(String email){
-        if (this.utilizadores.getContaByEmail(email)!=null 
-            || this.transportadoras.getContaByEmail(email)!=null 
-            || this.lojas.getContaByEmail(email)!=null 
-            || this.voluntarios.getContaByEmail(email)!=null ) return false;
-        return true;    
+        return this.utilizadores.getContaByEmail(email) == null
+                && this.transportadoras.getContaByEmail(email) == null
+                && this.lojas.getContaByEmail(email) == null
+                && this.voluntarios.getContaByEmail(email) == null;
     }
 
     public String newCodeEnc() {
@@ -205,9 +202,9 @@ public class Estado implements Serializable,Randoms {
                 Conta util = this.utilizadores.getContaByCode(user);
                 Transportadora transp = (Transportadora) this.transportadoras.getContaByCode(a.getValue());
                 Loja loja = (Loja)this.lojas.getContaByCode(e.getCodLoja());
-                Double distancia = Point.distance(loja.getGPSx(), loja.getGPSy(), transp.getGPSx(), transp.getGPSy())+ Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy());
+                double distancia = Point.distance(loja.getGPSx(), loja.getGPSy(), transp.getGPSx(), transp.getGPSy())+ Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy());
                 Double custo = transp.totalPreco(distancia)+e.getPeso()*transp.getPrecoPeso();
-                //Nao se consegue saber qual o tempo na fila que a entidade vai estar at� chegar l�, logo nao adiciono tempos de fila de espera
+                //Não se consegue saber qual o tempo na fila que a entidade vai estar até chegar lá, logo nao adiciono tempos de fila de espera
                 Double tempo = distancia/transp.getVelocidade();
                 ArrayList <Double> arr = new ArrayList<>();
                 arr.add(custo);
@@ -332,21 +329,6 @@ public class Estado implements Serializable,Randoms {
         if (i == 2) v.setDisponibilidade(false);
         this.transportadoras.addConta(v);
     }
-
-    /*public Map.Entry<Duration, Double> entregaEnc(Transportadora t, String enc) {
-        double x,y;
-        double dist;
-        Encomenda e = this.encomendas.getEncomendaByCod(enc);
-        Utilizador u = (Utilizador) this.utilizadores.getContaByCode(e.getCodUtil());
-        u.addToEncTransp();
-        this.utilizadores.addConta(u.clone());
-        e.setFoiEntregue(true);
-        this.encomendas.addEnc(e);
-        LocalDateTime d = e.getData();
-        Double custo = e.getDistPercorrida() * t.getPrecoPorKm();
-        Duration data = Duration.between(d, LocalDateTime.now());
-        return new AbstractMap.SimpleEntry<>(data, custo);
-    }*/
     
     public void addToTransp(String codEnc,String transportadora){
         Transportadora t = (Transportadora)this.transportadoras.getContaByCode(transportadora);
@@ -366,8 +348,8 @@ public class Estado implements Serializable,Randoms {
             Encomenda enc = this.encomendas.getEncomendaByCod(e);
             le.add(enc);
         }
-        Comparator<Encomenda> compareByDist = (Encomenda o1, Encomenda o2) -> Double.compare(this.lojas.getContaByCode(o1.getCodLoja()).calcDist(t.getGPSx(),t.getGPSy()),this.lojas.getContaByCode(o2.getCodLoja()).calcDist(t.getGPSx(),t.getGPSy()));
-        Collections.sort(le, compareByDist);
+        Comparator<Encomenda> compareByDist = Comparator.comparingDouble((Encomenda o) -> this.lojas.getContaByCode(o.getCodLoja()).calcDist(t.getGPSx(), t.getGPSy()));
+        le.sort(compareByDist);
         for(Encomenda e: le) {
             Loja loja = (Loja) this.lojas.getContaByCode(e.getCodLoja());
             double dist = loja.calcDist(t.getGPSx(),t.getGPSy());
@@ -375,8 +357,8 @@ public class Estado implements Serializable,Randoms {
             distancias[le.indexOf(e)] = dist;
             
         }
-        Comparator<Encomenda> compareByDistU = (Encomenda o1, Encomenda o2) -> Double.compare(this.utilizadores.getContaByCode(o1.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()),this.utilizadores.getContaByCode(o2.getCodUtil()).calcDist(t.getGPSx(),t.getGPSy()));
-        Collections.sort(le, compareByDistU);
+        Comparator<Encomenda> compareByDistU = Comparator.comparingDouble((Encomenda o) -> this.utilizadores.getContaByCode(o.getCodUtil()).calcDist(t.getGPSx(), t.getGPSy()));
+        le.sort(compareByDistU);
         for(Encomenda e: le) {
             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(e.getCodUtil());
             //adiciona uma encomenda transportada
@@ -398,7 +380,7 @@ public class Estado implements Serializable,Randoms {
             this.encomendas.removeOld(e.getCodEnc());
             this.encomendas.addEnc(e.clone());
             double tempo = (distanc/vel)+ ((Loja)this.lojas.getContaByCode(e.getCodLoja())).tempoEspera(e.getCodEnc())+atraso();
-            AbstractMap.SimpleEntry<Double, Double> me = new AbstractMap.SimpleEntry<Double, Double>(distanc/vel,distanc*custo+(e.getPeso()*custo1));
+            AbstractMap.SimpleEntry<Double, Double> me = new AbstractMap.SimpleEntry<>(distanc/vel,distanc*custo+(e.getPeso()*custo1));
             map.put(e.getCodEnc(),me);
             Loja loja = (Loja) this.lojas.getContaByCode(e.getCodLoja());
             loja.remove(e.getCodEnc());
@@ -436,7 +418,7 @@ public class Estado implements Serializable,Randoms {
             String u = e.getCodUtil();
             Utilizador util = (Utilizador) this.utilizadores.getContaByCode(u);
             Loja loja = (Loja) this.lojas.getContaByCode(l);
-            AbstractMap.SimpleEntry<String, String> p = new AbstractMap.SimpleEntry<String, String>(e.getCodEnc(),v.getCodigo());
+            AbstractMap.SimpleEntry<String, String> p = new AbstractMap.SimpleEntry<>(e.getCodEnc(),v.getCodigo());
             if (podeTransportarT(e.getCodEnc(), v.getCodigo()) && !this.pedidosTransporte.contains(p)) {
                 List<Double> list = new ArrayList<>();
                 double d = Point.distance(loja.getGPSx(), loja.getGPSy(), v.getGPSx(), v.getGPSy())+Point.distance(loja.getGPSx(), loja.getGPSy(), util.getGPSx(), util.getGPSy());
