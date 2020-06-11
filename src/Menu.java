@@ -408,6 +408,7 @@ public class Menu {
         else if (i==15) sb.append("****Nenhuma transportadora pediu para transportar encomendas suas****").append("\n");
         else if (i==16) sb.append("****Credenciais invalidas!****").append("\n");
         else if (i==17) sb.append("****Encomenda nao se encontra na loja!****").append("\n");
+        else if (i==18) sb.append("****\nEmail já existente!****").append("\n");
         sb.append("\nPressione enter para continuar...");
         System.out.print(sb.toString());
         Scanner scanner = new Scanner(System.in);

@@ -125,7 +125,7 @@ public class ControllerUtilizador {
                     break;
 
                 case 5:
-                    List<String> ls =trazAqui.entityWorkedForUser();
+                    List<String> ls = trazAqui.entityWorkedForUser();
                     Menu.showExtraInfo(ls,2);
                     String code = Menu.userMenuData(1);
                     if (trazAqui.checkIfEntityWorkedForUser(code)) {

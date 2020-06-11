@@ -32,6 +32,9 @@ public class TrazAqui implements Serializable {
     public String getCod(){
         return this.contaLoggedIn.getCodigo();
     }
+    public boolean freeEmail(String email){
+        return this.estado.freeEmail(email);
+    }
     
     public boolean checkEncInStore(String enc){
         Loja l = (Loja)this.contaLoggedIn;

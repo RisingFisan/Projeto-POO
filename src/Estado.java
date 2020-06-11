@@ -92,6 +92,14 @@ public class Estado implements Serializable,Randoms {
         
 
     }
+    
+    public boolean freeEmail(String email){
+        if (this.utilizadores.getContaByEmail(email)!=null 
+            || this.transportadoras.getContaByEmail(email)!=null 
+            || this.lojas.getContaByEmail(email)!=null 
+            || this.voluntarios.getContaByEmail(email)!=null ) return false;
+        return true;    
+    }
 
     public String newCodeEnc() {
         return ("e"+this.encomendas.newCodeNumber());
