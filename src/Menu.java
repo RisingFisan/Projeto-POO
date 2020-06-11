@@ -62,7 +62,10 @@ public class Menu {
     public static void maisFreqT(List<AbstractMap.SimpleEntry<String, Double>> l) {
         clearWindow();
         StringBuilder sb = new StringBuilder("-----------Entidades que utilizam mais o sistema-----------\n\n");
-        for (AbstractMap.SimpleEntry<String, Double> m : l) sb.append(m.getKey()+"----->"+m.getValue()+"Km percorridos\n");
+        for (AbstractMap.SimpleEntry<String, Double> m : l) {
+            String result = String.format("%.2f", m.getValue());
+            sb.append(m.getKey()+"----->"+result+"Km percorridos\n");
+        }
         System.out.println(sb.toString());
     }
     
@@ -195,7 +198,7 @@ public class Menu {
     
     public static void LojaMenuRes(int i,String res){
         StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
-        if (i==1 ) sb.append("Tempo de espera na fila sera, em principio: "+i);
+        if (i==1 ) sb.append("Tempo de espera na fila sera, em principio: "+res+" min");
         System.out.println(sb.toString());
     }
     
@@ -308,7 +311,8 @@ public class Menu {
         StringBuilder sb = new StringBuilder("-----------MENU LOJA-----------\n\n");
         sb.append("1) Ver lista de encomendas.\n");
         sb.append("2) Ver quanto falta para a sua encomenda ficar disponivel.\n");
-        sb.append("0) Logout.\n\n");
+        sb.append("3)Despachar encomenda.\n");
+        sb.append("0) Logout.n");
         sb.append("Selecione a opcao pretendida: ");
         System.out.println(sb.toString());
         Scanner scanner = new Scanner(System.in);
@@ -555,26 +559,22 @@ public class Menu {
         return new Transportadora(codigo, nome, x , y, nif, raio, precoPorKm, email, password, capacidadeMax, vel,b,precoPorKg);
     }
 
-    public static void encomendasListMenu(List<Encomenda> encomendas) {
-        for(Encomenda e : encomendas) {
-            System.out.println("Encomenda " + e.getCodEnc());
-            System.out.println("Utilizador: " + e.getCodUtil());
-            System.out.println("Conteudo da encomenda:");
-            for(LinhaEncomenda le : e.getProdutos().values()) {
-                System.out.println("\n" + le);
-            }
-        }
-    }
+    
     
     
     public static void extraNotes(int i){
         if (i==1) System.out.println("\n*****O seu pedido de transporte foi adicionado! Aguarde aprovacao*****\n");
         if (i==2) System.out.println("\n****A entidade ainda não efetuou nenhuma entrega para si,logo nao pode avalia-la******\n");
         if (i==3) System.out.println("\n*****Combinacao Invalida*****\n");
+        if (i==4) System.out.println("\n*****Encomenda já despachada*****\n");
+        if (i==5) System.out.println("\n*****Encomenda despachada com sucesso!*****\n");
     }
     
     public static void showExtraInfo(List<String> t,int i){
         if (i==1) System.out.println("Lojas disponiveis: "+t.toString());
+        if (i==2) System.out.println("Entidades possíveis de avaliar: \n"+t.toString());
+        if (i==3) System.out.println("Encomendas na fila: \n"+t.toString());
+        if (i==4) System.out.println("Encomendas despachadas: \n"+t.toString());
     }
     
     

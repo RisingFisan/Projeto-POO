@@ -52,6 +52,7 @@ public class ControllerUtilizador {
 
                 case 2:
                     Set<String> s = trazAqui.encsOfUserToTransport();
+                    
                     if (s.isEmpty()) Menu.errors(11);
                     else {
                         Menu.userMenuResult(2,s.toString());
@@ -123,6 +124,8 @@ public class ControllerUtilizador {
                     break;
 
                 case 5:
+                    List<String> ls =trazAqui.entityWorkedForUser();
+                    Menu.showExtraInfo(ls,2);
                     String code = Menu.userMenuData(1);
                     if (trazAqui.checkIfEntityWorkedForUser(code)) {
                         int classi = -1;
